@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+	<session-factory>
+
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+
+		<property name="hibernate.connection.url">jdbc:mysql://localhost/Hospital</property>
+
+		<property name="hibernate.connection.username">root</property>
+
+		<property name="hibernate.connection.password">root</property>
+
+		<property name="hibernate.connection.pool_size">10</property>
+
+		<property name="show_sql">true</property>
+
+		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+		
+		<property name="hibernate.hbm2ddl.auto">update</property>
+		
+		<mapping class="VO.LoginVO"/>
+		
+		<mapping class="VO.AdminVo"/>
+		
+		<mapping class="VO.DepartmentVo"/>
+		
+		<mapping class="VO.SpecializationVo"/>
+		
+		<mapping class="VO.DoctorVo"/>
+		
+		<mapping class="VO.NurseVo"/>
+		
+		<mapping class="VO.Support_StaffVo"/>
+		
+		<mapping class="VO.PharmacistVo"/>
+		
+		<mapping class="VO.LaboratoryVo"/>
+		
+		<mapping class="VO.AccountantStaffVo"/>
+		
+		<mapping class="VO.CategoryVo"/>
+		
+		<mapping class="VO.MedicineVo"/>
+		
+		<mapping class="VO.TreatmentVo"/>
+		
+		<mapping class="VO.BloodManageVo"/>
+		
+		<mapping class="VO.BloodDonorVo"/>
+		
+	</session-factory>
+</hibernate-configuration>
