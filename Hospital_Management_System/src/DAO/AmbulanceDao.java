@@ -12,6 +12,7 @@ import org.hibernate.cfg.AnnotationConfiguration;
 import VO.AmbulanceVo;
 import VO.BloodDonorVo;
 import VO.BloodManageVo;
+import VO.PatientVo;
 import VO.TreatmentVo;
 
 public class AmbulanceDao {
@@ -99,5 +100,21 @@ public class AmbulanceDao {
 			return message = "error";
 		}
 		return message = "true";
+	}
+
+	public ArrayList<AmbulanceVo> getlastrecord() {
+		List<AmbulanceVo> ambulanceList = new ArrayList<AmbulanceVo>();
+		try {
+			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+			Session session = sessionfactory.openSession();
+			Transaction transaction = session.beginTransaction();
+			Query q = session.createQuery("from AmbulanceVo ORDER BY id DESC LIMIT 1;");
+			ambulanceList = q.list();
+			transaction.commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return (ArrayList<AmbulanceVo>) ambulanceList;
 	}
 }

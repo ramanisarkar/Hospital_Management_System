@@ -189,7 +189,6 @@ public class AccountantStaff extends HttpServlet {
    		out.print(gson.toJson(list));
    		out.flush();
    		out.close();
-
    	}
 
    	private void accountantStaffInsert(HttpServletRequest request, HttpServletResponse response) {

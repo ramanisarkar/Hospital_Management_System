@@ -53,5 +53,7 @@
 		
 		<mapping class="VO.BloodDonorVo"/>
 		
+		<mapping class="VO.AmbulanceVo"/>
+		
 	</session-factory>
 </hibernate-configuration>

@@ -89,16 +89,17 @@ public class Ambulance extends HttpServlet {
 		if (flag.equalsIgnoreCase("insert")) {
 			int adminid = Integer.parseInt(request.getParameter("id"));
 			session.setAttribute("ambulanceAdminid", adminid);
-			response.sendRedirect("Admin_Ambulance_Reg.jsp");
+			response.sendRedirect("Admin_Ambulance_Staff_Reg.jsp");
 		}
-		if (flag.equalsIgnoreCase("accountantStaffList")) {
+		if (flag.equalsIgnoreCase("ambulanceStaffList")) {
 			ambulanceList(request, response);
 		}
-		if (flag.equalsIgnoreCase("editAccountantStaff")) {
+		if (flag.equalsIgnoreCase("editAmbulanceStaff")) {
 			ambulanceEdit(request, response);
 		}
-		if (flag.equalsIgnoreCase("deleteAccountantStaff")) {
+		if (flag.equalsIgnoreCase("deleteAmbulanceStaff")) {
 			ambulanceDelete(request, response);
+			ambulanceList(request, response);
 		}
 	}
 
@@ -115,15 +116,16 @@ public class Ambulance extends HttpServlet {
 		if (flag.equalsIgnoreCase("insert")) {
 			ambulanceInsert(request, response);
 		}
-		if (flag.equalsIgnoreCase("update")) {
+		if (flag.equalsIgnoreCase("ambulanceUpdate")) {
 			ambulanceUpdate(request, response);
 		}
-		if (flag.equalsIgnoreCase("chackusername")) {
+		if (flag.equalsIgnoreCase("getAmbulanceId")) {
 			ambulanceIdDispatch(request, response);
 		}
 	}
 
-	private void ambulanceIdDispatch(HttpServletRequest request, HttpServletResponse response) {
+	private void ambulanceIdDispatch(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String ambulanceId = null;
 		HttpSession session = request.getSession();
 		int adminid = (int) session.getAttribute("ambulanceAdminid");
 		
@@ -134,7 +136,30 @@ public class Ambulance extends HttpServlet {
 		ambulanceVo.setAdminid(adminVo);
 		
 		AmbulanceDao ambulanceDao = new AmbulanceDao();
-		ArrayList<PatientVo> getlastrecord = ambulanceDao.getlastrecord();
+		ArrayList<AmbulanceVo> getlastrecord = ambulanceDao.getlastrecord();
+		if(getlastrecord.isEmpty()==true) {
+			ambulanceId= "AMB0001";
+		}
+		else if(getlastrecord.isEmpty()==false) {
+			String id = getlastrecord.get(0).getAmbulanceid();
+			String removeFirstThree = id.substring(3);
+			int a1 = Integer.parseInt(removeFirstThree);
+			a1++;
+			int c = a1;
+			String s2 = String.valueOf(c);
+			if (c >= 1 && c < 10) {
+				ambulanceId = "AMB".concat("000").concat(s2);
+			} else if (c >= 10 && c < 100) {
+				ambulanceId = "AMB".concat("00").concat(s2);
+			} else if (c >= 100) {
+				ambulanceId = "AMB".concat("0").concat(s2);
+			}else if (c >= 1000) {
+				ambulanceId = "AMB".concat(s2);
+			}
+		}
+		response.setContentType("text/plain");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(ambulanceId);
 		
 	}
 
@@ -228,8 +253,14 @@ public class Ambulance extends HttpServlet {
 				}
 				ambulanceImage(s, profileImagepath, profileImage);
 				ambulanceeUpdate = "true";
+				response.setContentType("text/plain");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write(ambulanceeUpdate);
 			} else {
 				ambulanceeUpdate = "false";
+				response.setContentType("text/plain");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write(ambulanceeUpdate);
 			}
 
 		} catch (Exception e) {
@@ -239,7 +270,7 @@ public class Ambulance extends HttpServlet {
 	}
 
 	private void ambulanceEdit(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		int ambulanceId = Integer.parseInt(request.getParameter("ambulanceId"));
+		int ambulanceId = Integer.parseInt(request.getParameter("abulanceStaffId"));
 		System.out.println(ambulanceId);
 
 		AmbulanceVo ambulanceVo = new AmbulanceVo();
@@ -338,7 +369,7 @@ public class Ambulance extends HttpServlet {
 
 			AmbulanceDao ambulanceDao = new AmbulanceDao();
 			String ambulance = ambulanceDao.ambulanceUpdate(ambulanceVo);
-			if (ambulance == "Add") {
+			if (ambulance == "true") {
 				ambulanceeUpdate = "true";
 				ambulanceImage(s, profileImagepath, profileImage);
 				System.out.println(ambulanceeUpdate);
@@ -361,7 +392,7 @@ public class Ambulance extends HttpServlet {
 
 	private void ambulanceDelete(HttpServletRequest request, HttpServletResponse response) {
 		try {
-   			int ambulanceId = Integer.parseInt(request.getParameter("ambulanceId"));
+   			int ambulanceId = Integer.parseInt(request.getParameter("abulanceStaffId"));
    			System.out.println(ambulanceId);
    			
    			AmbulanceVo ambulanceVo = new AmbulanceVo();
@@ -378,19 +409,11 @@ public class Ambulance extends HttpServlet {
 					File dir = new File(Path);
 					dir.delete();
 				}
-				System.out.println(message);
-				String respose = "seccess";
-				response.setContentType("text/plain");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().write(respose);
+				ambulanceeUpdate = "true";
 			} else {
-				String respose = "error";
-				response.setContentType("text/plain");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().write(respose);
+				ambulanceeUpdate = "false";
 			}
-
-   		} catch (IOException e) {
+   		} catch (Exception e) {
    			e.printStackTrace();
    		}
 	}

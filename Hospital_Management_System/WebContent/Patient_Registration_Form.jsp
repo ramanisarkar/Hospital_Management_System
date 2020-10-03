@@ -9,11 +9,12 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script>
-  $(document).ready(function(){
+$(document).ready(function(){
 	  var count = 1;
-	  $(document).on('click', '.add_more_report', function(){
+  	$(document).on('click', '.add_more_report', function(){
 		count++;
 		$(".diagnosissnosis_div").append('<div class="form-group"><label class="col-sm-1 control-label" >Diagnosis Report</label><div class="col-sm-2"><input type="file" class="form-control" name="diagnosis'+count+'"></div><div class="col-sm-2"><input type="button" value="Delete" onclick="deleteParentElement(this)" class="remove_cirtificate btn btn-default"></div></div>');
+		$('#count').val(count);
 	});
 	$(document).on("click", ".remove_cirtificate", function()
 	{
@@ -85,7 +86,7 @@
 		</div>
 	</div>
 
-	<form id="insert_form" action="<%=request.getContextPath()%>/PatientRegistration" method="post" enctype="multipart/form-data">
+	<form id="insert_form" method="post" enctype="multipart/form-data">
   		
 		<div class="form-group row">
 			<label class="col-sm-2 control-label" for="first_name">First Name<span class="require-field">*</span></label>
@@ -240,7 +241,8 @@
   					</div>
 			</div>	
 			<div class="col-sm-offset-2 col-sm-8">
-        	<input type="text" name="flag" value="insert">
+        	<input type="hidden" name="flag" value="insert">
+        	<input type="hidden" name="count" id="count" >
         	<input type="submit" value="Patient Registration" name="registration_front_patient" class="btn btn-success">
         </div>
     </form>

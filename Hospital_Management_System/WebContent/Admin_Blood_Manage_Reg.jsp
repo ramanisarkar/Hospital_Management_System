@@ -344,6 +344,7 @@ $(document).ready(function(){
         		$('#message3').show();
         		$('#example').DataTable();
         		$('#messagepass').text("Recored Delete Successsfully");
+        		$('#example').DataTable();
     		}
 		});
 	});
@@ -373,7 +374,7 @@ $(document).ready(function(){
     			$('.bloodDonor').append(html);
     	 	});
         	var message=obj[0].bloodmanageupdate;
-			console.log(message)
+			console.log(message);
 			if(message == "true"){
 				$('#message1').show();
         		$('#message2').show();

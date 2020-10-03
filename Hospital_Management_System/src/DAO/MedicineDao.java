@@ -12,6 +12,7 @@ import org.hibernate.cfg.AnnotationConfiguration;
 import VO.DoctorVo;
 import VO.LoginVO;
 import VO.MedicineVo;
+import VO.MessageVo;
 import VO.NurseVo;
 
 public class MedicineDao {
