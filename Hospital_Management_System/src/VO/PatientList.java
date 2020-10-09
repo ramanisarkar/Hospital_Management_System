@@ -2,9 +2,15 @@ package VO;
 
 public class PatientList {
 	private int id,adminid,doctorid;
-	private String firstname,midalname,lastname,date,gender,homeeaddrss,homecity,homestate,homecountry,
-	homezipcode,mobilecountrycode,mobileno,phoneno,email,username,password,profileimage,profileimagename,
-	doctorname;
+	private String firstname,midalname,lastname,date,gender,homeeaddrss,homecity,homestate,homecountry,bloodgroup,chackusername,joiningdate,
+	
+	homezipcode,mobilecountrycode,mobileno,phoneno,email,username,password,profileimage,profileimagename,patientid,guardianid,symptoms,
+	
+	doctorname,guardianfirstname,guardianmidalname,guardianlastname,Guardiangender,relationwithpatient,guardianhomeeaddrss,guardianhomecity,guardianhomestate
+	
+	,guardianhomecountry,guardianhomezipcode,guardianmobilecountrycode,guardianmobileno,guardianphoneno,guardianimage,guardianimagename,admintdate
+	
+	,adminttime,patientstatus;
 	public int getId() {
 		return id;
 	}
@@ -37,6 +43,12 @@ public class PatientList {
 	}
 	public String getLastname() {
 		return lastname;
+	}
+	public String getJoiningdate() {
+		return joiningdate;
+	}
+	public void setJoiningdate(String joiningdate) {
+		this.joiningdate = joiningdate;
 	}
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
@@ -136,6 +148,143 @@ public class PatientList {
 	}
 	public void setDoctorname(String doctorname) {
 		this.doctorname = doctorname;
-	}	
-	
+	}
+	public String getPatientid() {
+		return patientid;
+	}
+	public void setPatientid(String patientid) {
+		this.patientid = patientid;
+	}
+	public String getSymptoms() {
+		return symptoms;
+	}
+	public void setSymptoms(String symptoms) {
+		this.symptoms = symptoms;
+	}
+	public String getBloodgroup() {
+		return bloodgroup;
+	}
+	public void setBloodgroup(String bloodgroup) {
+		this.bloodgroup = bloodgroup;
+	}
+	public String getGuardianid() {
+		return guardianid;
+	}
+	public void setGuardianid(String guardianid) {
+		this.guardianid = guardianid;
+	}
+	public String getChackusername() {
+		return chackusername;
+	}
+	public void setChackusername(String chackusername) {
+		this.chackusername = chackusername;
+	}
+	public String getGuardianfirstname() {
+		return guardianfirstname;
+	}
+	public void setGuardianfirstname(String guardianfirstname) {
+		this.guardianfirstname = guardianfirstname;
+	}
+	public String getGuardianmidalname() {
+		return guardianmidalname;
+	}
+	public void setGuardianmidalname(String guardianmidalname) {
+		this.guardianmidalname = guardianmidalname;
+	}
+	public String getGuardianlastname() {
+		return guardianlastname;
+	}
+	public void setGuardianlastname(String guardianlastname) {
+		this.guardianlastname = guardianlastname;
+	}
+	public String getGuardiangender() {
+		return Guardiangender;
+	}
+	public void setGuardiangender(String guardiangender) {
+		Guardiangender = guardiangender;
+	}
+	public String getRelationwithpatient() {
+		return relationwithpatient;
+	}
+	public void setRelationwithpatient(String relationwithpatient) {
+		this.relationwithpatient = relationwithpatient;
+	}
+	public String getGuardianhomeeaddrss() {
+		return guardianhomeeaddrss;
+	}
+	public void setGuardianhomeeaddrss(String guardianhomeeaddrss) {
+		this.guardianhomeeaddrss = guardianhomeeaddrss;
+	}
+	public String getGuardianhomecity() {
+		return guardianhomecity;
+	}
+	public void setGuardianhomecity(String guardianhomecity) {
+		this.guardianhomecity = guardianhomecity;
+	}
+	public String getGuardianhomestate() {
+		return guardianhomestate;
+	}
+	public void setGuardianhomestate(String guardianhomestate) {
+		this.guardianhomestate = guardianhomestate;
+	}
+	public String getGuardianhomecountry() {
+		return guardianhomecountry;
+	}
+	public void setGuardianhomecountry(String guardianhomecountry) {
+		this.guardianhomecountry = guardianhomecountry;
+	}
+	public String getGuardianhomezipcode() {
+		return guardianhomezipcode;
+	}
+	public void setGuardianhomezipcode(String guardianhomezipcode) {
+		this.guardianhomezipcode = guardianhomezipcode;
+	}
+	public String getGuardianmobilecountrycode() {
+		return guardianmobilecountrycode;
+	}
+	public void setGuardianmobilecountrycode(String guardianmobilecountrycode) {
+		this.guardianmobilecountrycode = guardianmobilecountrycode;
+	}
+	public String getGuardianmobileno() {
+		return guardianmobileno;
+	}
+	public void setGuardianmobileno(String guardianmobileno) {
+		this.guardianmobileno = guardianmobileno;
+	}
+	public String getGuardianphoneno() {
+		return guardianphoneno;
+	}
+	public void setGuardianphoneno(String guardianphoneno) {
+		this.guardianphoneno = guardianphoneno;
+	}
+	public String getGuardianimage() {
+		return guardianimage;
+	}
+	public void setGuardianimage(String guardianimage) {
+		this.guardianimage = guardianimage;
+	}
+	public String getGuardianimagename() {
+		return guardianimagename;
+	}
+	public void setGuardianimagename(String guardianimagename) {
+		this.guardianimagename = guardianimagename;
+	}
+	public String getAdmintdate() {
+		return admintdate;
+	}
+	public void setAdmintdate(String admintdate) {
+		this.admintdate = admintdate;
+	}
+	public String getAdminttime() {
+		return adminttime;
+	}
+	public void setAdminttime(String adminttime) {
+		this.adminttime = adminttime;
+	}
+	public String getPatientstatus() {
+		return patientstatus;
+	}
+	public void setPatientstatus(String patientstatus) {
+		this.patientstatus = patientstatus;
+	}
 }

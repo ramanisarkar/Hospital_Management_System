@@ -7,9 +7,10 @@
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 
 <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap.min.js"></script>
@@ -17,305 +18,221 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js"></script>
+<script src="js/BloodManage.js"></script>
  
 <script>
 
 $(document).ready(function(){
-	var table;
-	var count = 0;
-	var name="bloodManageList";
- 	$.get('BloodManage',{flag:name},function(response) {
-		var obj = JSON.parse(response);
-		$.each(obj, function(index, value) {
-			count++;
-		   	var html = '';
-		   	html += '<tr id='+count+'>';
-		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].bloodgroup+'</a></td>';
-		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].numberofbags+'</td>';
-			html += '<td style="text-align: center;"><button style=" margin-left: 93px;" type="button" class="btn btn-info  editBloodManage" data-edit_id="'+count+'" id="bloodManageId'+count+'" value="'+obj[index].id+'">Edit</button>';
-			html += '<button style="margin-left: 10px; " type="button" class="btn btn-danger deleteBloodManage" data-delete_id="'+count+'" id="bloodManageId'+count+'" value-="'+obj[index].id+'">Delete</button></td></tr>';
-			$('.bloodManage').append(html);
-	 	});
-			 $('#example').DataTable();
-	});
+ 	$('.input-group.date').datepicker({format: "dd/mm/yyyy"}); 
 	
- 	var blooddoner = 0;
- 	var username="donorList";
- 	$.get('BloodManage',{flag:username},function(response) {
-		var obj = JSON.parse(response);
-		$.each(obj, function(index, value) {
-			blooddoner++;
-		   	var html = '';
-		   	html += '<tr id='+blooddoner+'>';
-		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].name+'</a></td>';
-		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].bloodgroup+'</td>';
-		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].age+'</a></td>';
-		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].gender+'</td>';
-		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].numberofbags+'</a></td>';
-		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].lastdonationdate+'</td>';
-			html += '<td style="text-align: center;"><button style="" type="button" class="btn btn-info  editBloodDonor" data-edit_id="'+blooddoner+'" id="bloodDonorId'+blooddoner+'" value="'+obj[index].id+'">Edit</button>';
-			html += '<button style="margin-left: 10px; " type="button" class="btn btn-danger deleteBloodDonor" data-delete_id="'+blooddoner+'" id="bloodDonorId'+blooddoner+'" value-="'+obj[index].id+'">Delete</button></td></tr>';
-			$('.bloodDonor').append(html);
-	 	});
-			 $('#tableBloodDoner').DataTable();
-	});
-	
-	$('#BloodManage_form').on('submit' , function(event){
-	    event.preventDefault();
-	    var form = $('#BloodManage_form')[0];
-	    var data = new FormData(form);
-	    $("#btnSubmit").prop("disabled", true);
-	    $.ajax({
-	        type: "POST",
-	        enctype: 'multipart/form-data',
-	        url: "BloodManage",
-	        data: data,
-	        processData: false,
-	        contentType: false,
-	        cache: false,
-	        timeout: 600000,
-	        success: function(response ,textStatus , jqXHR ){
-	        	var obj = JSON.parse(response);
-	        	table = $('#example').DataTable();
-	        	table.destroy();
-	        	$('.bloodManage').children('tr').remove();
-	    		$.each(obj, function(index, value) {
-	    			count++;
-	    		   	var html = '';
-	    		   	html += '<tr id='+count+'>';
-	    		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].bloodgroup+'</a></td>';
-	    		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].numberofbags+'</td>';
-	    			html += '<td style="text-align: center;"><button style=" margin-left: 93px;" type="button" class="btn btn-info  editBloodManage" data-edit_id="'+count+'" id="bloodManageId'+count+'" value="'+obj[index].id+'">Edit</button>';
-	    			html += '<button style="margin-left: 10px; " type="button" class="btn btn-danger deleteBloodManage" data-delete_id="'+count+'" id="bloodManageId'+count+'" value-="'+obj[index].id+'">Delete</button></td></tr>';
-	    			$('.bloodManage').append(html);
-	    	 	});
-	    		var message=obj[0].bloodmanageupdate;
-				console.log(message)
-				if(message == "true"){
+ 	$('#updateBloodInword_form').on('submit', function(event) {
+		event.preventDefault();
+		var form = $('#updateBloodInword_form')[0];
+		var data = new FormData(form);
+		console.log(form);
+		console.log(data);
+		$("#update").prop("disabled", true);
+		$.ajax({
+			type: "POST",
+			enctype: 'multipart/form-data',
+			url: "BloodManage",
+			data: data,
+			processData: false,
+			contentType: false,
+			cache: false,
+			timeout: 600000,
+			success: function(response) {
+				var obj = JSON.parse(response);
+				console.log(response);
+				var count1 =0;
+				$.each(obj, function(index, value) {
+					if (obj[index].numberofbags <= 5) {
+						$("#stockchak"+count1+"").addClass("info-box1");
+					} else if (obj[index].numberofbags > 5 && obj[index].numberofbags <= 10) {
+						$("#stockchak"+count1+"").addClass("info-box2");
+					}
+					else if (obj[index].numberofbags > 10) {
+						$("#stockchak"+count1+"").addClass("info-box3");
+					}
+					count1++;
+				});
+				$('#obloodstock').text(obj[0].numberofbags);
+				$('#o-bloodstock1').text(obj[1].numberofbags);
+				$('#abloodstock2').text(obj[2].numberofbags);
+				$('#a-bloodstock3').text(obj[3].numberofbags);
+				$('#bbloodstock4').text(obj[4].numberofbags);
+				$('#b-bloodstock5').text(obj[5].numberofbags);
+				$('#abbloodstock6').text(obj[6].numberofbags);
+				$('#ab-bloodstock7').text(obj[7].numberofbags);
+
+				var status = obj[0].bloodmanageupdate;
+				if (status == "true") {
 					$('#message1').show();
-	        		$('#message2').show();
-	        		$('#message3').show();
-	        		$('#messagepass').text("Recored Add Successsfully");
-	        		$("#BloodManage_form")[0].reset();
-	        		$('#example').DataTable();
-	    		}
-	            $("#btnSubmit").prop("disabled", false);
-	        },
-	        error: function (e) {
-	            $("#result").text(e.responseText);
-	            console.log("ERROR : ", e);
-	            $("#btnSubmit").prop("disabled", false);
-	        }
-	    });
-	});
-	
-	$('#BloodDonor_form').on('submit' , function(event){
-	    event.preventDefault();
-	    var form = $('#BloodDonor_form')[0];
-	    var data = new FormData(form);
-	    $("#btnSubmit").prop("disabled", true);
-	    $.ajax({
-	        type: "POST",
-	        enctype: 'multipart/form-data',
-	        url: "BloodManage",
-	        data: data,
-	        processData: false,
-	        contentType: false,
-	        cache: false,
-	        timeout: 600000,
-	        success: function(response ,textStatus , jqXHR ){
-	        	var obj = JSON.parse(response);
-	        	table = $('#tableBloodDoner').DataTable();
-	        	table.destroy();
-	        	$('.bloodDonor').children('tr').remove();
-	        	$.each(obj, function(index, value) {
-	    			blooddoner++;
-	    		   	var html = '';
-	    		   	html += '<tr id='+blooddoner+'>';
-	    		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].name+'</a></td>';
-	    		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].bloodgroup+'</td>';
-	    		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].age+'</a></td>';
-	    		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].gender+'</td>';
-	    		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].numberofbags+'</a></td>';
-	    		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].lastdonationdate+'</td>';
-	    			html += '<td style="text-align: center;"><button style="" type="button" class="btn btn-info  editBloodDonor" data-edit_id="'+blooddoner+'" id="bloodDonorId'+blooddoner+'" value="'+obj[index].id+'">Edit</button>';
-	    			html += '<button style="margin-left: 10px; " type="button" class="btn btn-danger deleteBloodDonor" data-delete_id="'+blooddoner+'" id="bloodDonorId'+blooddoner+'" value-="'+obj[index].id+'">Delete</button></td></tr>';
-	    			$('.bloodDonor').append(html);
-	    	 	});
-	        	var message=obj[0].bloodmanageupdate;
-				console.log(message)
-				if(message == "true"){
-					$('#message1').show();
-	        		$('#message2').show();
-	        		$('#message3').show();
-	        		$('#messagepass').text("Recored Add Successsfully");
-	        		$("#BloodDonor_form")[0].reset();
-	        		$('#tableBloodDoner').DataTable();
-	    		}
-	            $("#btnSubmit").prop("disabled", false);
-	        },
-	        error: function (e) {
-	            $("#result").text(e.responseText);
-	            console.log("ERROR : ", e);
-	            $("#btnSubmit").prop("disabled", false);
-	        }
-	    });
-	});
-	
-	$(document).on('click', '.editBloodManage', function(){
-		var editid = $(this).data('edit_id');
-		console.log(editid);
-		var bloodManage = $('#bloodManageId'+editid).val();
-		var username = "editBloodManage";
-		$.get('BloodManage',{flag:username , bloodManageId:bloodManage},function(response){
- 			$("#BloodManagetab1").hide();
- 			var obj = JSON.parse(response);
-			console.log(response);
-			$("#BloodManagetab2").show();
-			$('.nav-tabs a[href="#menu2"]').tab('show');
-			$('#bloodManageId').val(obj[0].id);
-			$('#adminid').val(obj[0].adminid);
-			$('#joiningdateid').val(obj[0].joiningdate);
-			$('#blood_group').val(obj[0].bloodgroup);
-			$('#number_Of_Bags').val(obj[0].numberofbags);
-		});
-	});
-	
-	$(document).on('click', '.editBloodDonor', function(){
-		var editid = $(this).data('edit_id');
-		console.log(editid);
-		var bloodDonor = $('#bloodDonorId'+editid).val();
-		var username = "editBloodDonor";
-		$.get('BloodManage',{flag:username , bloodDonorId:bloodDonor},function(response){
- 			$("#BloodDonortab1").hide();
- 			var obj = JSON.parse(response);
-			console.log(response);
-			$("#BloodDonortab2").show();
-			$('.nav-tabs a[href="#menu5"]').tab('show');
-			$('#bloodDonorId').val(obj[0].id);
-			$('#bloodDonorAdminid').val(obj[0].adminid);
-			$('#bloodDonorJoiningdateid').val(obj[0].joiningdate);
-			$('#bloodDonoremail').val(obj[0].email);
-			$('#bloodDonorphone').val(obj[0].phone);
-			$('#bloodDonoraeg').val(obj[0].age);
-			$('#bloodDonorbool_dodnor_name').val(obj[0].name);
-			var gender = obj[0].gender;
-  			if(gender=="male"){
-  				$("#bloodDonormale").prop("checked", true);
-  			}
-  			else {
-  				$("#bloodDonorfemale").prop("checked", true);
+					$('#message2').show();
+					$('#message3').show();
+					$('#messagepass').text("Record Added Successsfully");
+					$("#bloodInword_form")[0].reset();
+					var bloodinword;
+					var username = "bloodinwordlist";
+					$.get('BloodManage', { flag: username }, function(response) {
+						var obj = JSON.parse(response);
+						table = $('#tableBloodInword').DataTable();
+						table.destroy();
+						$('.bloodinwordList').children('tr').remove();
+						$.each(obj, function(index, value) {
+							bloodinword++;
+							var html = '';
+							html += '<tr id=' + bloodinword + '>';
+							html += '<td style="padding-left: 15px; padding-top: 15px;">' + obj[index].name + '</td>';
+							html += '<td style="padding-left: 15px; padding-top: 15px;">' + obj[index].bloodgroup + '</a></td>';
+							html += '<td style="padding-left: 15px; padding-top: 15px;">' + obj[index].age + '</td>';
+							html += '<td style="padding-left: 15px; padding-top: 15px;">' + obj[index].address + '</a></td>';
+							html += '<td style="padding-left: 15px; padding-top: 15px;">' + obj[index].numberofbags + '</td>';
+							html += '<td style="padding-left: 15px; padding-top: 15px;">' + obj[index].lastdonationdate + '</td>';
+							html += '<td style="text-align: center;"><button style="" type="button" class="btn btn-info  editBloodInword" data-edit_id="' + bloodinword + '" id="bloodInwordId' + bloodinword + '"value="' + obj[index].id + '">Edit</button>';
+							html += '<button style="margin-left: 10px; " type="button" class="btn btn-danger deleteBloodInword" data-delete_id="' + bloodinword + '" id="bloodInwordId' + bloodinword + '" value="' + obj[index].id + '">Delete</button></td></tr>';
+							$('.bloodinwordList').append(html);
+						});
+						$('#tableBloodInword').DataTable();
+					});
+				}
+				$("#inwordsubmit").prop("disabled", false);
+			},
+			error: function(e) {
+				$("#result").text(e.responseText);
+				console.log("ERROR : ", e);
+				$("#inwordsubmit").prop("disabled", false);
 			}
-			$('#bloodDonorblood_group').val(obj[0].bloodgroup);
-			$('#bloodDonorblood_status').val(obj[0].numberofbags);
-			$('#bloodDonorlast_donet_date').val(obj[0].lastdonationdate);
 		});
 	});
-	
-	$('#BloodManageupdate_form').on('submit', function(event){
-    event.preventDefault();
-    var form = $('#BloodManageupdate_form')[0];
-    var data = new FormData(form);
-    console.log(form);
-    console.log(data);
-    $("#update").prop("disabled", true);
-    $.ajax({
-        type: "POST",
-        enctype: 'multipart/form-data',
-        url: "BloodManage",
-        data: data,
-        processData: false,
-        contentType: false,
-        cache: false,
-        timeout: 600000,
-        success: function(response ,textStatus , jqXHR ){
-        	var obj = JSON.parse(response);
-        	table = $('#example').DataTable();
-        	table.destroy();
-        	$('.bloodManage').children('tr').remove();
-    		$.each(obj, function(index, value) {
-    			count++;
-    		   	var html = '';
-    		   	html += '<tr id='+count+'>';
-    		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].bloodgroup+'</a></td>';
-    		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].numberofbags+'</td>';
-    			html += '<td style="text-align: center;"><button style=" margin-left: 93px;" type="button" class="btn btn-info  editBloodManage" data-edit_id="'+count+'" id="bloodManageId'+count+'" value="'+obj[index].id+'">Edit</button>';
-    			html += '<button style="margin-left: 10px; " type="button" class="btn btn-danger deleteBloodManage" data-delete_id="'+count+'" id="bloodManageId'+count+'" value-="'+obj[index].id+'">Delete</button></td></tr>';
-    			$('.bloodManage').append(html);
-    	 	});
-    		var message=obj[0].bloodmanageupdate;
-			console.log(message)
-			if(message == "true"){
-				$('#message1').show();
-        		$('#message2').show();
-        		$('#message3').show();
-        		$('#messagepass').text("Recored Update Successsfully");
-        		$("#BloodManage_form")[0].reset();
-        		$('#example').DataTable();
-        		$("#update").prop("disabled", false);
-    		}
-        },
-        error: function (e) {
-            console.log("ERROR : ", e);
-            $("#update").prop("disabled", false);
-        	}
-    	});
+ 	
+ 	$('#insertpatientid').change(function() {
+		var patient = $('#insertpatientid').val();
+		var username = "insertPatientId";
+		$.get('Patient', { flag: username, patientId: patient }, function(response) {
+			var obj = JSON.parse(response);
+			console.log(response);
+			$('#insertfirstname').val(obj[0].firstname);
+			$('#insertmiddlename').val(obj[0].midalname);
+			$('#insertlastname').val(obj[0].lastname);
+			$('#insertdob').val(obj[0].date);
+			var gender = obj[0].gender;
+			if (gender == "male") {
+				$("#insertmale").prop("checked", true);
+			}
+			else {
+				$("#insertfemale").prop("checked", true);
+			}
+			$('#insertbloodgroup').val(obj[0].bloodgroup);
+			$('#insertsymptoms').val(obj[0].symptoms);
+			$('#inserthomeaddress').val(obj[0].homeeaddrss);
+			$('#inserthomecity').val(obj[0].homecity);
+			$('#inserthomestate').val(obj[0].homestate);
+			$('#inserthomecountry').val(obj[0].homecountry);
+			$('#inserthomezip').val(obj[0].homezipcode);
+			$('#insertcode').val(obj[0].mobilecountrycode);
+			$('#insertmobile').val(obj[0].mobileno);
+			$('#insertphone').val(obj[0].phoneno);
+			$('#insertguardian').val(obj[0].guardianid);
+			$('#insertstep2patientid').val(obj[0].patientid);
+		});
 	});
-	
-	$('#BloodDonorupdate_form').on('submit', function(event){
-	    event.preventDefault();
-	    var form = $('#BloodDonorupdate_form')[0];
-	    var data = new FormData(form);
-	    console.log(form);
-	    console.log(data);
-	    $("#blooddonorupdate").prop("disabled", true);
-	    $.ajax({
-	        type: "POST",
-	        enctype: 'multipart/form-data',
-	        url: "BloodManage",
-	        data: data,
-	        processData: false,
-	        contentType: false,
-	        cache: false,
-	        timeout: 600000,
-	        success: function(response ,textStatus , jqXHR ){
-	        	var obj = JSON.parse(response);
-	        	table = $('#tableBloodDoner').DataTable();
-	        	table.destroy();
-	        	$('.bloodDonor').children('tr').remove();
-	        	$.each(obj, function(index, value) {
-	    			blooddoner++;
-	    		   	var html = '';
-	    		   	html += '<tr id='+blooddoner+'>';
-	    		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].name+'</a></td>';
-	    		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].bloodgroup+'</td>';
-	    		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].age+'</a></td>';
-	    		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].gender+'</td>';
-	    		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].numberofbags+'</a></td>';
-	    		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].lastdonationdate+'</td>';
-	    			html += '<td style="text-align: center;"><button style="" type="button" class="btn btn-info  editBloodDonor" data-edit_id="'+blooddoner+'" id="bloodDonorId'+blooddoner+'" value="'+obj[index].id+'">Edit</button>';
-	    			html += '<button style="margin-left: 10px; " type="button" class="btn btn-danger deleteBloodDonor" data-delete_id="'+blooddoner+'" id="bloodDonorId'+blooddoner+'" value-="'+obj[index].id+'">Delete</button></td></tr>';
-	    			$('.bloodDonor').append(html);
-	    	 	});
-	        	var message=obj[0].bloodmanageupdate;
-				console.log(message)
-				if(message == "true"){
+
+	$('.totalcharg').keyup(function(event) {
+		console.log("-------------------------------------");
+		var charge = $('#bloodoutwordchage').val();
+		var noofbag = $('#blooddispachbag').val();
+		console.log(charge);
+		console.log(noofbag);
+
+		var total = charge * noofbag;
+		console.log(total);
+		$('#totalcost').val(total);
+	});
+
+	$('#bloodOutword_form').on('submit', function(event) {
+		event.preventDefault();
+		var form = $('#bloodOutword_form')[0];
+		var data = new FormData(form);
+		var count1 = 0;
+		console.log("data");
+		console.log("form");
+		$("#inwordsubmit").prop("disabled", true);
+		$.ajax({
+			type: "POST",
+			enctype: 'multipart/form-data',
+			url: "BloodManage",
+			data: data,
+			processData: false,
+			contentType: false,
+			cache: false,
+			timeout: 600000,
+			success: function(response, textStatus, jqXHR) {
+				var obj = JSON.parse(response);
+				console.log(response);
+				$.each(obj, function(index, value) {
+					if (obj[index].numberofbags <= 5) {
+						$("#stockchak" + count1 + "").addClass("info-box1");
+					} else if (obj[index].numberofbags > 5 && obj[index].numberofbags <= 10) {
+						$("#stockchak" + count1 + "").addClass("info-box2");
+					}
+					else if (obj[index].numberofbags > 10) {
+						$("#stockchak" + count1 + "").addClass("info-box3");
+					}
+					count1++;
+				});
+				$('#obloodstock').text(obj[0].numberofbags);
+				$('#o-bloodstock1').text(obj[1].numberofbags);
+				$('#abloodstock2').text(obj[2].numberofbags);
+				$('#a-bloodstock3').text(obj[3].numberofbags);
+				$('#bbloodstock4').text(obj[4].numberofbags);
+				$('#b-bloodstock5').text(obj[5].numberofbags);
+				$('#abbloodstock6').text(obj[6].numberofbags);
+				$('#ab-bloodstock7').text(obj[7].numberofbags);
+
+				var status = obj[0].bloodmanageupdate;
+				if (status == "true") {
 					$('#message1').show();
-	        		$('#message2').show();
-	        		$('#message3').show();
-	        		$('#messagepass').text("Recored Update Successsfully");
-	        		$('#tableBloodDoner').DataTable();
-	    		}
-	            $("#blooddonorupdate").prop("disabled", false);
-	        },
-	        error: function (e) {
-	            $("#result").text(e.responseText);
-	            console.log("ERROR : ", e);
-	            $("#blooddonorupdate").prop("disabled", false);
-	        }
-    	});
+					$('#message2').show();
+					$('#message3').show();
+					$('#messagepass').text("Record Added Successsfully");
+					$("#bloodOutword_form")[0].reset();
+					var bloodinword;
+					var username = "bloodinwordlist";
+					$.get('BloodManage', { flag: username }, function(response) {
+						var obj = JSON.parse(response);
+						table = $('#tableBloodInword').DataTable();
+						table.destroy();
+						$('.bloodinwordList').children('tr').remove();
+						$.each(obj, function(index, value) {
+							bloodinword++;
+							var html = '';
+							html += '<tr id=' + bloodinword + '>';
+							html += '<td style="padding-left: 15px; padding-top: 15px;">' + obj[index].name + '</td>';
+							html += '<td style="padding-left: 15px; padding-top: 15px;">' + obj[index].bloodgroup + '</a></td>';
+							html += '<td style="padding-left: 15px; padding-top: 15px;">' + obj[index].age + '</td>';
+							html += '<td style="padding-left: 15px; padding-top: 15px;">' + obj[index].address + '</a></td>';
+							html += '<td style="padding-left: 15px; padding-top: 15px;">' + obj[index].numberofbags + '</td>';
+							html += '<td style="padding-left: 15px; padding-top: 15px;">' + obj[index].lastdonationdate + '</td>';
+							html += '<td style="text-align: center;"><button style="" type="button" class="btn btn-info  editBloodInword" data-edit_id="' + bloodinword + '" id="bloodInwordId' + bloodinword + '"value="' + obj[index].id + '">Edit</button>';
+							html += '<button style="margin-left: 10px; " type="button" class="btn btn-danger deleteBloodInword" data-delete_id="' + bloodinword + '" id="bloodInwordId' + bloodinword + '" value="' + obj[index].id + '">Delete</button></td></tr>';
+							$('.bloodinwordList').append(html);
+						});
+						$('#tableBloodInword').DataTable();
+					});
+				}
+				$("#inwordsubmit").prop("disabled", false);
+			},
+			error: function(e) {
+				$("#result").text(e.responseText);
+				console.log("ERROR : ", e);
+				$("#inwordsubmit").prop("disabled", false);
+			}
+		});
 	});
-	
+ 	
 	$(document).on('click', '.deleteBloodManage', function(){
 		var deleteid = $(this).data('delete_id');
 		console.log(deleteid);
@@ -385,18 +302,104 @@ $(document).ready(function(){
 		});
 	});
 	
+ 	$("#datechange").on("change", function() {
+ 	    this.setAttribute(
+ 	        "data-date",
+ 	        moment(this.value, "YYYY-MM-DD")
+ 	        .format( this.getAttribute("data-date-format") )
+ 	    )
+ 	}).trigger("change")
+ 	$("#datechange1").on("change", function() {
+ 	    this.setAttribute(
+ 	        "data-date",
+ 	        moment(this.value, "YYYY-MM-DD")
+ 	        .format( this.getAttribute("data-date-format") )
+ 	    )
+ 	}).trigger("change")
+ 	
  	$(".nav-tabs a").click(function(){
-   		$("#BloodManagetab2").hide();
-   		$("#BloodDonortab2").hide();
+   		$("#Bloodtab3").hide();
+   		$("#Bloodtab10").hide();
+   		$("#Bloodtab6").hide();
    		$('#message1').hide();
 		$('#message2').hide();
 		$('#message3').hide();
+		$("#Bloodtab2").show();
+		$("#Bloodtab5").show();
    	    $(this).tab('show');
    	});
 });
 </script>
 
 <style type="text/css">
+img.dashboard_background {
+  float: left;
+  width: 100%;
+}
+.info-box .patient .info-box-stats p {
+  font-family: 'Open Sans';
+  color: red;
+  font-size: 34px; 
+}
+.hi{
+font-family: 'Open Sans';
+  color: red;
+  font-size: 34px;
+}
+.info-box .patient .info-box-stats span.info-box-title {
+	font-family: 'Open Sans';
+  color: #22baa0;
+  font-size: 34px; 
+}
+.info-box .panel-body {
+	  background-position: right center !important;
+	}
+	.info-box .info-box-icon i {
+    float: right;
+    font-size: 70px !important;
+}
+.info-box img{
+ 
+	transition: all 0.3s ease 0s;
+} .info-box:hover img
+{
+	transition: all 0.3s ease 0s;
+    transform: scale(1.2);
+    overflow: hidden;
+}  
+.info-box .info-box-stats {
+	  position: absolute;
+	  left: 8%;
+	  top: 15%;
+	  z-index:2;
+}
+.info-box .panel-body {
+  padding: 0 !important;
+}
+.info-box{
+	box-shadow: 0px 0px 8px #22baa0;
+	overflow: hidden;
+	border: 1px solid #22baa0;
+}
+.info-box1{
+	box-shadow: 0px 0px 8px red !important;
+	overflow: hidden;
+	border: 1px solid red !important;
+}
+.info-box2{
+	box-shadow: 0px 0px 10px #f0ad4e !important;
+	overflow: hidden;
+	border: 1px solid #eea236 !important;
+}
+.info-box3{
+	box-shadow: 0px 0px 8px green !important;
+	overflow: hidden;
+	border: 1px solid green !important;
+}
+.img-fludia{
+max-width: 100%;
+height: auto;
+}
 .require-field{
 color: red;
 }
@@ -412,8 +415,7 @@ color: red;
 	padding: 8px;
 }
 .text{
-
-text-align: right;
+	text-align: right;
 }
 .ullist {
 	list-style-type: none;
@@ -428,7 +430,6 @@ text-align: right;
     text-decoration: none;
     background-color: #2C3542; !important;
 }
-
 .tabcalss>li>a {
 	color:#555555;
     position: relative;
@@ -460,7 +461,6 @@ table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, 
 }table.dataTable thead .sorting_asc:after {
     content: "\e155";
 }
-
 table.dataTable thead .sorting_desc:after {
      content: "\e156";
 }
@@ -477,7 +477,6 @@ table.dataTable thead .sorting:after {
 table.dataTable thead .sorting:last-child:after{
 display:none !important;
 }
-
 .table th:focus {
 	outline: 0 !important;
 }
@@ -500,6 +499,15 @@ display:none !important;
     margin-left: 298px;
     margin-top: -29px;
 }
+#tableBloodInword_length{
+	margin-left: 4px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+#tableBloodInword_paginate{
+    margin-left: 298px;
+    margin-top: -29px;
+}
 #tableBloodDoner_length{
 	margin-left: 4px;
     margin-top: 15px;
@@ -509,8 +517,61 @@ display:none !important;
     margin-left: 298px;
     margin-top: -29px;
 }
+#tableBloodDonorHistry_length{
+	margin-left: 4px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+#tableBloodDonorHistry_paginate{
+    margin-left: 298px;
+    margin-top: -29px;
+}
+#tableBloodDonorView1_length{
+	margin-left: 4px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+#tableBloodDonorView1_paginate{
+    margin-left: 298px;
+    margin-top: -29px;
+}
+#tableoutwordlist_length{
+	margin-left: 4px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+#tableoutwordlist_paginate{
+    margin-left: 298px;
+    margin-top: -29px;
+}
 .btn {
 border-radius: 0px;
+}
+.dateformat {
+    position: relative;
+    color: white;
+}
+
+.dateformat:before {
+    content: attr(data-date);
+    color: black;
+}
+
+.dateformat::-webkit-datetime-edit, input::-webkit-inner-spin-button, input::-webkit-clear-button {
+    display: none;
+}
+
+.dateformat::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 3px;
+    right: 0;
+    color: black;
+    opacity: 1;
+}
+#icone{
+	padding-bottom: 8px;
+    padding-top: 8px;
+    padding-right: 5px;
 }
 </style>
 </head>
@@ -603,284 +664,928 @@ border-radius: 0px;
 		<div style="color: green; margin-top: 3px;" id="specializationadd"></div>
 		<div style="padding-top: 15px;"></div>
 		<div class="container" style="margin-right: 90px;">
-			<ul class="nav nav-tabs tabcalss">
+			<ul class="nav nav-tabs tabcalss" style="font-size: 14px;">
 				<li class="active" id="BloodManagetab">
-					<a href="#home"	data-toggle="tab"><i class="fa fa-bars"aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Blood Manage</a>
+					<a href="#home"	data-toggle="tab"><i class="fa fa-bars"aria-hidden="true"id="icone"></i>Blood Stock</a>
 				</li>
-				<li style="margin-left: 15px; background-color: f1f4f9;">
-					<a href="#menu1" id="BloodManagetab1" data-toggle="tab">
-						<i class="fa fa-plus-circle"aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i> Add Blood Group
+				<li style="background-color: f1f4f9;">
+					<a href="#menu1" id="Bloodtab1" data-toggle="tab"><i class="fa fa-bars"aria-hidden="true" id="icone"></i>Blood Donor List</a></li>
+				<li style="background-color: f1f4f9;">
+					<a href="#menu2" id="Bloodtab2" data-toggle="tab">
+						<i class="fa fa-plus-circle"aria-hidden="true" id="icone"></i>Add Blood Donor
 					</a>
 				</li>
-				<li style="margin-left: 15px; background-color: f1f4f9;">
-					<a id="BloodManagetab2" data-toggle="tab"href="#menu2" style="display: none;">
-						<i class="fas fa-edit"aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Edit Blood Group</a>
+				<li style="background-color: f1f4f9;">
+					<a href="#menu3" id="Bloodtab3" style="display: none;" data-toggle="tab">
+						<i class="fa fa-plus-circle"aria-hidden="true" id="icone"></i>Edit Blood Donor</a>
 				</li>
-				<li style="margin-left: 15px; background-color: f1f4f9;">
-					<a href="#menu3" id="BloodDonortab" data-toggle="tab"><i class="fa fa-bars"aria-hidden="true"style="border-radius: 50%;padding: 8px;"></i>Blood Donor List</a>
+				<li style="background-color: f1f4f9;">
+					<a href="#menu10"  id="Bloodtab10" data-toggle="tab"style="display: none;">
+						<i class="fas fa-edit"aria-hidden="true" id="icone"></i>View Blood Donor</a>
 				</li>
-				<li style="margin-left: 15px; background-color: f1f4f9;">
-					<a href="#menu4" id="BloodDonortab1" data-toggle="tab">
-						<i class="fa fa-plus-circle"aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Add Blood Donor
+				<li style="background-color: f1f4f9;">
+					<a href="#menu4" id="Bloodtab4" data-toggle="tab">
+						<i class="fa fa-bars"aria-hidden="true" id="icone"></i>Blood Inword List
 					</a>
 				</li>
-				<li style="margin-left: 15px; background-color: f1f4f9;">
-					<a id="BloodDonortab2" data-toggle="tab"href="#menu5" style="display: none;">
-						<i class="fas fa-edit"aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Edit Blood Donor</a>
+				<li style="background-color: f1f4f9;">
+					<a href="#menu5" id="Bloodtab5" data-toggle="tab">
+						<i class="fa fa-plus-circle"aria-hidden="true"id="icone"></i>Add Blood Inword
+					</a>
+				</li>
+				<li style="background-color: f1f4f9;">
+					<a href="#menu6" id="Bloodtab6" style="display: none;" data-toggle="tab">
+						<i class="fa fa-plus-circle"aria-hidden="true" id="icone"></i>Edit Blood Inword
+					</a>
+				</li>
+				<li style="background-color: f1f4f9;">
+					<a href="#menu7" id="Bloodtab7" data-toggle="tab">
+						<i class="fa fa-bars"aria-hidden="true" id="icone"></i>Blood Outword List 
+					</a>
+				</li>
+				<li style="background-color: f1f4f9;">
+					<a href="#menu8" id="Bloodtab8" data-toggle="tab">
+						<i class="fa fa-plus-circle"aria-hidden="true" id="icone"></i>Add Blood Outword 
+					</a>
+				</li>
+				<li style="background-color: f1f4f9;">
+					<a href="#menu9"  id="Bloodtab9" data-toggle="tab"style="display: none;">
+						<i class="fas fa-edit"aria-hidden="true" id="icone"></i>Edit Blood Outword</a>
 				</li>
 			</ul>
 			<div class="tab-content">
-			<div id="home"  class="container tab-pane active"style="margin-top: 10px;">
-					<table id="example" class="display table table-striped table-hover" style="width:100%">
+				<div id="home"  class="container tab-pane active"style="margin-top: 10px;">
+					<div style="padding: 50px;">
+					<div class="row">	
+						<div class="col-lg-3">			
+						<a href="">			
+							<div  class="panel info-box panel-white"id="stockchak0" >
+								<div class="panel-body patient" >
+									<div class="info-box-stats">
+										<p style="font-family: 'Open Sans';" class="counter">O+</p>
+										
+										<span class="info-box-title" id="obloodstock"></span>
+									</div>
+									<img src="ing/blood (1).png" class="dashboard_background">
+								</div>
+							</div>
+						</a></div>
+						<div class="col-lg-3 ">			
+						<a href="">			
+							<div class="panel info-box panel-white"id="stockchak1" >
+								<div class="panel-body patient">
+									<div class="info-box-stats">
+										<p class="counter">O-</p>
+										<span  class="info-box-title"id="o-bloodstock1"></span>
+									</div>
+									<img src="ing/blood (1).png" class="dashboard_background"> 	
+								</div>
+							</div>
+							</a>
+						</div>
+						<div class="col-lg-3 ">			
+						<a href="">			
+							<div class="panel info-box panel-white"id="stockchak2">
+								<div class="panel-body patient">
+									<div class="info-box-stats">
+										<p class="counter">A+</p>
+										<span class="info-box-title"id="abloodstock2"></span>
+									</div>
+									<img src="ing/blood (1).png" class="dashboard_background"> 	
+								</div>
+							</div>
+							</a>
+						</div>
+						<div class="col-lg-3 ">			
+						<a href="">			
+							<div class="panel info-box panel-white"id="stockchak3">
+								<div class="panel-body patient">
+									<div class="info-box-stats">
+										<p class="counter">A-</p>
+										<span class="info-box-title"id="a-bloodstock3"></span>
+									</div>
+									<img src="ing/blood (1).png" class="dashboard_background"> 	
+								</div>
+							</div>
+							</a>
+						</div>
+						</div>
+						<div class="row">	
+						<div class="col-lg-3">			
+						<a href="">			
+							<div class="panel info-box panel-white" id="stockchak4">
+								<div class="panel-body patient">
+									<div class="info-box-stats">
+										<p class="counter">B+</p>
+										
+										<span class="info-box-title"id="bbloodstock4"></span>
+									</div>
+									<img src="ing/blood (1).png" class="dashboard_background">
+									
+								</div>
+							</div>
+						</a></div>
+						<div class="col-lg-3 ">			
+						<a href="">			
+							<div class="panel info-box panel-white"id="stockchak5">
+								<div class="panel-body patient">
+									<div class="info-box-stats">
+										<p class="counter">B-</p>
+										<span class="info-box-title"id="b-bloodstock5"></span>
+									</div>
+									<img src="ing/blood (1).png" class="dashboard_background"> 	
+								</div>
+							</div>
+							</a>
+						</div>
+						<div class="col-lg-3 ">			
+						<a href="">			
+							<div class="panel info-box panel-white" id="stockchak6">
+								<div class="panel-body patient">
+									<div class="info-box-stats">
+										<p class="counter">AB+</p>
+										<span class="info-box-title"id="abbloodstock6"></span>
+									</div>
+									<img src="ing/blood (1).png" class="dashboard_background"> 	
+								</div>
+							</div>
+							</a>
+						</div>
+						<div class="col-lg-3 ">			
+						<a href="">			
+							<div class="panel info-box panel-white"id="stockchak7">
+								<div class="panel-body patient">
+									<div class="info-box-stats">
+										<p class="counter">AB-</p>
+										<span class="info-box-title"id="ab-bloodstock7"></span>
+									</div>
+									<img src="ing/blood (1).png" class="dashboard_background img-fludia"> 	
+								</div>
+							</div>
+						 </a>
+						</div>
+					</div>
+					<div class="row">	
+						<div class="col-lg-3">			
+						<a href="">			
+							<div class="panel info-box panel-white">
+								<div class="panel-body patient">
+									<div class="info-box-stats">
+										<p class="counter" id="donorcount" style="margin-left: 5px; color: #22baa0;">0</p>
+										<span class="info-box-title" style="font-size: 30px;">Doner</span>
+									</div>
+									<img src="ing/sasasa.jpg" style="margin-left: 28px;" class="dashboard_background">
+								</div>
+							</div>
+						</a>
+						</div>
+					</div>
+	   			 </div>
+				</div>
+				<div id="menu1"  class="tab-pane "style="margin-top: 15px;">
+					<table id="tableBloodDoner" class="display table table-striped table-hover" style="width:100%">
 			        <thead>
 			            <tr>
+			            	<th style="padding-left: 15px;">Donor Id</th>
+							<th style="padding-left: 15px;">Name</th>
 							<th style="padding-left: 15px;">Blood Group</th>
-							<th style="padding-left: 15px;">Number Of Bags</th>
+							<th style="padding-left: 15px;">Age</th>
+							<th style="padding-left: 15px;">Email</th>
+							<th style="padding-left: 15px;">Phone NO</th>
+							<th style="padding-left: 15px;">Joining</th>
 							<th style="padding-left: 15px; text-align: center ;">Action</th>
 			            </tr>
 			        </thead>
-			        <tbody class="bloodManage">
+			        <tbody class="bloodDonorList">
 			        </tbody>
 			        <tfoot>
 			            <tr>
-			            	<th style="padding-left: 15px;">Blood Group</th>
-							<th style="padding-left: 15px;">Number Of Bags</th>
+			            	<th style="padding-left: 15px;">Donor Id</th>
+							<th style="padding-left: 15px;">Name</th>
+							<th style="padding-left: 15px;">Blood Group</th>
+							<th style="padding-left: 15px;">Age</th>
+							<th style="padding-left: 15px;">Email</th>
+							<th style="padding-left: 15px;">Phone NO</th>
+							<th style="padding-left: 15px;">Joining</th>
 							<th style="padding-left: 15px; text-align: center ;">Action</th>
 			            </tr>
 			        </tfoot>
-			    </table>
-			    <div style="margin-top: 26px;"></div>
-   			 </div>
-			<div id="menu1" class="tab-pane">
-				<form id="BloodManage_form" style="margin-top: 20px;" >
-					<div class="form-group row">
-			    		<label class="col-sm-2 col-form-label text" >Blood Group<span style="color: red;">*</span></label>
-			    		<div class="col-sm-8 ">
-			      			<select class="form-control " name="bloodgroup" required="required">
-								<option value="" disabled selected hidden="">Select Blood Group</option>	
-								<option value="O+">O+ </option>
-								<option value="O-">O- </option>
-								<option value="A+">A+ </option>
-								<option value="B+">B+ </option>
-								<option value="A-">A- </option>
-								<option value="B-">B- </option>
-								<option value="AB+">AB+ </option>
-								<option value="AB-">AB- </option>
-							</select>
+			    	</table>
+			    	<div style="margin-top: 26px;"></div>
+				</div>
+				<div id="menu2"  class="tab-pane "style="margin-top: 15px;">
+					<form id="bloodDonor_form" style="margin-top: 20px;" >
+					<div style="margin-top: 15px;"><h4>Personal Information</h4></div>
+						<div style="border-bottom: 1px solid gray;"></div>
+						<div >
+							<div style="margin-top: 15px;">
+								<div class="form-group row">
+						    		<label class="col-sm-2 col-form-label text" >First Name<span style="color: red;">*</span></label>
+						    		<div class="col-sm-4">
+						      			<input type="text" class="form-control" name="firstname" placeholder="First Name"  required>
+						    		</div>
+		
+						    		<label class="col-sm-2 col-form-label text" >Middle Name</label>
+						    		<div class="col-sm-4">
+						      			<input type="text" class="form-control" name="middlename"  placeholder="Middle Name">
+						    		</div>
+						    	</div>
+					  			<div class="form-group row">
+						    		<label  class="col-sm-2 col-form-label text" >Last Name<span style="color: red;">*</span></label>
+						    		<div class="col-sm-4">
+						      			<input type="text" class="form-control" name="lastname" placeholder="Last Name" required>
+						    		</div>
+						    		<label class="col-sm-2 col-form-label text" >Date of birth<span style="color: red;">*</span></label>
+						    		<div class="col-sm-4">
+						      			<input type="date" id="datechange1" name="dob"class="form-control dateformat" data-date="" data-date-format="DD/MM/YYYY" required="required">
+						    		</div>
+						    		
+					  			</div>
+					  			<div class="form-group row">
+						    		<label  class="col-sm-2 col-form-label text" >Gender<span style="color: red;">*</span></label>
+						    		<div class="col-sm-4">
+						      			<label class="radio-inline"><input type="radio" name="gender" value="male" checked="checked">Male</label>
+										<label class="radio-inline"><input type="radio" name="gender" value="female">Female</label>
+						    		</div>
+						    		<label class="col-sm-2 text " for="email">Email<span class="require-field">*</span></label>
+									<div class="col-sm-4">
+										<input class="form-control  text-input" maxlength="100" type="text" name="email" value=""required>
+									</div>
+					  			</div>
+					  			<div class="form-group row">
+					  				<label class="col-sm-2 col-form-label text" >Blood Group<span style="color: red;">*</span></label>
+				    				<div class="col-sm-4 ">
+					      			<select class="form-control " name="bloodgroup" required="required">
+										<option value="" disabled selected hidden="">Select Blood Group</option>	
+										<option value="O+">O+ </option>
+										<option value="O-">O- </option>
+										<option value="A+">A+ </option>
+										<option value="B+">B+ </option>
+										<option value="A-">A- </option>
+										<option value="B-">B- </option>
+										<option value="AB+">AB+ </option>
+										<option value="AB-">AB- </option>
+									</select>
+				    			</div>
+				    			<label class="col-sm-2 text" for="med_category_name">Age<span class="require-field">*</span></label>
+								<div class="col-sm-4">
+									<input name="age"  class="form-control" min="0" max="99" type="number" onkeypress="if(this.value.length==2) return false;" required>
+								</div>
+				    		</div>
+							</div>
+						</div>
+						<div style="margin-top: 20px;"><h4>Contact Information</h4></div>
+						<div style="border-bottom: 1px solid gray;"></div>
+						<div style="margin-top: 15px;">
+							<div class="form-group row">
+					    		<label class="col-sm-2 col-form-label text" >Mobile Number<span style="color: red;">*</span></label>
+					    		<div class="col-sm-1">
+					      			<input type="tel" class="form-control" name="standardcode" value="+91" >
+					    		</div>
+					    		<div class="col-sm-3">
+					      			<input type="tel" class="form-control" name="mobilenumber" placeholder="123-456-7890" pattern="[0-9]{3}[0-9]{3}[0-9]{4}" required>
+					    		</div>
+					    		<label class="col-sm-2 col-form-label text" >Phone Number</label>
+					    		<div class="col-sm-4">
+					      			<input type="tel" class="form-control" name="phonenumber" placeholder="123-456-7890" pattern="[0-9]{3}[0-9]{3}[0-9]{4}">
+					    		</div>
+					    	</div>
+					    </div>
+						
+						<div class="col-sm-offset-2 col-sm-8" style="margin-bottom: 15px;">
+						<input type="hidden" name="flag" value="insertblooddonor">
+				        	<input type="submit" value="Save" id="blooddonerbten" name="save_blooddonor" class="btn btn-success">
+				        </div>
+	       			 </form>
+				</div>
+				<div id="menu3"  class="tab-pane "style="margin-top: 15px;">
+					<form id="updateBloodDonor_form" style="margin-top: 20px;" >
+					<div style="margin-top: 15px;"><h4>Personal Information</h4></div>
+						<div style="border-bottom: 1px solid gray;"></div>
+						<div >
+							<div style="margin-top: 15px;">
+								<div class="form-group row">
+						    		<label class="col-sm-2 col-form-label text" >First Name<span style="color: red;">*</span></label>
+						    		<div class="col-sm-4">
+						      			<input type="text" id="donerfirstname" class="form-control" name="firstname" placeholder="First Name"  required>
+						    		</div>
+		
+						    		<label class="col-sm-2 col-form-label text" >Middle Name</label>
+						    		<div class="col-sm-4">
+						      			<input type="text" id="donermiddlename" class="form-control" name="middlename"  placeholder="Middle Name">
+						    		</div>
+						    	</div>
+					  			<div class="form-group row">
+						    		<label  class="col-sm-2 col-form-label text" >Last Name<span style="color: red;">*</span></label>
+						    		<div class="col-sm-4">
+						      			<input type="text" id="donerlastname" class="form-control" name="lastname" placeholder="Last Name" required>
+						    		</div>
+						    		<label class="col-sm-2 col-form-label text" >Date of birth<span style="color: red;">*</span></label>
+						    		<div class="col-sm-4">
+						      			<input type="date"id="donordob" name="dateofbirth"id="datechange1"class="form-control " data-date="" data-date-format="DD/MM/YYYY" required="required">
+						    		</div>
+						    		
+					  			</div>
+					  			<div class="form-group row">
+						    		<label  class="col-sm-2 col-form-label text" >Gender<span style="color: red;">*</span></label>
+						    		<div class="col-sm-4">
+						      			<label class="radio-inline"><input type="radio" id="donortgender" name="gender" value="male" checked="checked">Male</label>
+										<label class="radio-inline"><input type="radio" id="donortgenderf"name="gender" value="female">Female</label>
+						    		</div>
+						    		<label class="col-sm-2 text " for="email">Email<span class="require-field">*</span></label>
+									<div class="col-sm-4">
+										<input id="donoremail" class="form-control  text-input" maxlength="100" type="text" name="email" value=""required>
+									</div>
+					  			</div>
+					  			<div class="form-group row">
+					  				<label class="col-sm-2 col-form-label text" >Blood Group<span style="color: red;">*</span></label>
+				    				<div class="col-sm-4 ">
+					      			<select id="donorblood_group" class="form-control" name="bloodgroup" required="required">
+										<option value="" disabled selected hidden="">Select Blood Group</option>	
+										<option value="O+">O+ </option>
+										<option value="O-">O- </option>
+										<option value="A+">A+ </option>
+										<option value="B+">B+ </option>
+										<option value="A-">A- </option>
+										<option value="B-">B- </option>
+										<option value="AB+">AB+ </option>
+										<option value="AB-">AB- </option>
+									</select>
+				    			</div>
+				    			<label class="col-sm-2 text" for="med_category_name">Age<span class="require-field">*</span></label>
+								<div class="col-sm-4">
+									<input class="form-control" id="donoraeg" min="0" max="99" type="number" onkeypress="if(this.value.length==2) return false;" name="age" required>
+								</div>
+				    		</div>
+							</div>
+						</div>
+						<div style="margin-top: 20px;"><h4>Contact Information</h4></div>
+						<div style="border-bottom: 1px solid gray;"></div>
+						<div style="margin-top: 15px;">
+							<div class="form-group row">
+					    		<label class="col-sm-2 col-form-label text" >Mobile Number<span style="color: red;">*</span></label>
+					    		<div class="col-sm-1">
+					      			<input type="tel" id="donorcode"class="form-control" name="standardcode" value="+91" >
+					    		</div>
+					    		<div class="col-sm-3">
+					      			<input type="tel" id="donormobile" class="form-control" name="mobilenumber" placeholder="123-456-7890" pattern="[0-9]{3}[0-9]{3}[0-9]{4}" required>
+					    		</div>
+					    		<label class="col-sm-2 col-form-label text" >Phone Number</label>
+					    		<div class="col-sm-4">
+					      			<input type="tel" id="donorphone" class="form-control" name="phonenumber" placeholder="123-456-7890" pattern="[0-9]{3}[0-9]{3}[0-9]{4}">
+					    		</div>
+					    	</div>
+					    </div>
+						
+						<div class="col-sm-offset-2 col-sm-8" style="margin-bottom: 15px;">
+							<input type="hidden" name="flag" value="updatedonor">
+							<input type="hidden" name="id" id="bloodDonorId">
+							<input type="hidden" name="adminid" id="bloodDonorAdminid">
+							<input type="hidden" name="joining" id="bloodDonorJoiningdate">
+							<input type="hidden" name="donorId" id="blodoonerid">
+				        	<input type="submit" value="Update"id="donorupdatebtn" name="save_blooddonor" style="padding: 8px 50px;margin-right: 8px;" class="btn btn-success">
+				        </div>
+	       			 </form>
+	       			 <div style="margin-top: 68px;"><h4>Blood Donation History</h4></div>
+					 <div style="border-bottom: 1px solid gray;"></div>
+	       			 <div style="margin-top: 15px;"></div>
+	       			 <div class="form-group row">
+		       			 <table id="tableBloodDonorHistry" class="display table table-striped table-hover" style="width:100%">
+				        <thead>
+				            <tr>
+								<th style="padding-left: 15px;">Blood Group</th>
+								<th style="padding-left: 15px;">Donation Camp</th>
+								<th style="padding-left: 15px;">Number Of Bags</th>
+								<th style="padding-left: 15px;">Last Donation Date</th>
+								<th style="padding-left: 15px; text-align: center ;">Action</th>
+				            </tr>
+				        </thead>
+				        <tbody class="blooddonorhistry">
+				        </tbody>
+				        <tfoot>
+				            <tr>
+								<th style="padding-left: 15px;">Blood Group</th>
+								<th style="padding-left: 15px;">Donation Camp</th>
+								<th style="padding-left: 15px;">Number Of Bags</th>
+								<th style="padding-left: 15px;">Last Donation Date</th>
+								<th style="padding-left: 15px; text-align: center ;">Action</th>
+				            </tr>
+				        </tfoot>
+				    	</table>
+				    	<div style="margin-top: 26px;"></div>
+			    	</div>
+				</div>
+				<div id="menu4"  class="tab-pane "style="margin-top: 15px;">
+					<table id="tableBloodInword" class="display table table-striped table-hover" style="width:100%">
+			        <thead>
+			            <tr>
+							<th style="padding-left: 15px;">Name</th>
+							<th style="padding-left: 15px;">Blood Group</th>
+							<th style="padding-left: 15px;">Age</th>
+							<th style="padding-left: 15px;">Donation Camp</th>
+							<th style="padding-left: 15px;">Number Of Bags</th>
+							<th style="padding-left: 15px;">Last Donation Date</th>
+							<th style="padding-left: 15px; text-align: center ;">Action</th>
+			            </tr>
+			        </thead>
+			        <tbody class="bloodinwordList">
+			        </tbody>
+			        <tfoot>
+			            <tr>
+			            	<th style="padding-left: 15px;">Name</th>
+							<th style="padding-left: 15px;">Blood Group</th>
+							<th style="padding-left: 15px;">Age</th>
+							<th style="padding-left: 15px;">Donation Camp</th>
+							<th style="padding-left: 15px;">Number Of Bags</th>
+							<th style="padding-left: 15px;">Last Donation Date</th>
+							<th style="padding-left: 15px; text-align: center ;">Action</th>
+			            </tr>
+			        </tfoot>
+			    	</table>
+			    	<div style="margin-top: 26px;"></div>
+				</div>
+				<div id="menu5"  class="tab-pane "style="margin-top: 15px;">
+					<form id="bloodInword_form" style="margin-top: 20px;">
+					<div style="margin-top: 15px;"><h4>Personal Information</h4></div>
+						<div style="border-bottom: 1px solid gray;"></div>
+						<div style="margin-top: 15px;">
+						<div class="form-group row">
+							<label class="col-sm-2 text" for="first_name">Donor Id<span class="require-field">*</span></label>
+							<div class="col-sm-4">
+								<select id="inworddonorid" class="form-control" name="donorId">
+									<option value="" disabled selected hidden="">Select Donor</option>
+							   </select>
+							</div>
+				    		<label class="col-sm-2 text" for="med_category_name">Age<span class="require-field">*</span></label>
+							<div class="col-sm-4">
+								<input class="form-control" id="inwordage"  type="text" id="donorage" name="age" readonly="readonly">
+							</div>
 			    		</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-2 col-form-label text" >Number Of Bags<span style="color: red;">*</span></label>
-						<div class="col-sm-8 ">
-							<input type="number" class="form-control" name="numberofbags"  min="0" required>
+						<div class="form-group row">
+						<label  class="col-sm-2 col-form-label text" >Gender<span style="color: red;">*</span></label>
+				    		<div class="col-sm-4">
+				      			<label class="radio-inline"><input type="radio" id="inwordmale" name="gender" value="male" checked="checked" disabled="disabled">Male</label>
+								<label class="radio-inline"><input type="radio" id="inwordfemale" name="gender" value="female" disabled="disabled">Female</label>
+				    		</div>
+							
+							<label class="col-sm-2 text " for="phone">Phone<span class="require-field">*</span></label>
+							<div class="col-sm-4">
+								<input class="form-control" id="inwordphone" type="text" name="phone" readonly="readonly">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-2 text " for="email">Email<span class="require-field">*</span></label>
+							<div class="col-sm-4">
+								<input class="form-control" id="inwordemail" type="text" name="email" readonly="readonly">
+							</div>
+						
+							<label class="col-sm-2 text" for="bloodgruop">Blood Group<span class="require-field" >*</span></label>
+							<div class="col-sm-4">
+								<input class="form-control"id="inwordbloodgroup" type="text" name="bloodgroup" id="donorbloodgroup" readonly="readonly">
+							</div>
+						</div>	
+						<div class="form-group row">
+							<label class="col-sm-2 text" for="blood_status">Number Of Bags<span class="require-field">*</span></label>
+							<div class="col-sm-4">
+								<input class="form-control" type="number" min="1"  value="" name="numberofbags"required>
+							</div>
+							<label class="col-sm-2 text" for="last_donet_date">Last Donation Date<span style="color: red;">*</span></label>
+							<div class="col-sm-4">
+								<input type="date" name="lastdate" id="datechange"class="form-control dateformat" data-date="" data-date-format="DD/MM/YYYY" required="required">
+							</div>
 						</div>
 					</div>
-					
-					<input type="hidden" name="flag" value="insert" />
-					<div class="col-sm-offset-2 col-sm-8">
-						<input type="submit" value="Save" name="save_medicine" class="btn btn-success"style="margin-bottom: 15px;"/>
-					</div>
-				</form>
-			</div>
-			<div id="menu2" class="tab-pane" style="margin-top: 15px;">
-				<form name="medicine_form" action="" method="post" class="form-horizontal" id="BloodManageupdate_form">
-					<div class="form-group row"style="margin-top: 20px;">
-			    		<label class="col-sm-2 col-form-label text" >Blood Group<span style="color: red;">*</span></label>
-			    		<div class="col-sm-8 ">
-			      			<select id="blood_group" class="form-control validate[required]" name="bloodgroup" required="required">
-								<option value="" disabled selected hidden="">Select Blood Group</option>	
-								<option value="O+">O+ </option>
-								<option value="O-">O- </option>
-								<option value="A+">A+ </option>
-								<option value="B+">B+ </option>
-								<option value="A-">A- </option>
-								<option value="B-">B- </option>
-								<option value="AB+">AB+ </option>
-								<option value="AB-">AB- </option>
-							</select>
+						<div style="margin-top: 20px;"><h4>Donation Camp Address Information</h4></div>
+					<div style="border-bottom: 1px solid gray;"></div>
+					<div>
+						<div style="margin-top: 10px;">
+							<div class="form-group row">
+					    		<label class="col-sm-2 col-form-label text" >Donation Camp Addres<span style="color: red;">*</span></label>
+					    		<div class="col-sm-4">
+					      			<input type="text"class="form-control" name="donationCampAddres" placeholder="Donation Camp Address" required="required">
+					    		</div>
+	
+					    		<label class="col-sm-2 col-form-label text" >City<span style="color: red;">*</span></label>
+					    		<div class="col-sm-4">
+					      			<input type="text"class="form-control" name="city" placeholder="city" required="required">
+					    		</div>
+					    	</div>
+				  			<div class="form-group row">
+					    		<label  class="col-sm-2 col-form-label text" >State</label>
+					    		<div class="col-sm-4">
+					      			<input type="text"class="form-control" name="state" placeholder="State">
+					    		</div>
+					    		<label class="col-sm-2 col-form-label text" >Country</label>
+					    		<div class="col-sm-4">
+					      			<input type="text"class="form-control" name="country" placeholder="Country">
+					    		</div>
+				  			</div>
+				  			<div class="form-group row">
+					    		<label  class="col-sm-2 col-form-label text" >Zip Code<span style="color: red;">*</span></label>
+					    		<div class="col-sm-4">
+					      			<input type="tel" class="form-control" name="zipCode" pattern="[0-9]{6}"  placeholder="Zip Code"required="required">
+					    		</div>
+				  			</div>
+						</div>
+						</div>
+						<div class="col-sm-offset-2 col-sm-8" style="margin-bottom: 15px;">
+						<input type="hidden" name="flag" value="insertinword">
+				        	<input type="submit" value="Save" id="inwordsubmit" name="save_blooddonor" class="btn btn-success">
+				        </div>
+	       			 </form>
+				</div>
+				<div id="menu6"  class="tab-pane "style="margin-top: 15px;">
+					<form id="updateBloodInword_form" style="margin-top: 20px;" >
+					<div style="margin-top: 15px;"><h4>Personal Information</h4></div>
+						<div style="border-bottom: 1px solid gray;"></div>
+						<div style="margin-top: 15px;">
+						<div class="form-group row">
+							<label class="col-sm-2 text" for="first_name">Donor Id<span class="require-field">*</span></label>
+							<div class="col-sm-4">
+								<select id="inworddonoreditid"  class="form-control" name="donorId">
+									<option value="" disabled selected hidden="">Select Donor</option>
+									
+							   </select>
+							</div>
+				    		<label class="col-sm-2 text" for="med_category_name">Age<span class="require-field">*</span></label>
+							<div class="col-sm-4">
+								<input class="form-control" id="donorinwordage" type="text" id="donorage" name="age" readonly="readonly">
+							</div>
 			    		</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-2 col-form-label text" >Number Of Bags<span style="color: red;">*</span></label>
-						<div class="col-sm-8 ">
-							<input id="number_Of_Bags" class="form-control " min="0" type="number" name="numberofbags">
+						<div class="form-group row">
+						<label  class="col-sm-2 col-form-label text" >Gender<span style="color: red;">*</span></label>
+				    		<div class="col-sm-4">
+				      			<label class="radio-inline"><input type="radio" id="donorinwordmale" name="gender" value="male" checked="checked" disabled="disabled">Male</label>
+								<label class="radio-inline"><input type="radio" id="donorinwordfemale" name="gender" value="female" disabled="disabled">Female</label>
+				    		</div>
+							
+							<label class="col-sm-2 text " for="phone">Phone<span class="require-field">*</span></label>
+							<div class="col-sm-4">
+								<input class="form-control" id="donorinwordphone" type="text" name="phone" readonly="readonly">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-2 text " for="email">Email<span class="require-field">*</span></label>
+							<div class="col-sm-4">
+								<input class="form-control" id="donorinwordemail" type="text" name="email" readonly="readonly">
+							</div>
+						
+							<label class="col-sm-2 text" for="bloodgruop">Blood Group<span class="require-field" >*</span></label>
+							<div class="col-sm-4">
+								<input class="form-control" type="text" name="bloodgroup" id="donorinwordbloodgoupe"readonly="readonly">
+							</div>
+						</div>	
+						<div class="form-group row">
+							<label class="col-sm-2 text" for="blood_status">Number Of Bags<span class="require-field">*</span></label>
+							<div class="col-sm-4">
+								<input class="form-control" id="donorinwordnob" type="number" min="1"  value="" name="numberofbags"required>
+							</div>
+							<label class="col-sm-2 text" for="last_donet_date">Last Donation Date<span style="color: red;">*</span></label>
+							<div class="col-sm-4">
+								<input type="date" name="lastdate" id="donorinwordlastdate"class="form-control" required="required">
+							</div>
 						</div>
 					</div>
-					<div class="col-sm-offset-2 col-sm-8">
-						<input type="hidden" name="flag" value="update">
-						<input type="hidden" name="adminId" id="adminid">
-						<input type="hidden" name="Id" id="bloodManageId">
-						<input type="hidden" id="joiningdateid" name="joinig" >
-						<input type="submit" value="Save" name="save_medicine" id="update" class="btn btn-success"style="margin-bottom: 15px;">
-					</div>	
-				</form>
-			</div>
-			<div id="menu3"  class="container tab-pane "style="margin-top: 10px;">
-				<table id="tableBloodDoner" class="display table table-striped table-hover" style="width:100%">
-		        <thead>
-		            <tr>
-						<th style="padding-left: 15px;">Name</th>
-						<th style="padding-left: 15px;">Blood Group</th>
-						<th style="padding-left: 15px;">Age</th>
-						<th style="padding-left: 15px;">Gender</th>
-						<th style="padding-left: 15px;">Number Of Bags</th>
-						<th style="padding-left: 15px;">Last Donation Date</th>
-						<th style="padding-left: 15px; text-align: center ;">Action</th>
-		            </tr>
-		        </thead>
-		        <tbody class="bloodDonor">
-		        </tbody>
-		        <tfoot>
-		            <tr>
-		            	<th style="padding-left: 15px;">Name</th>
-						<th style="padding-left: 15px;">Blood Group</th>
-						<th style="padding-left: 15px;">Age</th>
-						<th style="padding-left: 15px;">Gender</th>
-						<th style="padding-left: 15px;">Number Of Bags</th>
-						<th style="padding-left: 15px;">Last Donation Date</th>
-						<th style="padding-left: 15px; text-align: center ;">Action</th>
-		            </tr>
-		        </tfoot>
-		    	</table>
-		    	<div style="margin-top: 26px;"></div>
-   			 </div>
-   			 <div id="menu4" class="tab-pane">
-				<form id="BloodDonor_form" style="margin-top: 20px;" >
-					<div class="form-group row">
-						<label class="col-sm-2 text" for="first_name">Full Name<span class="require-field">*</span></label>
-						<div class="col-sm-8">
-							<input class="form-control  text-input" maxlength="50" type="text" value="" name="bool_dodnor_name"required>
+					<div style="margin-top: 20px;"><h4>Donation Camp Address Information</h4></div>
+					<div style="border-bottom: 1px solid gray;"></div>
+					<div>
+						<div style="margin-top: 10px;">
+							<div class="form-group row">
+					    		<label class="col-sm-2 col-form-label text" >Donation Camp Addres<span style="color: red;">*</span></label>
+					    		<div class="col-sm-4">
+					      			<input type="text" id="donorinwordaddress"class="form-control" name="donationCampAddres" placeholder="Donation Camp Address" required="required">
+					    		</div>
+	
+					    		<label class="col-sm-2 col-form-label text" >City<span style="color: red;">*</span></label>
+					    		<div class="col-sm-4">
+					      			<input type="text" id="donorinwordcity"class="form-control" name="city" placeholder="city" required="required">
+					    		</div>
+					    	</div>
+				  			<div class="form-group row">
+					    		<label  class="col-sm-2 col-form-label text" >State</label>
+					    		<div class="col-sm-4">
+					      			<input type="text" id="donorinwordstate" class="form-control" name="state" placeholder="State">
+					    		</div>
+					    		<label class="col-sm-2 col-form-label text" >Country</label>
+					    		<div class="col-sm-4">
+					      			<input type="text" id="donorinwordcontry" class="form-control" name="country" placeholder="Country">
+					    		</div>
+				  			</div>
+				  			<div class="form-group row">
+					    		<label  class="col-sm-2 col-form-label text" >Zip Code<span style="color: red;">*</span></label>
+					    		<div class="col-sm-4">
+					      			<input type="tel"id="donorinwordzipcode"class="form-control" name="zipcode" pattern="[0-9]{6}"  placeholder="Zip Code"required="required">
+					    		</div>
+				  			</div>
 						</div>
-					</div>
-					<div class="form-group row">
-			    		<label  class="col-sm-2 col-form-label text" >Gender<span style="color: red;">*</span></label>
-			    		<div class="col-sm-8">
-			      			<label class="radio-inline"><input type="radio" name="gender" value="male" required>Male</label>
-							<label class="radio-inline"><input type="radio" name="gender" value="female" required>Female</label>
-			    		</div>
-		  			</div>
-					<div class="form-group row">
-						<label class="col-sm-2 text" for="med_category_name">Age<span class="require-field">*</span></label>
-						<div class="col-sm-8">
-							<input class="form-control  text-input" min="0" max="99" type="number" onkeypress="if(this.value.length==2) return false;" value="" name="age" required>
 						</div>
-					</div>
-					<div class="form-group row">	
-						<label class="col-sm-2 text " for="phone">Phone<span class="require-field">*</span></label>
-						<div class="col-sm-8">
-							<input class="form-control text-input" minlength="6" maxlength="15" type="text" value="" name="phone" required>						
+						
+						<div class="col-sm-offset-2 col-sm-8" style="margin-bottom: 15px;">
+							<input type="hidden" name="adminid" id="bloodidwordadminid">
+							<input type="hidden" name="id" id="bloodInwordid">
+							<input type="hidden" name="joining" id="bloodInwordJoiningdate">
+							<input type="hidden" name="flag" value="updatebloodinword">
+				        	<input type="submit" value="Update Blood Inword" name="update_bloodinword" class="btn btn-success">
+				        </div>
+	       			 </form>
+				</div>
+				<div id="menu7"  class="tab-pane"style="margin-top: 15px;">
+					<table id="tableoutwordlist" class="display table table-striped table-hover" style="width:100%">
+			        <thead>
+			            <tr>
+							<th style="padding-left: 15px;">Patient Name</th>
+							<th style="padding-left: 15px;">Blood Group</th>
+							<th style="padding-left: 15px;">Email</th>
+							<th style="padding-left: 15px;">Mobile</th>
+							<th style="padding-left: 15px;">Number Of Bags</th>
+							<th style="padding-left: 15px;">Donation Date</th>
+							<th style="padding-left: 15px; text-align: center ;">Action</th>
+			            </tr>
+			        </thead>
+			        <tbody class="bloodOutwordList">
+			        </tbody>
+			        <tfoot>
+			            <tr>
+			            	<th style="padding-left: 15px;">Patient Name</th>
+							<th style="padding-left: 15px;">Blood Group</th>
+							<th style="padding-left: 15px;">Email</th>
+							<th style="padding-left: 15px;">Mobile</th>
+							<th style="padding-left: 15px;">Number Of Bags</th>
+							<th style="padding-left: 15px;">Donation Date</th>
+							<th style="padding-left: 15px; text-align: center ;">Action</th>
+			            </tr>
+			        </tfoot>
+			    	</table>
+			    	<div style="margin-top: 26px;"></div>
+				</div>
+				<div id="menu8"  class="tab-pane "style="margin-top: 15px;">
+					<form id="bloodOutword_form" style="margin-top: 20px;" >
+					<div style="margin-top: 15px;"><h4>Patient Information</h4></div>
+					<div style="border-bottom: 1px solid gray;"></div>
+						<div style="margin-top: 10px;">
+							<div class="form-group row">
+					    		<label class="col-sm-2 col-form-label text" >Patient Id<span style="color: red;">*</span></label>
+								<div class="col-sm-4">
+									<select id="insertpatientid" class="form-control " name="patientId">
+										<option value="" disabled selected hidden="">Select Patient</option>
+										<c:forEach items="${sessionScope.patientRagistrationList }" var="q">
+											<option value="${q.patientid }">${q.firstname }</option>
+										</c:forEach>
+								   </select>
+								   <span id="error_patient_id" class="text-danger"></span>
+								</div>
+					    		<label class="col-sm-2 col-form-label text" >First Name<span style="color: red;">*</span></label>
+					    		<div class="col-sm-4">
+					      			<input type="text" id="insertfirstname" class="form-control" name="firstname" readonly="readonly">
+					      			<span id="error_first_name" class="text-danger"></span>
+					    		</div>
+					    	</div>
+				  			<div class="form-group row">
+				  				
+					    		<label class="col-sm-2 col-form-label text" >Middle Name</label>
+					    		<div class="col-sm-4">
+					      			<input type="text" id="insertmiddlename"  class="form-control" name="middlename" readonly="readonly">
+					    		</div>
+				  				
+					    		<label  class="col-sm-2 col-form-label text" >Last Name<span style="color: red;">*</span></label>
+					    		<div class="col-sm-4">
+					      			<input type="text" id="insertlastname"class="form-control" name="lastname" readonly="readonly">
+					      			<span id="error_last_name" class="text-danger"></span>
+					    		</div>
+				  			</div>
+				  			<div class="form-group row">
+				  				<label class="col-sm-2 col-form-label text" >Date of birth<span style="color: red;">*</span></label>
+					    		<div class="col-sm-4">
+					      			<input type="date" id="insertdob" class="form-control" name="dob" placeholder="Date of birth" readonly="readonly">
+					      			<span id="error_date_of_birth" class="text-danger"></span>
+					    		</div>
+					    		<label class="col-sm-2 col-form-label text" >Blood Group<span style="color: red;">*</span></label>
+					    		<div class="col-sm-4">
+					    			<input type="text" id="insertbloodgroup" class="form-control" name="blood_group" readonly="readonly">
+					    		</div>
+				  			</div>
+				  			<div class="form-group row">
+				  				<label  class="col-sm-2 col-form-label text" >Gender<span style="color: red;">*</span></label>
+					    		<div class="col-sm-4">
+					      			<label class="radio-inline"><input type="radio" id="insertmale" name="gender" value="male" disabled="disabled">Male</label>
+									<label class="radio-inline"><input type="radio" id="insertfemale" name="gender" value="female" disabled="disabled">Female</label>
+					    		</div>
+				  			</div>
 						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-2 text " for="email">Email<span class="require-field">*</span></label>
-						<div class="col-sm-8">
-							<input class="form-control  text-input" maxlength="100" type="text" name="email" value=""required>
+						<div style="margin-top: 20px;"><h4>Billing Information</h4></div>
+						<div style="border-bottom: 1px solid gray;"></div>
+						<div style="margin-top: 15px;">
+							<div class="form-group row">
+								<label class="col-sm-2 col-form-label text" >Number Of Bags<span style="color: red;">*</span></label>
+								<div class="col-sm-4 ">
+									<input type="number" class="form-control totalcharg" id="blooddispachbag"name="numberofbags"onkeypress="if(this.value.length==3) return false;"  min="0" max="999" required>
+									
+								</div>
+								<label class="col-sm-2 col-form-label text">Charge(&#x20B9;)<span style="color: red;">*</span></label>
+								<div class="col-sm-4 ">
+									<input type="number" class="form-control totalcharg" name="charge" onkeypress="if(this.value.length==5) return false;" id="bloodoutwordchage" max="99999" min="0" required>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-sm-2 col-form-label text">Date<span style="color: red;">*</span></label>
+								<div class="col-sm-4 ">
+									<div class="input-group date" data-date-format="dd/mm/yyyy">
+						            <input  type="text" name="date" class="form-control" placeholder="dd/mm/yyyy">
+						            <div class="input-group-addon" >
+						              <span class="glyphicon glyphicon-th"></span>
+						            </div>
+						          	</div>
+								</div>
+								<label class="col-sm-2 col-form-label text">Total<span style="color: red;">*</span></label>
+								<div class="col-sm-4 ">
+									<input type="number" class="form-control" value="0" id="totalcost"name="total" min="0" readonly="readonly">
+								</div>
+							</div>
+							<input type="hidden" name="flag" value="insertOutword"/>
+							<div class="col-sm-offset-2 col-sm-8">
+								<input type="submit" value="Save" name="save_medicine" class="btn btn-success"style="margin-bottom: 15px;"/>
+							</div>
 						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-2 text" for="bloodgruop">Blood Group<span class="require-field">*</span></label>
-						<div class="col-sm-8">
-							<select class="form-control validate[required]" name="blood_group"required>
-								<option value="" disabled selected hidden="">Select Blood Group</option>
-								<option value="O+">O+ </option>
-								<option value="O-">O- </option>
-								<option value="A+">A+ </option>
-								<option value="B+">B+ </option>
-								<option value="A-">A- </option>
-								<option value="B-">B- </option>
-								<option value="AB+">AB+ </option>
-								<option value="AB-">AB- </option>
-							</select>
+					</form>
+				</div>
+				<div id="menu9"  class="tab-pane"style="margin-top: 15px;">
+					<form id="updateBloodOutword_form" style="margin-top: 20px;" >
+					<div style="margin-top: 15px;"><h4>Patient Information</h4></div>
+					<div style="border-bottom: 1px solid gray;"></div>
+						<div style="margin-top: 10px;">
+							<div class="form-group row">
+					    		<label class="col-sm-2 col-form-label text" >Patient Id<span style="color: red;">*</span></label>
+								<div class="col-sm-4">
+									<select id="insertpatientid" class="form-control " name="patientId">
+										<option value="" disabled selected hidden="">Select Patient</option>
+										<c:forEach items="${sessionScope.patientRagistrationList }" var="q">
+											<option value="${q.patientid }">${q.firstname }</option>
+										</c:forEach>
+								   </select>
+								   <span id="error_patient_id" class="text-danger"></span>
+								</div>
+					    		<label class="col-sm-2 col-form-label text" >First Name<span style="color: red;">*</span></label>
+					    		<div class="col-sm-4">
+					      			<input type="text" id="insertfirstname" class="form-control" name="firstname" readonly="readonly">
+					      			<span id="error_first_name" class="text-danger"></span>
+					    		</div>
+					    	</div>
+				  			<div class="form-group row">
+				  				
+					    		<label class="col-sm-2 col-form-label text" >Middle Name</label>
+					    		<div class="col-sm-4">
+					      			<input type="text" id="insertmiddlename"  class="form-control" name="middlename" readonly="readonly">
+					    		</div>
+				  				
+					    		<label  class="col-sm-2 col-form-label text" >Last Name<span style="color: red;">*</span></label>
+					    		<div class="col-sm-4">
+					      			<input type="text" id="insertlastname"class="form-control" name="lastname" readonly="readonly">
+					      			<span id="error_last_name" class="text-danger"></span>
+					    		</div>
+				  			</div>
+				  			<div class="form-group row">
+				  				<label class="col-sm-2 col-form-label text" >Date of birth<span style="color: red;">*</span></label>
+					    		<div class="col-sm-4">
+					      			<input type="date" id="insertdob" class="form-control" name="dob" placeholder="Date of birth" readonly="readonly">
+					      			<span id="error_date_of_birth" class="text-danger"></span>
+					    		</div>
+					    		<label class="col-sm-2 col-form-label text" >Blood Group<span style="color: red;">*</span></label>
+					    		<div class="col-sm-4">
+					    			<input type="text" id="insertbloodgroup" class="form-control" name="blood_group" readonly="readonly">
+					    		</div>
+				  			</div>
+				  			<div class="form-group row">
+				  				<label  class="col-sm-2 col-form-label text" >Gender<span style="color: red;">*</span></label>
+					    		<div class="col-sm-4">
+					      			<label class="radio-inline"><input type="radio" id="insertmale" name="gender" value="male" checked>Male</label>
+									<label class="radio-inline"><input type="radio" id="insertfemale" name="gender" value="female" >Female</label>
+					    		</div>
+				  			</div>
 						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-2 text" for="blood_status">Number Of Bags<span class="require-field">*</span></label>
-						<div class="col-sm-8">
-							<input class="form-control validate[required] text-input" type="number" min="1"  value="" name="numberofbags"required>
+						<div style="margin-top: 20px;"><h4>Contact Information</h4></div>
+						<div style="border-bottom: 1px solid gray;"></div>
+						<div style="margin-top: 15px;">
+							<div class="form-group row">
+								<label class="col-sm-2 col-form-label text" >Number Of Bags<span style="color: red;">*</span></label>
+								<div class="col-sm-4 ">
+									<input type="number" class="form-control" name="numberofbags"  min="0" required>
+								</div>
+								<label class="col-sm-2 col-form-label text">Charge(&#x20B9;)<span style="color: red;">*</span></label>
+								<div class="col-sm-4 ">
+									<input type="number" class="form-control" name="charge"  min="0" required>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-sm-2 col-form-label text">Date<span style="color: red;">*</span></label>
+								<div class="col-sm-4 ">
+									<input type="Date" class="form-control" name="date" min="0" required>
+								</div>
+							</div>
+							<input type="hidden" name="flag" value="insert" />
+							<div class="col-sm-offset-2 col-sm-8">
+								<input type="submit" value="Save" name="save_medicine" class="btn btn-success"style="margin-bottom: 15px;"/>
+							</div>
 						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-2 text" for="last_donet_date">Last Donation Date</label>
-						<div class="col-sm-8">
-							<input  class="form-control " type="date"  name="last_donate_date">
+					</form>
+				</div>
+				<div id="menu10"  class="tab-pane "style="margin-top: 15px;">
+					<div style="margin-top: 15px;"><h4>Personal Information</h4></div>
+						<div style="border-bottom: 1px solid gray;"></div>
+						<div >
+							<div style="margin-top: 15px;">
+								<div class="form-group row">
+						    		<label class="col-sm-2 col-form-label text" >First Name<span style="color: red;">*</span></label>
+						    		<div class="col-sm-4">
+						      			<input type="text" id="viewFirstName" class="form-control" name="firstname"readonly="readonly">
+						    		</div>
+		
+						    		<label class="col-sm-2 col-form-label text" >Middle Name</label>
+						    		<div class="col-sm-4">
+						      			<input type="text" id="viewMiddleName" class="form-control" readonly="readonly">
+						    		</div>
+						    	</div>
+					  			<div class="form-group row">
+						    		<label  class="col-sm-2 col-form-label text" >Last Name<span style="color: red;">*</span></label>
+						    		<div class="col-sm-4">
+						      			<input type="text" id="viewLastName" class="form-control" readonly="readonly">
+						    		</div>
+						    		<label class="col-sm-2 col-form-label text" >Date of birth<span style="color: red;">*</span></label>
+						    		<div class="col-sm-4">
+						      			<input type="text" id="viewDOB" class="form-control" readonly="readonly">
+						    		</div>
+						    		
+					  			</div>
+					  			<div class="form-group row">
+						    		<label  class="col-sm-2 col-form-label text" >Gender<span style="color: red;">*</span></label>
+						    		<div class="col-sm-4">
+						      			<label class="radio-inline"><input type="radio" id="viewMale" disabled="disabled" >Male</label>
+										<label class="radio-inline"><input type="radio" id="ViewFemale" disabled="disabled">Female</label>
+						    		</div>
+						    		<label class="col-sm-2 text " for="email">Email<span class="require-field">*</span></label>
+									<div class="col-sm-4">
+										<input id="viewEmail" class="form-control" type="text" readonly="readonly">
+									</div>
+					  			</div>
+					  			<div class="form-group row">
+					  				<label class="col-sm-2 col-form-label text" >Blood Group<span style="color: red;">*</span></label>
+				    				<div class="col-sm-4 ">
+						      			<input class="form-control" type="text" id="viewBloodgroup" readonly="readonly">
+				    				</div>
+					    			<label class="col-sm-2 text" for="med_category_name">Age<span class="require-field">*</span></label>
+									<div class="col-sm-4">
+										<input class="form-control" id="viewAge" type="text" readonly="readonly">
+									</div>
+				    			</div>
+							</div>
 						</div>
-					</div>
-					<div class="col-sm-offset-2 col-sm-8" style="margin-bottom: 15px;">
-					<input type="hidden" name="flag" value="insertblooddonor">
-			        	<input type="submit" value="Save" name="save_blooddonor" class="btn btn-success">
-			        </div>
-       			 </form>
-			</div>
-			<div id="menu5" class="tab-pane" style="margin-top: 15px;">
-				<form id="BloodDonorupdate_form">
-					<div class="form-group row">
-						<label class="col-sm-2 text" for="first_name">Full Name<span class="require-field">*</span></label>
-						<div class="col-sm-8">
-							<input id="bloodDonorbool_dodnor_name" class="form-control  text-input" maxlength="50" type="text" value="" name="bool_dodnor_name"required>
-						</div>
-					</div>
-					<div class="form-group row">
-			    		<label  class="col-sm-2 col-form-label text" >Gender<span style="color: red;">*</span></label>
-			    		<div class="col-sm-4">
-			      			<label class="radio-inline"><input type="radio" id="bloodDonormale" name="gender" value="male" required>Male</label>
-							<label class="radio-inline"><input type="radio" id="bloodDonorfemale" name="gender" value="female" required>Female</label>
-			    		</div>
-		  			</div>
-					<div class="form-group row">
-						<label class="col-sm-2 text" for="med_category_name">Age<span class="require-field">*</span></label>
-						<div class="col-sm-8">
-							<input class="form-control" id="bloodDonoraeg" min="0" max="99" type="number" onkeypress="if(this.value.length==2) return false;" name="age" required>
-						</div>
-					</div>
-					<div class="form-group row">	
-						<label class="col-sm-2 text " for="phone">Phone<span class="require-field">*</span></label>
-						<div class="col-sm-8">
-							<input id="bloodDonorphone" class="form-control text-input" minlength="6" maxlength="15" type="text" value="" name="phone" required>						
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-2 text " for="email">Email<span class="require-field">*</span></label>
-						<div class="col-sm-8">
-							<input id="bloodDonoremail" class="form-control  text-input" maxlength="100" type="text" name="email" value=""required>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-2 text" for="bloodgruop">Blood Group<span class="require-field">*</span></label>
-						<div class="col-sm-8">
-							<select id="bloodDonorblood_group" class="form-control validate[required]" name="blood_group"required>
-								<option value="" disabled selected hidden="">Select Blood Group</option>
-								<option value="O+">O+ </option>
-								<option value="O-">O- </option>
-								<option value="A+">A+ </option>
-								<option value="B+">B+ </option>
-								<option value="A-">A- </option>
-								<option value="B-">B- </option>
-								<option value="AB+">AB+ </option>
-								<option value="AB-">AB- </option>
-							</select>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-2 text" for="blood_status">Number Of Bags<span class="require-field">*</span></label>
-						<div class="col-sm-8">
-							<input class="form-control" id="bloodDonorblood_status" type="number" min="1"  value="" name="numberofbags"required>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-2 text" for="last_donet_date">Last Donation Date</label>
-						<div class="col-sm-8">
-							<input  class="form-control" id="bloodDonorlast_donet_date" type="date"  name="last_donate_date">
-						</div>
-					</div>
-					<div class="col-sm-offset-2 col-sm-8">
-						<input type="hidden" name="flag" value="blooddonorupdate">
-						<input type="hidden" name="adminId" id="bloodDonorAdminid">
-						<input type="hidden" name="Id" id="bloodDonorId">
-						<input type="hidden" id="bloodDonorJoiningdateid" name="joinig" >
-						<input type="submit" value="Save" name="save_medicine" id="blooddonorupdate" class="btn btn-success"style="margin-bottom: 15px;">
-					</div>	
-				</form>
-			</div>
+						<div style="margin-top: 20px;"><h4>Contact Information</h4></div>
+						<div style="border-bottom: 1px solid gray;"></div>
+						<div style="margin-top: 15px;">
+							<div class="form-group row">
+					    		<label class="col-sm-2 col-form-label text" >Mobile Number<span style="color: red;">*</span></label>
+					    		<div class="col-sm-1">
+					      			<input type="text" id="viewCode"class="form-control" readonly="readonly">
+					    		</div>
+					    		<div class="col-sm-3">
+					      			<input type="text" id="viewMobile" class="form-control" readonly="readonly">
+					    		</div>
+					    		<label class="col-sm-2 col-form-label text" >Phone Number</label>
+					    		<div class="col-sm-4">
+					      			<input type="tel" id="viewPhone" class="form-control"readonly="readonly">
+					    		</div>
+					    	</div>
+					    </div>
+					 					    	
+	       			 <div style="margin-top: 20px;"><h4>Blood Donation History</h4><button style="margin-left:913px; margin-top:-45px; padding: 8px 100px; " type="button" class="btn btn-danger editBloodDonor" data-edit_id="edit" id="bloodDonorIdedit" value="">Edit</button></div>
+					 <div style="border-bottom: 1px solid gray;"></div>
+					 <div style="margin-top: 15px;">
+ 	       			 <div class="form-group row">
+					 
+		       			<table id="tableBloodDonorView1" class="display table table-striped table-hover" style="width:100%">
+				        <thead>
+				            <tr>
+				            	<th style="padding-left: 15px;">Donor ID</th>
+								<th style="padding-left: 15px;">Blood Group</th>
+								<th style="padding-left: 15px;">Donation Camp</th>
+								<th style="padding-left: 15px;">Number Of Bags</th>
+								<th style="padding-left: 15px;">Last Donation Date</th>
+				            </tr>
+				        </thead>
+				        <tbody class="viewbloodinworddetails">
+				        </tbody>
+				        <tfoot>
+				            <tr>
+				            	<th style="padding-left: 15px;">Donor ID</th>
+								<th style="padding-left: 15px;">Blood Group</th>
+								<th style="padding-left: 15px;">Donation Camp</th>
+								<th style="padding-left: 15px;">Number Of Bags</th>
+								<th style="padding-left: 15px;">Last Donation Date</th>
+				            </tr>
+				        </tfoot>
+				    	</table>
+			    	</div>
+			    	</div>
+				</div>
 			</div>
 		</div>
 	</div>

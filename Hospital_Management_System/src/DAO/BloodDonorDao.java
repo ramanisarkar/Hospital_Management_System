@@ -11,14 +11,14 @@ import org.hibernate.cfg.AnnotationConfiguration;
 
 import VO.BloodDonorVo;
 import VO.BloodManageVo;
+import VO.BloodOutwordVo;
+import VO.PatientRegistretionVo;
 import VO.TreatmentVo;
 
 public class BloodDonorDao {
 
 	public ArrayList<BloodDonorVo> bloodDonorList(BloodDonorVo bloodDonorVo) {
-		System.out.println(bloodDonorVo.getAdminid());
 		List<BloodDonorVo> bloodDonorList = new ArrayList<BloodDonorVo>();
-		System.out.println(bloodDonorVo.getAdminid());
 		try {
 			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
 			Session session = sessionfactory.openSession();
@@ -85,7 +85,6 @@ public class BloodDonorDao {
 	public String deleteBloodDonor(BloodDonorVo bloodDonorVo) {
 		String message = null;
 		try {
-			System.out.println(bloodDonorVo.getId());
 			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
 			Session session = sessionfactory.openSession();
 			Transaction transaction = session.beginTransaction();
@@ -98,5 +97,55 @@ public class BloodDonorDao {
 			return message = "error";
 		}
 		return message = "true";
+	}
+
+	public ArrayList<BloodDonorVo> getlastrecord() {
+		List<BloodDonorVo> donorList = new ArrayList<BloodDonorVo>();
+		try {
+			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+			Session session = sessionfactory.openSession();
+			Transaction transaction = session.beginTransaction();
+			Query q = session.createQuery("from BloodDonorVo ORDER BY id DESC LIMIT 1;");
+			donorList = q.list();
+			transaction.commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return (ArrayList<BloodDonorVo>) donorList;
+	}
+
+	public String deleteBloodManage(BloodManageVo bloodManageVo) {
+		String message = null;
+		try {
+			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+			Session session = sessionfactory.openSession();
+			Transaction transaction = session.beginTransaction();
+			Query q = session.createQuery("delete from BloodManageVo AS n where n.donorid =:id");
+			q.setParameter("id", bloodManageVo.getDonorid());
+			q.executeUpdate();
+			transaction.commit();
+			session.close();
+		} catch (Exception e) {
+			return message = "error";
+		}
+		return message = "true";
+	}
+
+	public ArrayList<BloodOutwordVo> bloodOutwordList(BloodOutwordVo bloodOutwordVo) {
+		List<BloodOutwordVo> bloodDonorList = new ArrayList<BloodOutwordVo>();
+		try {
+			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+			Session session = sessionfactory.openSession();
+			Transaction transaction = session.beginTransaction();
+			Query q = session.createQuery("from BloodOutwordVo AS d where d.adminid =:id");
+			q.setParameter("id", bloodOutwordVo.getAdminid());
+			bloodDonorList = q.list();
+			transaction.commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return (ArrayList<BloodOutwordVo>) bloodDonorList;
 	}
 }

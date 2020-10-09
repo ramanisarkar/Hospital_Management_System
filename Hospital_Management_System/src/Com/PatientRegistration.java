@@ -21,11 +21,13 @@ import com.google.gson.Gson;
 
 import DAO.AccountantStaffDao;
 import DAO.LoginDAO;
+import DAO.PatientRegistreationDao;
 import VO.AccountantList;
 import VO.AccountantStaffVo;
 import VO.AdminVo;
 import VO.AmbulanceVo;
 import VO.LoginVO;
+import VO.PatentRegistreationList;
 import VO.PatientRegistretionVo;
 
 /**
@@ -45,6 +47,9 @@ public class PatientRegistration extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
     private String patientupdate = null;
+	private String patientemail = null;
+	private String patientuser = null;
+	private String patientemailinvalid = null;
    	
     private static final String SAVE_DIR_Images = "Patient_Registration_Image";
 
@@ -59,12 +64,17 @@ public class PatientRegistration extends HttpServlet {
    		return filename;
    	}
 
-   	private void patientImage(boolean s, String profileImagepath, Part profileImage) {
+   	private void patientImage(boolean s, String profileImagepath, Part profileImage, boolean s2, String diagosispath, Part diagnosis) {
    		try {
    			if (s == true) {
    				String Path = getServletContext()
    						.getRealPath(File.separator + SAVE_DIR_Images + File.separator + profileImagepath);
    				profileImage.write(Path);
+   			}
+   			if (s2 == true) {
+   				String Path = getServletContext()
+   						.getRealPath(File.separator + SAVE_DIR_Images + File.separator + diagosispath);
+   				diagnosis.write(Path);
    			}
    		} catch (IOException e) {
    			e.printStackTrace();
@@ -80,16 +90,16 @@ public class PatientRegistration extends HttpServlet {
    		if (flag.equalsIgnoreCase("insert")) {
    			int adminid = Integer.parseInt(request.getParameter("id"));
    			session.setAttribute("patientRaggistrationAdminid", adminid);
-   			response.sendRedirect("Patient_Registration_Form.jsp");
+   			response.sendRedirect("Admin_Patient_Registration.jsp");
    		}
-   		if (flag.equalsIgnoreCase("accountantStaffList")) {
-   			accountantStaffList(request, response);
+   		if (flag.equalsIgnoreCase("PatientRegistrationList")) {
+   			patientList(request, response);
    		}
-   		if (flag.equalsIgnoreCase("editAccountantStaff")) {
-   			accountantStaffEdit(request, response);
+   		if (flag.equalsIgnoreCase("editPatientRegistration")) {
+   			patientRegistrationEdit(request, response);
    		}
-   		if (flag.equalsIgnoreCase("deleteAccountantStaff")) {
-   			accountantStaffDelete(request, response);
+   		if (flag.equalsIgnoreCase("deletePatientRegistration")) {
+   			patientRegistrationDelete(request, response);
    		}
    	}
 
@@ -103,37 +113,38 @@ public class PatientRegistration extends HttpServlet {
    		System.out.println(firstName);
    		System.out.println(flag);
    		if (flag.equalsIgnoreCase("insert")) {
-   			accountantStaffInsert(request, response);
+   			patientRegistrationInsert(request, response);
    		}
    		if (flag.equalsIgnoreCase("update")) {
-   			accountantStaffUpdate(request, response);
+   			patientRegistrationUpdate(request, response);
    		}
-   		if (flag.equalsIgnoreCase("chackusername")) {
-   			accountantStaffUserNameChack(request, response);
+   		if (flag.equalsIgnoreCase("chackuser")) {
+   			patientReagistrationChack(request, response);
    		}
    	}
 
-   	private void accountantStaffUserNameChack(HttpServletRequest request, HttpServletResponse response)
+   	private void patientReagistrationChack(HttpServletRequest request, HttpServletResponse response)
    			throws IOException {
-   		String accountantStaffUserName = request.getParameter("accountantStaffUserName");
-   		System.out.println(accountantStaffUserName);
-   		LoginVO loginvo = new LoginVO();
-   		loginvo.setUsername(accountantStaffUserName);
-
-   		LoginDAO logdao = new LoginDAO();
-   		ArrayList<LoginVO> usernamechack = logdao.userNameVerify(loginvo);
+   		String patientuserId = request.getParameter("patientuserId");
+   		System.out.println(patientuserId);
+   		
+   		PatientRegistretionVo patientRegistretionVo = new PatientRegistretionVo();
+   		patientRegistretionVo.setUsername(patientuserId);
+   		
+   		PatientRegistreationDao patientRegistreationDao = new  PatientRegistreationDao();
+   		ArrayList<PatientRegistretionVo> usernamechack = patientRegistreationDao.userNameVerify(patientRegistretionVo);
    		System.out.println(usernamechack.size());
-   		List<AccountantList> list = new ArrayList<AccountantList>();
+   		List<PatentRegistreationList> list = new ArrayList<PatentRegistreationList>();
    		if (usernamechack.isEmpty() == true) {
    			String respose = "true";
-   			AccountantList common = new AccountantList();
+   			PatentRegistreationList common = new PatentRegistreationList();
    			common.setChackusername(respose);
    			list.add(common);
    		} else {
-   			for (LoginVO pharmacist : usernamechack) {
+   			for (PatientRegistretionVo pharmacist : usernamechack) {
    				String username = pharmacist.getUsername();
    				String user = "false";
-   				AccountantList common = new AccountantList();
+   				PatentRegistreationList common = new PatentRegistreationList();
    				common.setUsername(username);
    				common.setChackusername(user);
    				list.add(common);
@@ -147,7 +158,7 @@ public class PatientRegistration extends HttpServlet {
    		out.close();
    	}
    	
-   	private void accountantStaffList(HttpServletRequest request, HttpServletResponse response) throws IOException {
+   	private void patientList(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
    		HttpSession session = request.getSession();
    		int adminid = (int) session.getAttribute("patientRaggistrationAdminid");
@@ -155,28 +166,30 @@ public class PatientRegistration extends HttpServlet {
    		AdminVo adminVo = new AdminVo();
    		adminVo.setId(adminid);
 
-   		AccountantStaffVo accountantStaffVo = new AccountantStaffVo();
-   		accountantStaffVo.setAdminid(adminVo);
+   		PatientRegistretionVo patientRegistretionVo = new PatientRegistretionVo();
+   		patientRegistretionVo.setAdminid(adminVo);
 
-   		AccountantStaffDao accountantStaffDao = new AccountantStaffDao();
-   		ArrayList<AccountantStaffVo> accountantList = accountantStaffDao.accountantStaffList(accountantStaffVo);
-   		List<AccountantList> list = new ArrayList<AccountantList>();
-   		for (AccountantStaffVo accountant : accountantList) {
-   			int id = accountant.getId();
-   			String name = accountant.getFirstname();
-   			String photo = accountant.getProfileimage();
-   			String email = accountant.getEmail();
-   			String mobile = accountant.getMobileno();
-   			AccountantList common = new AccountantList();
+   		PatientRegistreationDao  patientRegistreationDao = new PatientRegistreationDao();
+   		ArrayList<PatientRegistretionVo> patientList = patientRegistreationDao.patientRegistrationList(patientRegistretionVo);
+   		List<PatentRegistreationList> list = new ArrayList<PatentRegistreationList>();
+   		for (PatientRegistretionVo patient : patientList) {
+   			int id = patient.getId();
+   			String name = patient.getFirstname();
+   			String blood = patient.getBloodgroup();
+   			String photo = patient.getProfileimage();
+   			String email = patient.getEmail();
+   			String mobile = patient.getMobileno();
+   			String patientid = patient.getPatientid();
+   			System.out.println(patientid);
+   			PatentRegistreationList common = new PatentRegistreationList();
    			common.setId(id);
    			common.setFirstname(name);
+   			common.setBloodgroup(blood);
    			common.setProfileimage(photo);
    			common.setEmail(email);
    			common.setMobileno(mobile);
-   			common.setAccountantstaffemail(accountantstaffemail);
-   			common.setAccountantstaffemailinvalid(accountantstaffemailinvalid);
-   			common.setAccountantstaffupdate(accountantstaffupdate);
-   			common.setAccountantstaffuser(accountantstaffuser);
+   			common.setPatientid(patientid);
+   			common.setPatientupdate(patientupdate);
    			list.add(common);
    		}
    		Gson gson = new Gson();
@@ -187,7 +200,7 @@ public class PatientRegistration extends HttpServlet {
    		out.close();
    	}
 
-   	private void accountantStaffInsert(HttpServletRequest request, HttpServletResponse response) {
+   	private void patientRegistrationInsert(HttpServletRequest request, HttpServletResponse response) {
    		try {
    			System.out.println("----------------------");
    			HttpSession session = request.getSession();
@@ -212,7 +225,6 @@ public class PatientRegistration extends HttpServlet {
    				String phone = request.getParameter("phone");
    				String userName = request.getParameter("username");
    				String password = request.getParameter("password");
-   				String count = request.getParameter("count");
 
    				Part profileImage = request.getPart("profileimage");
    				Part diagnosis = request.getPart("diagnosis");
@@ -246,30 +258,35 @@ public class PatientRegistration extends HttpServlet {
    				AdminVo adminVo = new AdminVo();
    				adminVo.setId(adminid);
    				
-   				ArrayList<PatientRegistretionVo> getlastrecord = ambulanceDao.getlastrecord();
-   				if(getlastrecord.isEmpty()==true) {
-   					ambulanceId= "AMB0001";
+   				PatientRegistreationDao patientRegistreationDao = new PatientRegistreationDao(); 
+   				ArrayList<PatientRegistretionVo> getlastrecord = patientRegistreationDao.getlastrecord();
+   				SimpleDateFormat yl2d = new SimpleDateFormat("yy");
+				String yearoflastdigital = yl2d.format(t1);
+   				String patientId = null;
+				if(getlastrecord.isEmpty()==true) {
+					patientId = "P".concat(yearoflastdigital).concat("0001");
    				}
    				else if(getlastrecord.isEmpty()==false) {
-   					String id = getlastrecord.get(0).getAmbulanceid();
-   					String removeFirstThree = id.substring(3);
-   					int a1 = Integer.parseInt(removeFirstThree);
+   					String id = getlastrecord.get(0).getPatientid();
+   					String removeFirst = id.substring(3);
+   					
+   					int a1 = Integer.parseInt(removeFirst);
    					a1++;
    					int c = a1;
-   					String s2 = String.valueOf(c);
+   					String s23 = String.valueOf(c);
    					if (c >= 1 && c < 10) {
-   						ambulanceId = "AMB".concat("000").concat(s2);
+   						patientId = "P".concat(yearoflastdigital).concat("000").concat(s23);
    					} else if (c >= 10 && c < 100) {
-   						ambulanceId = "AMB".concat("00").concat(s2);
+   						patientId = "P".concat(yearoflastdigital).concat("00").concat(s23);
    					} else if (c >= 100) {
-   						ambulanceId = "AMB".concat("0").concat(s2);
+   						patientId = "P".concat(yearoflastdigital).concat("0").concat(s23);
    					}else if (c >= 1000) {
-   						ambulanceId = "AMB".concat(s2);
+   						patientId = "P".concat(yearoflastdigital).concat(s23);
    					}
    				}
-   				
-   				
-   				PatientRegistretionVo patientRegistretionVo = new PatientRegistretionVo();
+ 
+				PatientRegistretionVo patientRegistretionVo = new PatientRegistretionVo();
+				patientRegistretionVo.setPatientid(patientId);
    				patientRegistretionVo.setFirstname(firstName);
    				patientRegistretionVo.setMidalname(middleName);
    				patientRegistretionVo.setLastname(lastName);
@@ -293,42 +310,31 @@ public class PatientRegistration extends HttpServlet {
    				patientRegistretionVo.setJoiningdate(joiningdate);
    				patientRegistretionVo.setAdminid(adminVo);
 
-   				
-
-   				LoginDAO logdao = new LoginDAO();
-   				ArrayList<LoginVO> emailchack = logdao.emailverify(loginvo);
-   				System.out.println(emailchack.size());
-   				if (emailchack.isEmpty() == true) {
-   					accountantstaffemail= "true";
-   					ArrayList<LoginVO> usernamechack = logdao.userNameVerify(loginvo);
-   					System.out.println(usernamechack.size());
-   					if (usernamechack.isEmpty() == true) {
-   						AccountantStaffDao accountantStaffDao = new AccountantStaffDao();
-   						String chackaccountantstaff = accountantStaffDao.accountantStaffStaffInsert(accountantStaffVo, loginvo);
-   						if (chackaccountantstaff == "true") {
-   							String uploadImagePath = getServletContext().getRealPath(File.separator + SAVE_DIR_Images);
-   							File imageDir = new File(uploadImagePath);
-   							if (!imageDir.exists()) {
-   								imageDir.mkdirs();
-   							}
-   							accountantStaffImage(s, profileImagepath, profileImage);
-   							accountantstaffupdate = "true";
-   						} else {
-   							accountantstaffupdate = "false";
-   						}
-   					} else {
-   						accountantstaffuser = "false";
-   						accountantstaffupdate = "false";
-   					}
-   				} else {
-   					accountantstaffupdate = "false";
-   					accountantstaffuser = "false";
-   					accountantstaffemail = "false";
-   				}
+				String chackPatient = patientRegistreationDao.insertPatient(patientRegistretionVo);
+				if (chackPatient == "true") {
+					String uploadImagePath = getServletContext().getRealPath(File.separator + SAVE_DIR_Images);
+					File imageDir = new File(uploadImagePath);
+					if (!imageDir.exists()) {
+						imageDir.mkdirs();
+					}
+					patientImage(s, profileImagepath, profileImage, s2, diagosispath, diagnosis);
+					patientupdate="true";
+					System.out.println(patientupdate);
+   					String respose = "success";
+   					response.setContentType("text/plain");
+   					response.setCharacterEncoding("UTF-8");
+   					response.getWriter().write(respose);
+				} else {
+					patientupdate = "false";
+				}
+   					
    			} else {
-   				accountantstaffupdate = "false";
-   				accountantstaffuser = "false";
-   				accountantstaffemailinvalid = "false";
+   				patientupdate = "false";
+   				patientemailinvalid = "false";
+   				System.out.println(patientupdate);
+				response.setContentType("text/plain");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write(patientemailinvalid);
    			}
 
    		} catch (Exception e) {
@@ -336,48 +342,63 @@ public class PatientRegistration extends HttpServlet {
    		}
    	}
 
-   	private void accountantStaffEdit(HttpServletRequest request, HttpServletResponse response) throws IOException {
-   		int accountantStaffId = Integer.parseInt(request.getParameter("accountantStaffId"));
-   		System.out.println(accountantStaffId);
+   	private void patientRegistrationEdit(HttpServletRequest request, HttpServletResponse response) throws IOException {
+   		int patientId = Integer.parseInt(request.getParameter("patientId"));
+   		System.out.println(patientId);
 
-   		AccountantStaffVo accountantStaffVo = new AccountantStaffVo();
-   		accountantStaffVo.setId(accountantStaffId);
-
-   		AccountantStaffDao accountantStaffDao = new  AccountantStaffDao();
-   		ArrayList<AccountantStaffVo> accountantStaffList = accountantStaffDao.accountantStaffStaffEdit(accountantStaffVo);
-   		List<AccountantList> list = new ArrayList<AccountantList>();
-   		for (AccountantStaffVo accountant: accountantStaffList) {
-   			int adminid = accountant.getAdminid().getId();
-   			String firstName = accountant.getFirstname();
-   			String middleName = accountant.getMidalname();
-   			String lastName = accountant.getLastname();
-   			java.sql.Date dateofbirth = accountant.getBirthdate();
+   		PatientRegistretionVo patientRegistretionVo = new PatientRegistretionVo();
+   		patientRegistretionVo.setId(patientId);
+   		
+   		PatientRegistreationDao patientRegistreationDao = new PatientRegistreationDao();
+   		
+   		ArrayList<PatientRegistretionVo> patientList = patientRegistreationDao.editPatient(patientRegistretionVo);
+   		List<PatentRegistreationList> list = new ArrayList<PatentRegistreationList>();
+   		for (PatientRegistretionVo patient: patientList) {
+   			int adminid = patient.getAdminid().getId();
+   			String patientid = patient.getPatientid();
+   			String symptoms = patient.getSymptoms();
+   			String firstName = patient.getFirstname();
+   			String middleName = patient.getMidalname();
+   			String lastName = patient.getLastname();
+   			java.sql.Date dateofbirth = patient.getBirthdate();
    			String date = dateofbirth.toString();
-   			String gender = accountant.getGender();
-   			String homeAddress = accountant.getHomeeaddrss();
-   			String homeCity = accountant.getHomecity();
-   			String homeState = accountant.getHomestate();
-   			String homeCountry = accountant.getHomecountry();
-   			String homeZipcode = accountant.getHomezipcode();
-   			String standardCode = accountant.getMobilecountrycode();
-   			String mobileNumber = accountant.getMobileno();
-   			String phoneNumber = accountant.getPhoneno();
-   			String email = accountant.getEmail();
-   			String password = accountant.getPassword();
-   			String userName = accountant.getUsername();
-   			String charge = accountant.getCharge();
-   			String profileimage = accountant.getProfileimage();
+   			String gender = patient.getGender();
+   			String homeAddress = patient.getHomeeaddrss();
+   			String homeCity = patient.getHomecity();
+   			String homeState = patient.getHomestate();
+   			String homeCountry = patient.getHomecountry();
+   			String homeZipcode = patient.getHomezipcode();
+   			String standardCode = patient.getMobilecountrycode();
+   			String mobileNumber = patient.getMobileno();
+   			String phoneNumber = patient.getPhoneno();
+   			String email = patient.getEmail();
+   			String password = patient.getPassword();
+   			String userName = patient.getUsername();
+   			String profileimage = patient.getProfileimage();
+   			String bloodgroup = patient.getBloodgroup();
    			String profileimagename = "";
    			if (profileimage != null) {
    				int a = profileimage.indexOf("@");
    				a++;
    				profileimagename = profileimage.substring(a);
    			}
-   			String joiningdate = accountant.getJoiningdate();
-   			AccountantList common = new AccountantList();
-   			common.setId(accountantStaffId);
+   			String diagnosis = patient.getDiagnosis();
+   			String diagnosisname = "";
+   			if (diagnosis != null) {
+   				int a = diagnosis.indexOf("@");
+   				a++;
+   				diagnosisname = diagnosis.substring(a);
+   			}
+   			String joiningdate = patient.getJoiningdate();
+   			PatentRegistreationList common = new PatentRegistreationList();
+   			common.setId(patientId);
+   			common.setPatientid(patientid);
+   			common.setDignosis(diagnosis);
+   			common.setDignosisname(diagnosisname);
+   			common.setSymptoms(symptoms);
    			common.setAdminid(adminid);
    			common.setFirstname(firstName);
+   			common.setBloodgroup(bloodgroup);
    			common.setMidalname(middleName);
    			common.setLastname(lastName);
    			common.setDate(date);
@@ -393,7 +414,6 @@ public class PatientRegistration extends HttpServlet {
    			common.setEmail(email);
    			common.setUsername(userName);
    			common.setPassword(password);
-   			common.setCharge(charge);
    			common.setProfileimage(profileimage);
    			common.setProfileimagename(profileimagename);
    			common.setJoiningdate(joiningdate);
@@ -408,39 +428,45 @@ public class PatientRegistration extends HttpServlet {
 
    	}
 
-   	private void accountantStaffUpdate(HttpServletRequest request, HttpServletResponse response) {
+   	private void patientRegistrationUpdate(HttpServletRequest request, HttpServletResponse response) {
    		try {
    			String email = request.getParameter("email");
    			if (EmailValidation.isValid(email)) {
    				int adminid = Integer.parseInt(request.getParameter("adminid"));
-   				int id = Integer.parseInt(request.getParameter("accountantStaffId"));
+   				int id = Integer.parseInt(request.getParameter("Id"));
    				String joiningdate = request.getParameter("joinig");
-   				String firstName = request.getParameter("firstname");
-   				String middleName = request.getParameter("middlename");
-   				String lastName = request.getParameter("lastname");
-   				String dateofbirth = request.getParameter("dob");
+   				String patientId = request.getParameter("patientId");
+   				String firstName = request.getParameter("first_name");
+   				String middleName = request.getParameter("middle_name");
+   				String lastName = request.getParameter("last_name");
+   				String dateofbirth = request.getParameter("birth_date");
    				java.sql.Date dateOfBirth = java.sql.Date.valueOf(dateofbirth);
    				String gender = request.getParameter("gender");
-   				String homeAddress = request.getParameter("hometownaddress");
-   				String homeCity = request.getParameter("homecity");
-   				String homeState = request.getParameter("homestate");
-   				String homeCountry = request.getParameter("homecountry");
-   				String homeZipcode = request.getParameter("homezipcode");
-   				String standardCode = request.getParameter("standardcode");
-   				String mobileNumber = request.getParameter("mobilenumber");
-   				String phoneNumber = request.getParameter("phonenumber");
+   				String blood_group = request.getParameter("blood_group");
+   				String symptoms = request.getParameter("symptoms");
+   				String address = request.getParameter("address");
+   				String city_name = request.getParameter("city_name");
+   				String state_name = request.getParameter("state_name");
+   				String country_name = request.getParameter("country_name");
+   				String zip_code = request.getParameter("zip_code");
+   				String phonecode = request.getParameter("phonecode");
+   				String mobile = request.getParameter("mobile");
+   				String phone = request.getParameter("phone");
    				String userName = request.getParameter("username");
    				String password = request.getParameter("password");
-   				String charge = request.getParameter("charge");
    				String editprofileImage = request.getParameter("editprofileImage");
+   				String dignosis = request.getParameter("editdignosis");
    				System.out.println(editprofileImage);
 
    				Part profileImage = request.getPart("profileimage");
+   				Part diagnosis = request.getPart("diagnosis");
+   				
    				String profileImageName = getSubmittedFileName(profileImage);
-   				System.out.println(profileImage);
+   				String diagonsisName = getSubmittedFileName(diagnosis);
    				String profileImagepath = null;
+   				String diagosispath = null;
 
-   				boolean s;
+   				boolean s,s2;
    				int i = 1;
    				if ((profileImageName.isEmpty()) == false) {
    					String Path = getServletContext()
@@ -454,176 +480,114 @@ public class PatientRegistration extends HttpServlet {
    					s = false;
    					profileImagepath = editprofileImage;
    				}
+   				if ((diagonsisName.isEmpty()) == false) {
+   					String Path = getServletContext()
+   							.getRealPath(File.separator + SAVE_DIR_Images + File.separator + dignosis);
+   					File dir = new File(Path);
+   					dir.delete();
+   					String uniq = String.valueOf(i);
+   					diagosispath = userName.concat(uniq).concat("@").concat(diagonsisName);
+   					s2 = true;
+   				} else {
+   					s2 = false;
+   					diagosispath = dignosis;
+   				}
 
    				AdminVo adminVo = new AdminVo();
    				adminVo.setId(adminid);
 
-   				AccountantStaffVo accountantStaffVo = new AccountantStaffVo();
-   				accountantStaffVo.setId(id);
-   				accountantStaffVo.setFirstname(firstName);
-   				accountantStaffVo.setMidalname(middleName);
-   				accountantStaffVo.setLastname(lastName);
-   				accountantStaffVo.setBirthdate(dateOfBirth);
-   				accountantStaffVo.setGender(gender);
-   				accountantStaffVo.setHomeeaddrss(homeAddress);
-   				accountantStaffVo.setHomecity(homeCity);
-   				accountantStaffVo.setHomestate(homeState);
-   				accountantStaffVo.setHomecountry(homeCountry);
-   				accountantStaffVo.setHomezipcode(homeZipcode);
-   				accountantStaffVo.setMobilecountrycode(standardCode);
-   				accountantStaffVo.setMobileno(mobileNumber);
-   				accountantStaffVo.setPhoneno(phoneNumber);
-   				accountantStaffVo.setEmail(email);
-   				accountantStaffVo.setUsername(userName);
-   				accountantStaffVo.setPassword(password);
-   				accountantStaffVo.setCharge(charge);
-   				accountantStaffVo.setProfileimage(profileImagepath);
-   				accountantStaffVo.setJoiningdate(joiningdate);
-   				accountantStaffVo.setAdminid(adminVo);
+   				PatientRegistretionVo patientRegistretionVo = new PatientRegistretionVo();
+				patientRegistretionVo.setPatientid(patientId);
+   				patientRegistretionVo.setFirstname(firstName);
+   				patientRegistretionVo.setMidalname(middleName);
+   				patientRegistretionVo.setLastname(lastName);
+   				patientRegistretionVo.setBirthdate(dateOfBirth);
+   				patientRegistretionVo.setBloodgroup(blood_group);
+   				patientRegistretionVo.setSymptoms(symptoms);
+   				patientRegistretionVo.setGender(gender);
+   				patientRegistretionVo.setHomeeaddrss(address);
+   				patientRegistretionVo.setHomecity(city_name);
+   				patientRegistretionVo.setHomestate(state_name);
+   				patientRegistretionVo.setHomecountry(country_name);
+   				patientRegistretionVo.setHomezipcode(zip_code);
+   				patientRegistretionVo.setMobilecountrycode(phonecode);
+   				patientRegistretionVo.setMobileno(mobile);
+   				patientRegistretionVo.setPhoneno(phone);
+   				patientRegistretionVo.setEmail(email);
+   				patientRegistretionVo.setUsername(userName);
+   				patientRegistretionVo.setPassword(password);
+   				patientRegistretionVo.setProfileimage(profileImagepath);
+   				patientRegistretionVo.setDiagnosis(diagosispath);
+   				patientRegistretionVo.setJoiningdate(joiningdate);
+   				patientRegistretionVo.setAdminid(adminVo);
+   				patientRegistretionVo.setId(id);
 
-   				LoginVO loginvo = new LoginVO();
-   				loginvo.setAccountantloginid(accountantStaffVo);
-   				loginvo.setEmail(email);
-   				loginvo.setPassword(password);
-   				loginvo.setUsername(userName);
-
-   				LoginDAO logdao = new LoginDAO();
-   				AccountantStaffDao accountantStaffDao = new AccountantStaffDao();
-   				ArrayList<LoginVO> emailchack = logdao.emailverify(loginvo);
-   				ArrayList<LoginVO> usernamechack = logdao.userNameVerify(loginvo);
-   				if (emailchack.isEmpty() == false) {
-   					String chackpassword = logdao.loginupdatePassword(loginvo);
-   					if (chackpassword.equals("add")) {
-   						if (usernamechack.isEmpty() == false) {
-   							String addaccountant = accountantStaffDao.accountantStaffUpdateProfile(accountantStaffVo);
-   							if (addaccountant == "Add") {
-   								accountantstaffupdate = "true";
-   								accountantStaffImage(s, profileImagepath, profileImage);
-   							} else {
-   								System.out.println("supportStaff profile was not update");
-   								accountantstaffupdate = "false";
-   							}
-   						} else if (usernamechack.isEmpty() == true) {
-   							String chackusername = logdao.loginupdateUsername(loginvo);
-   							if (chackusername.equals("add")) {
-   	   							String addaccountant = accountantStaffDao.accountantStaffUpdateProfile(accountantStaffVo);
-   								if (addaccountant == "Add") {
-   									accountantstaffupdate = "true";
-   									accountantStaffImage(s, profileImagepath, profileImage);
-   								} else {
-   									accountantstaffupdate = "false";
-   									System.out.println("supportStaff profile was not update");
-   								}
-   							} else {
-   								accountantstaffuser = "false";
-   								System.out.println("User name was not update");
-   							}
-   						}
-   					}
-   				} else if (emailchack.isEmpty() == true) {
-   					System.out.println("--1--1-1-11-111-1--11-1--1---------------");
-   					String chack = logdao.accountantStaffLoginUpdate(loginvo);
-   					if (chack.equals("add")) {
-   						accountantstaffemail = "true";
-   						if (usernamechack.isEmpty() == false) {
-   							String addaccountant = accountantStaffDao.accountantStaffUpdateProfile(accountantStaffVo);
-   							if (addaccountant == "Add") {
-   								accountantStaffImage(s, profileImagepath, profileImage);
-   								accountantstaffupdate = "true";
-   							} else {
-   								System.out.println("doctor profile was not update");
-   								accountantstaffupdate = "false";
-   							}
-   						} else if (usernamechack.isEmpty() == true) {
-   							System.out.println(email);
-   							System.out.println("---------------------------------------------");
-   							String chackusername = logdao.loginupdateUsername(loginvo);
-   							System.out.println(chackusername);
-   							if (chackusername.equals("add")) {
-   								String addaccountant = accountantStaffDao.accountantStaffUpdateProfile(accountantStaffVo);
-   								if (addaccountant == "Add") {
-   									accountantStaffImage(s, profileImagepath, profileImage);
-   									accountantstaffupdate= "true";
-   								} else {
-   									accountantstaffupdate = "false";
-   								}
-   							} else {
-   								accountantstaffuser = "false";
-   							}
-   						}
-   					} else {
-   						accountantstaffemail = "false";
-   						System.out.println("Email id was not update");
-   					}
-   				}
+   				PatientRegistreationDao  patientRegistreationDao = new PatientRegistreationDao();
+				String chackpatient = patientRegistreationDao.UpdatePatientProfile(patientRegistretionVo);
+				if (chackpatient == "true") {
+					patientupdate = "true";
+					patientImage(s, profileImagepath, profileImage,s2, diagosispath, diagnosis );
+					System.out.println(patientupdate);
+   					String respose = "success";
+   					response.setContentType("text/plain");
+   					response.setCharacterEncoding("UTF-8");
+   					response.getWriter().write(respose);
+				} else {
+					System.out.println("supportStaff profile was not update");
+					patientupdate = "false";
+				}
    			} else {
-   				accountantstaffemailinvalid = "false";
-   				System.out.println("Email id not valid");
+   				patientupdate = "false";
+   				patientemailinvalid = "false";
+   				System.out.println(patientupdate);
+				response.setContentType("text/plain");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write(patientemailinvalid);
    			}
-   			List<AccountantList> list = new ArrayList<AccountantList>();
-   			AccountantList common = new AccountantList();
-   			common.setAccountantstaffemail(accountantstaffemail);
-   			common.setAccountantstaffemailinvalid(accountantstaffemailinvalid);
-   			common.setAccountantstaffupdate(accountantstaffupdate);
-   			common.setAccountantstaffuser(accountantstaffuser);
-   			list.add(common);
-   			Gson gson = new Gson();
-   			System.out.println(gson.toJson(list));
-   			PrintWriter out = response.getWriter();
-   			out.print(gson.toJson(list));
-   			out.flush();
-   			out.close();
    		} catch (Exception e) {
    			e.printStackTrace();
    		}
    	}
 
-   	private void accountantStaffDelete(HttpServletRequest request, HttpServletResponse response) {
+   	private void patientRegistrationDelete(HttpServletRequest request, HttpServletResponse response) {
    		try {
-   			int accountantStaffId = Integer.parseInt(request.getParameter("accountantStaffId"));
-   			System.out.println(accountantStaffId);
+   			int patientId = Integer.parseInt(request.getParameter("patientId"));
+   			System.out.println(patientId);
 
-   			AccountantStaffVo accountantStaffVo = new AccountantStaffVo();
-   			accountantStaffVo.setId(accountantStaffId);
+   			PatientRegistretionVo patientRegistretionVo = new PatientRegistretionVo();
+   			patientRegistretionVo.setId(patientId);
    			
-   			LoginVO loginVO = new LoginVO();
-   			loginVO.setAccountantloginid(accountantStaffVo);
+   			PatientRegistreationDao patientRegistreationDao = new PatientRegistreationDao();
+   			ArrayList<PatientRegistretionVo> patientList = patientRegistreationDao.editPatient(patientRegistretionVo);
+   			String profileimage = patientList.get(0).getProfileimage();
+   			String diagnosis = patientList.get(0).getDiagnosis();
    			
-   			AccountantStaffDao accountantStaffDao = new AccountantStaffDao();
-   			ArrayList<AccountantStaffVo> accountantStaffList = accountantStaffDao.accountantStaffStaffEdit(accountantStaffVo);
-   			String profileimage = accountantStaffList.get(0).getProfileimage();
-   			
-   			String loginmessage = accountantStaffDao.deleteLogin(loginVO);
-   			if (loginmessage == "true") {
-   				String message = accountantStaffDao.deleteAccountantStaff(accountantStaffVo);
-   				if (message == "true") {
-   					if ((profileimage.isEmpty()) == false) {
-   						String Path = getServletContext()
-   								.getRealPath(File.separator + SAVE_DIR_Images + File.separator + profileimage);
-   						File dir = new File(Path);
-   						dir.delete();
-   					}
-   					System.out.println(message);
-   					String respose = "seccess";
-   					response.setContentType("text/plain");
-   					response.setCharacterEncoding("UTF-8");
-   					response.getWriter().write(respose);
-   				} else {
-   					String respose = "error";
-   					response.setContentType("text/plain");
-   					response.setCharacterEncoding("UTF-8");
-   					response.getWriter().write(respose);
-   				}
+   			String message = patientRegistreationDao.deletePatient(patientRegistretionVo);
+   			if (message  == "true") {
+				if ((profileimage.isEmpty()) == false) {
+					String Path = getServletContext()
+							.getRealPath(File.separator + SAVE_DIR_Images + File.separator + profileimage);
+					File dir = new File(Path);
+					dir.delete();
+					String Path1 = getServletContext()
+							.getRealPath(File.separator + SAVE_DIR_Images + File.separator + diagnosis);
+					File dir1 = new File(Path1);
+					dir1.delete();
+				}
+				System.out.println(message);
+				String respose = "success";
+				response.setContentType("text/plain");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write(respose);
+			} else {
+				String respose = "error";
+				response.setContentType("text/plain");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write(respose);
+			}
 
-   			} else {
-   				String respose = "error";
-   				response.setContentType("text/plain");
-   				response.setCharacterEncoding("UTF-8");
-   				response.getWriter().write(respose);
-   			}
    		} catch (IOException e) {
    			e.printStackTrace();
    		}
    	}
-
-   }
+}

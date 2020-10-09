@@ -105,8 +105,17 @@ public class AdminVo {
 	@OneToMany( mappedBy = "adminid" , cascade = CascadeType.REMOVE)
 	private List<BloodDonorVo> bloodDonorid;
 
-//	@OneToMany( mappedBy = "adminid", cascade = CascadeType.REMOVE)
-//	private List<PatientDoctorVo> patientdoctorid;
+	@OneToMany( mappedBy = "adminid" , cascade = CascadeType.REMOVE)
+	private List<PatientRegistretionVo> patientRegistrationid;
+
+    @OneToMany( mappedBy = "adminid", cascade = CascadeType.REMOVE)
+    private List<PatientVo> patientid;
+    
+	@OneToMany( mappedBy = "adminid" , cascade = CascadeType.REMOVE)
+	private List<BloodStockVo> bloodstockid;
+
+    @OneToMany( mappedBy = "adminid", cascade = CascadeType.REMOVE)
+    private List<BloodOutwordVo> bloodoutwordid;
 
 	public int getId() {
 		return id;
@@ -339,13 +348,36 @@ public class AdminVo {
 	public void setBloodDonorid(List<BloodDonorVo> bloodDonorid) {
 		this.bloodDonorid = bloodDonorid;
 	}
-	
-//	public List<PatientDoctorVo> getPatientdoctorid() {
-//		return patientdoctorid;
-//	}
-//
-//	public void setPatientdoctorid(List<PatientDoctorVo> patientdoctorid) {
-//		this.patientdoctorid = patientdoctorid;
-//	}
-	
+
+	public List<PatientRegistretionVo> getPatientRegistrationid() {
+		return patientRegistrationid;
+	}
+
+	public void setPatientRegistrationid(List<PatientRegistretionVo> patientRegistrationid) {
+		this.patientRegistrationid = patientRegistrationid;
+	}
+
+	public List<PatientVo> getPatientid() {
+		return patientid;
+	}
+
+	public void setPatientid(List<PatientVo> patientid) {
+		this.patientid = patientid;
+	}
+
+	public List<BloodStockVo> getBloodstockid() {
+		return bloodstockid;
+	}
+
+	public void setBloodstockid(List<BloodStockVo> bloodstockid) {
+		this.bloodstockid = bloodstockid;
+	}
+
+	public List<BloodOutwordVo> getBloodoutwordid() {
+		return bloodoutwordid;
+	}
+
+	public void setBloodoutwordid(List<BloodOutwordVo> bloodoutwordid) {
+		this.bloodoutwordid = bloodoutwordid;
+	}
 }

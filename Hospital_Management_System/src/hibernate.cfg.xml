@@ -55,5 +55,13 @@
 		
 		<mapping class="VO.AmbulanceVo"/>
 		
+		<mapping class="VO.PatientRegistretionVo"/>
+		
+		<mapping class="VO.PatientVo"/>
+		
+		<mapping class="VO.BloodOutwordVo"/>
+		
+		<mapping class="VO.BloodStockVo"/>
+		
 	</session-factory>
 </hibernate-configuration>

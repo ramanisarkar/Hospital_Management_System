@@ -518,7 +518,7 @@ border-radius: 0px;
 					<div class="form-group row">
 			    		<label class="col-sm-2 col-form-label text" >Driver Phone Number<span style="color: red;">*</span></label>
 			    		<div class="col-sm-4">
-			      			<input class="form-control" id="phone" minlength="6" maxlength="15" type="text" value="" name="phone" required>	
+			      			<input class="form-control" id="phone" minlength="6" maxlength="15" type="tel" value="" name="phone" required>	
 			    		</div>
 			    	</div>
 		  			<div class="form-group row">

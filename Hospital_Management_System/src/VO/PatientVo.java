@@ -15,7 +15,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "Patient", uniqueConstraints = @UniqueConstraint(name = "unique", columnNames={"Email", "UserName","PatientId"}))
+@Table(name = "Patient", uniqueConstraints = @UniqueConstraint(name = "unique", columnNames =  "email"))
 public class PatientVo {
 	
 	@Id
@@ -137,19 +137,22 @@ public class PatientVo {
 	@Column(name = "Symtoms")
 	private String symptoms;
 	
+	@Column(name = "JoiningDate")
+	private String joiningdate;
+	
 	@ManyToOne
 	@JoinColumn(name="Adminid")
 	private AdminVo adminid;
 	
-	@Column(name = "JoiningDate")
-	private String joiningdate;
-	
-	@OneToMany( mappedBy = "patientid", cascade = CascadeType.REMOVE)
-	private List<LoginVO> loginid;
-	
-	@OneToMany( mappedBy = "patientid", cascade = CascadeType.REMOVE)
-	private List<PatientDoctorVo> patientdoctorid;
+	@ManyToOne
+	@JoinColumn(name="DoctorId")
+	private DoctorVo doctorid;
 
+	@OneToMany( mappedBy = "patientloginid", cascade = CascadeType.REMOVE)
+	private List<LoginVO> loginid;	
+	
+	@OneToMany( mappedBy = "patientid", cascade = CascadeType.REMOVE)
+	private List<BloodOutwordVo> bloodoutwordid;	
 
 	public int getId() {
 		return id;
@@ -487,12 +490,20 @@ public class PatientVo {
 		this.loginid = loginid;
 	}
 
-	public List<PatientDoctorVo> getPatientdoctorid() {
-		return patientdoctorid;
+	public DoctorVo getDoctorid() {
+		return doctorid;
 	}
 
-	public void setPatientdoctorid(List<PatientDoctorVo> patientdoctorid) {
-		this.patientdoctorid = patientdoctorid;
+	public void setDoctorid(DoctorVo doctorid) {
+		this.doctorid = doctorid;
 	}
-	
+
+	public List<BloodOutwordVo> getBloodoutwordid() {
+		return bloodoutwordid;
+	}
+
+	public void setBloodoutwordid(List<BloodOutwordVo> bloodoutwordid) {
+		this.bloodoutwordid = bloodoutwordid;
+	}
+
 }

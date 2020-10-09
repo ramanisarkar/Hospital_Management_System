@@ -8,9 +8,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "BloodDonor")
+@Table(name = "BloodDonor",uniqueConstraints = @UniqueConstraint(name = "unique", columnNames =  "DonorId"))
 
 public class BloodDonorVo {
 	
@@ -18,9 +19,21 @@ public class BloodDonorVo {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "Id")
 	private int id;
+	
+	@Column(name = "DonorId")
+	private String donorid;
 
-	@Column(name = "Name")
-	private String name;
+	@Column(name = "FirstName")
+	private String firstname;
+	
+	@Column(name = "MidalName")
+	private String midalname;
+	
+	@Column(name = "LastName")
+	private String lastname;
+	
+	@Column(name = "DateOfBirth")
+	private java.sql.Date birthdate;
 	
 	@Column(name = "Gender")
 	private String gender;
@@ -28,20 +41,20 @@ public class BloodDonorVo {
 	@Column(name = "Age")
 	private int age;
 	
-	@Column(name = "Phone")
-	private String phone;
+	@Column(name = "MobileCountryCode")
+	private String mobilecountrycode;
+	
+	@Column(name = "MobileNo")
+	private String mobileno;
+	
+	@Column(name = "PhoneNo")
+	private String phoneno;
 	
 	@Column(name = "Email")
 	private String email;
 	
 	@Column(name = "BloodGroup")
 	private String bloodgroup;
-	
-	@Column(name = "NumberOfBags")
-	private int numberofbags;
-	
-	@Column(name = "LastDonationDate")
-	private String lastdonationdate;
 	
 	@Column(name = "JoiningDate")
 	private String joiningdate;
@@ -58,12 +71,44 @@ public class BloodDonorVo {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getDonorid() {
+		return donorid;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setDonorid(String donorid) {
+		this.donorid = donorid;
+	}
+
+	public String getFirstname() {
+		return firstname;
+	}
+
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
+	public String getMidalname() {
+		return midalname;
+	}
+
+	public void setMidalname(String midalname) {
+		this.midalname = midalname;
+	}
+
+	public String getLastname() {
+		return lastname;
+	}
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+
+	public java.sql.Date getBirthdate() {
+		return birthdate;
+	}
+
+	public void setBirthdate(java.sql.Date birthdate) {
+		this.birthdate = birthdate;
 	}
 
 	public String getGender() {
@@ -82,12 +127,28 @@ public class BloodDonorVo {
 		this.age = age;
 	}
 
-	public String getPhone() {
-		return phone;
+	public String getMobilecountrycode() {
+		return mobilecountrycode;
 	}
 
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setMobilecountrycode(String mobilecountrycode) {
+		this.mobilecountrycode = mobilecountrycode;
+	}
+
+	public String getMobileno() {
+		return mobileno;
+	}
+
+	public void setMobileno(String mobileno) {
+		this.mobileno = mobileno;
+	}
+
+	public String getPhoneno() {
+		return phoneno;
+	}
+
+	public void setPhoneno(String phoneno) {
+		this.phoneno = phoneno;
 	}
 
 	public String getEmail() {
@@ -106,22 +167,6 @@ public class BloodDonorVo {
 		this.bloodgroup = bloodgroup;
 	}
 
-	public int getNumberofbags() {
-		return numberofbags;
-	}
-
-	public void setNumberofbags(int numberofbags) {
-		this.numberofbags = numberofbags;
-	}
-
-	public String getLastdonationdate() {
-		return lastdonationdate;
-	}
-
-	public void setLastdonationdate(String lastdonationdate) {
-		this.lastdonationdate = lastdonationdate;
-	}
-
 	public String getJoiningdate() {
 		return joiningdate;
 	}
@@ -137,5 +182,4 @@ public class BloodDonorVo {
 	public void setAdminid(AdminVo adminid) {
 		this.adminid = adminid;
 	}
-	
 }

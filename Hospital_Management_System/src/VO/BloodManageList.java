@@ -1,16 +1,31 @@
 package VO;
 
 public class BloodManageList {
-	int id,adminid,numberofbags,age ;
-	String bloodgroup,joiningdate, bloodmanageupdate,name,gender,phone,email,lastdonationdate;
+	int id,adminid,numberofbags,age,donorId ;
+	String bloodgroup,joiningdate,donorid, bloodmanageupdate,name,middelname,lastname,gender,dob,phone,email,lastdonationdate,address,city,country,state,zipcode,countrycode,mobileno;
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
+	public String getDob() {
+		return dob;
+	}
+	public void setDob(String dob) {
+		this.dob = dob;
+	}
 	public int getAdminid() {
 		return adminid;
+	}
+	public int getDonorId() {
+		return donorId;
+	}
+	public void setDonorId(int donorId) {
+		this.donorId = donorId;
+	}
+	public void setDonorid(String donorid) {
+		this.donorid = donorid;
 	}
 	public void setAdminid(int adminid) {
 		this.adminid = adminid;
@@ -20,6 +35,18 @@ public class BloodManageList {
 	}
 	public void setNumberofbags(int numberofbags) {
 		this.numberofbags = numberofbags;
+	}
+	public String getMiddelname() {
+		return middelname;
+	}
+	public void setMiddelname(String middelname) {
+		this.middelname = middelname;
+	}
+	public String getLastname() {
+		return lastname;
+	}
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
 	public String getBloodgroup() {
 		return bloodgroup;
@@ -74,5 +101,47 @@ public class BloodManageList {
 	}
 	public void setLastdonationdate(String lastdonationdate) {
 		this.lastdonationdate = lastdonationdate;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	public String getCountry() {
+		return country;
+	}
+	public void setCountry(String country) {
+		this.country = country;
+	}
+	public String getState() {
+		return state;
+	}
+	public void setState(String state) {
+		this.state = state;
+	}
+	public String getZipcode() {
+		return zipcode;
+	}
+	public void setZipcode(String zipcode) {
+		this.zipcode = zipcode;
+	}
+	public String getCountrycode() {
+		return countrycode;
+	}
+	public void setCountrycode(String countrycode) {
+		this.countrycode = countrycode;
+	}
+	public String getMobileno() {
+		return mobileno;
+	}
+	public void setMobileno(String mobileno) {
+		this.mobileno = mobileno;
 	}
 }

@@ -22,33 +22,34 @@
 $(document).ready(function(){
 	var count = 0;
 	var supportstaffusername;
-	var username="accountantStaffList";
-		$.get('AccountantStaff',{flag:username},function(response) {
+	var username="PatientRegistrationList";
+		$.get('PatientRegistration',{flag:username},function(response) {
 			var obj = JSON.parse(response);
 			$.each(obj, function(index, value) {
 			count++;
 		   	var html = '';
 		   	html += '<tr id='+count+'>';
-		   	html += '<td><img src="Accountant_Staff_Image/'+obj[index].profileimage+'" height="50px" width="50px" class="img-circle"></td>';
+		   	html += '<td><img src="Patient_Registration_Image/'+obj[index].profileimage+'" height="50px" width="50px" class="img-circle"></td>';
 		   	html += '<td style="padding-left: 15px; padding-top: 23px;" ><a href="#">'+obj[index].patientid+'</a></td>';
 		   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].firstname+'</td>';
+		   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].bloodgroup+'</td>';
+		   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].mobileno+'</td>';
 		   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].email+'</td>';
-			html += '<td><button style="margin-top: 10px;" type="button" class="btn btn-info  edit" data-edit_id="'+count+'" id="accountantStaffId'+count+'" value="'+obj[index].id+'">Edit</button>';
-			html += '<button style="margin-left: 10px; margin-top: 10px;" type="button" class="btn btn-danger delete" data-delete_id="'+count+'" id="accountantStaffId'+count+'" value="'+obj[index].id+'">Delete</button></td></tr>';
-			$('.accountant').append(html);
+			html += '<td><button style="margin-top: 10px;" type="button" class="btn btn-info  edit" data-edit_id="'+count+'" id="patientId'+count+'" value="'+obj[index].id+'">Edit</button>';
+			html += '<button style="margin-left: 10px; margin-top: 10px;" type="button" class="btn btn-danger delete" data-delete_id="'+count+'" id="patientId'+count+'" value="'+obj[index].id+'">Delete</button></td></tr>';
+			$('.patientRegistration').append(html);
 	 	});
 			 $('#example').DataTable();
 	});
 	$("#txt_username").keyup(function(){
-		
-	      var pharmacist = $(this).val().trim();
-	      var username = "chackusername";
-	      console.log(pharmacist);
-	      if(pharmacist != ''){
+	      var patientuser = $(this).val().trim();
+	      var username = "chackuser";
+	      console.log(patientuser);
+	      if(patientuser != ''){
 	         $.ajax({
-	            url: 'AccountantStaff',
+	            url: 'PatientRegistration',
 	            type: 'post',
-	            data: {flag:username , pharmacistusername1:pharmacist},
+	            data: {flag:username , patientuserId:patientuser},
 	            success: function(response){
 	            	var obj = JSON.parse(response);
 	            	console.log(response);
@@ -68,29 +69,25 @@ $(document).ready(function(){
 	 });
 	$("#username").keyup(function(){
 	      var pharmacist = $(this).val().trim();
-	      var username = "chackusername";
+	      var username = "chackuser";
 	      if(pharmacist != ''){
 	         $.ajax({
-	            url: 'AccountantStaff',
+	            url: 'PatientRegistration',
 	            type: 'post',
-	            data: {flag:username , pharmacistusername1:pharmacist},
+	            data: {flag:username , patientuserId:patientuser},
 	            success: function(response){
 	            	var obj = JSON.parse(response);
 	            	console.log(response);
 		        	if(obj[0].chackusername == "false"){
-		        		console.log("------------1245123461+7+4----------------");
 		        		if(obj[0].username == supportstaffusername){
-		        			console.log("-------------789456---------------");
 		        			$('#available1').html("");
 		        			$("#btnSubmit").prop("disabled", false);
 		        		}else {
-		        			console.log("--------------123456--------------");
 		        			$("#btnSubmit").prop("disabled", true);
 			                $('#available1').html("Username Already Taken");		
 						}
 	             	}
 		        	else if (obj[0].chackusername == "true") {
-		        		console.log("--------------dadada--------------");
 		                $('#available1').html("");
 		                $("#btnSubmit").prop("disabled", false);
 					}
@@ -110,35 +107,29 @@ $(document).ready(function(){
 	    $.ajax({
 	        type: "POST",
 	        enctype: 'multipart/form-data',
-	        url: "AccountantStaff",
+	        url: "PatientRegistration",
 	        data: data,
 	        processData: false,
 	        contentType: false,
 	        cache: false,
 	        timeout: 600000,
 	        success: function(response ,textStatus , jqXHR ){
-	        	console.log(response);
-	        	var obj = JSON.parse(response);
-	        	if(obj[0].accountantstaffupdate == "true"){
+	        	var obj = response;
+	        	console.log(obj);
+	        	if(obj== "success"){
 	        		$('#message1').show();
 	        		$('#message2').show();
 	        		$('#message3').show();
 	        		$('#messagepass').text("Recored Add Successsfully");
 	        		$("#insert_form")[0].reset();
 	        	}
-	        	else if(obj[0].accountantstaffemail == "false"){
+	        	else if(obj == "false"){
 	        		$('#message1').show();
 	        		$('#message2').show();
 	        		$('#message3').show();
-	        		$('#messagepass').text("Email Id , Please try again");
+	        		$('#messagepass').text("Email Id Already Exist , Please try again");
 	        	}
 	        	
-	        	else if(obj[0].accountantstaffemailinvalid == "false"){
-	        		$('#message1').show();
-	        		$('#message2').show();
-	        		$('#message3').show();
-	        		$('#messagepass').text("Email Id was not coreact ,  Please try again");
-	        	}
 	            $("#btnSubmit").prop("disabled", false);
 	        },
 	        error: function (e) {
@@ -152,21 +143,22 @@ $(document).ready(function(){
 	$(document).on('click', '.edit', function(){
 		var editid = $(this).data('edit_id');
 		console.log(editid);
-		var accountantStaff = $('#accountantStaffId'+editid).val();
-		var username = "editAccountantStaff";
-		$.get('AccountantStaff',{flag:username , accountantStaffId:accountantStaff},function(response){
- 			$("#accountantStaffTab1").hide();
+		var patient = $('#patientId'+editid).val();
+		var username = "editPatientRegistration";
+		$.get('PatientRegistration',{flag:username , patientId:patient},function(response){
+ 			$("#patienttab1").hide();
  			var obj = JSON.parse(response);
 			console.log(response);
-			$("#accountantStaffTab2").show();
+			$("#patienttab2").show();
 			$('.nav-tabs a[href="#menu2"]').tab('show');
-			$('#accountantStaffId').val(obj[0].id);
+			$('#patientId').val(obj[0].id);
 			$('#adminid').val(obj[0].adminid);
 			$('#joiningdateid').val(obj[0].joiningdate);
-			$('#firstname').val(obj[0].firstname);
+			$('#first_name').val(obj[0].firstname);
 			$('#middlename').val(obj[0].midalname);
-			$('#lastname').val(obj[0].lastname);
+			$('#last_name').val(obj[0].lastname);
 			$('#dob').val(obj[0].date);
+			$('#patientid').val(obj[0].patientid);
 			var gender = obj[0].gender;
 			if(gender=="male"){
 				$("#male").prop("checked", true);
@@ -174,26 +166,37 @@ $(document).ready(function(){
 			else {
 				$("#female").prop("checked", true);
 			}
-			$('#hometownaddress').val(obj[0].homeeaddrss);
+			$('#blood_group').val(obj[0].bloodgroup);
+			$('#symptoms').val(obj[0].symptoms);
+			$('#address').val(obj[0].homeeaddrss);
 			$('#homecity').val(obj[0].homecity);
-			$('#homestate').val(obj[0].homestate);
+			$('#state_name').val(obj[0].homestate);
 			$('#homecountry').val(obj[0].homecountry);
-			$('#homezipcode').val(obj[0].homezipcode);
+			$('#zip_code').val(obj[0].homezipcode);
 			$('#standardcode').val(obj[0].mobilecountrycode);
-			$('#mobilenumber').val(obj[0].mobileno);
-			$('#phonenumber').val(obj[0].phoneno);
+			$('#mobile').val(obj[0].mobileno);
+			$('#phone').val(obj[0].phoneno);
 			$('#email').val(obj[0].email);
 			$('#username').val(obj[0].username);
-			supportstaffusername= obj[0].username;
 			$('#password').val(obj[0].password);
-			$('#chargeid').val(obj[0].charge);
 			if(obj[0].profileimagename){
-				$('#profileimageid').show();
-				$('#profileimageid').text(obj[0].profileimagename);
-				$('#editprofileImage').val(obj[0].profileimage);
-				$("#coveredit").attr("src", "Accountant_Staff_Image/"+obj[0].profileimage+"");
-			}else{
-				$('#profileimageid').hide();
+  				$('#profileimageid').show();
+  				$('#profileimageid').text(obj[0].profileimagename);
+  				$('#editprofileImage').val(obj[0].profileimage);
+  				console.log(obj[0].profileimage);
+  				$("#coveredit").attr("src", "Patient_Registration_Image/"+obj[0].profileimage+"");
+  			}else{
+  				$('#profileimageid').hide();
+  			}
+			if(obj[0].dignosisname){
+  				$('#experiencecertificateid').show();
+  				$('#experiencecertificatebuttonid').show();
+  				$('#experiencecertificateid').text(obj[0].dignosisname);
+  				$('#editexperienceCertificate').val(obj[0].dignosis);
+  				$('#experiencecertificatebuttonid').attr("href","Patient_Registration_Image/"+obj[0].dignosis+"");
+  			}else {
+  				$('#experiencecertificateid').hide();
+  				$('#experiencecertificatebuttonid').hide();
 			}
 		});
 	});
@@ -207,36 +210,28 @@ $(document).ready(function(){
     $.ajax({
         type: "POST",
         enctype: 'multipart/form-data',
-        url: "AccountantStaff",
+        url: "PatientRegistration",
         data: data,
         processData: false,
         contentType: false,
         cache: false,
         timeout: 600000,
         success: function(response ,textStatus , jqXHR ){
-        	var obj = JSON.parse(response);
+        	var obj = response;
         	console.log(obj);
-        	if(obj[0].accountantstaffupdate == "true"){
+        	if(obj== "success"){
         		$('#message1').show();
         		$('#message2').show();
         		$('#message3').show();
         		$('#messagepass').text("Recored Update Successsfully");
-        		 $("#update").prop("disabled", false);
         		
         	}
-        	else if(obj[0].accountantstaffemail == "false"){
+        	else if(obj == "false"){
         		$('#message1').show();
         		$('#message2').show();
         		$('#message3').show();
-        		$('#messagepass').text("Email Id  , Please try again");
-        	}
-        	
-        	else if(obj[0].accountantstaffemailinvalid == "false"){
-        		$('#message1').show();
-        		$('#message2').show();
-        		$('#message3').show();
-        		$('#messagepass').text("Email Id was not coreact ,  Please try again");
-        	}
+        		$('#messagepass').text("Email Id Already Exist , Please try again");
+        	}$("#update").prop("disabled", false);
         },
         error: function (e) {
             console.log("ERROR : ", e);
@@ -247,12 +242,12 @@ $(document).ready(function(){
 	$(document).on('click', '.delete', function(){
 		var deleteid = $(this).data('delete_id');
 		console.log(deleteid);
-		var accountantStaff = $('#accountantStaffId'+deleteid).val();
-		var username = "deleteAccountantStaff";
-		$.get('AccountantStaff',{flag:username , accountantStaffId:accountantStaff},function(response){
+		var patient = $('#patientId'+deleteid).val();
+		var username = "deletePatientRegistration";
+		$.get('PatientRegistration',{flag:username , patientId:patient},function(response){
 			var message=response;
 			console.log(message)
-			if(message == "seccess"){
+			if(message == "success"){
 				count--;
         	$('#'+deleteid+'').closest('tr').remove();
 			$('#message1').show();
@@ -270,7 +265,7 @@ $(document).ready(function(){
    	    $(this).tab('show');
    	    var supportStaffList =  $(this).text(); 
    	    console.log(supportStaffList);
-   	    if(supportStaffList=="Accountant Staff List"){
+   	    if(supportStaffList=="Patient Registration List"){
    	    	location.reload();
    	    }
    	});
@@ -289,7 +284,7 @@ $(document).ready(function(){
 	color: white;
 	padding: 8px;
 }
-.text{
+.control-label{
 
 text-align: right;
 }
@@ -380,6 +375,10 @@ display:none !important;
 }
 .btn {
 border-radius: 0px;
+}
+.require-field{
+color: red;
+text-align: right;
 }
 </style>
 </head>
@@ -474,11 +473,11 @@ border-radius: 0px;
 			<ul class="nav nav-tabs tabcalss">
 				<li class="active" id="tab1doctorlist"><a href="#home"
 					data-toggle="tab" ><i class="fa fa-bars"
-						aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Patient List</a></li>
+						aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Patient Registration List</a></li>
 						
 				<li id="tabdoctoradd"style="margin-left: 15px; background-color: f1f4f9;">
 				<a href="#menu1" id="patienttab1" data-toggle="tab">
-				<i class="fa fa-plus-circle"aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Add Patient</a>
+				<i class="fa fa-plus-circle"aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Add Patient Registration</a>
 				</li>
 				<li id="tabdoctoradd"style="margin-left: 15px; background-color: f1f4f9;"><a 
 				id="patienttab2" data-toggle="tab"
@@ -500,7 +499,7 @@ border-radius: 0px;
 							 <th style="padding-left: 15px;">Action</th>
 			            </tr>
 			        </thead>
-			        <tbody class="accountant">
+			        <tbody class="patientRegistration">
 			        
 			        </tbody>
 			        <tfoot>
@@ -518,7 +517,8 @@ border-radius: 0px;
 			    <div style="margin-top: 26px;"></div>
    			 </div>
 			<div id="menu1" class="tab-pane">
-				<form id="insert_form" method="post" enctype="multipart/form-data">
+			<div style="margin-top: 20px;"></div>
+				<form id="insert_form"  enctype="multipart/form-data">
 					<div class="form-group row">
 						<label class="col-sm-2 control-label" for="first_name">First Name<span class="require-field">*</span></label>
 						<div class="col-sm-8">
@@ -580,7 +580,7 @@ border-radius: 0px;
 						<div class="form-group row">
 							<label class="col-sm-2 control-label" for="diagnosis">Diagnosis Report</label>
 							<div class="col-sm-8">
-								<input type="file" class="form-control" name="diagnosis">
+								<input type="file" class="form-control" name="diagnosis"accept="application/pdf">
 							</div>
 						</div>	
 					</div>
@@ -616,7 +616,7 @@ border-radius: 0px;
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-sm-2 control-label " for="mobile">Mobile<span class="require-field">*</span></label>
+						<label class="col-sm-2 control-label" >Mobile<span class="require-field">*</span></label>
 						<div class="col-sm-1" style="padding-right: 0px;">
 						<input type="text" value="+91" class="form-control" name="phonecode" maxlength="5">
 						</div>
@@ -640,8 +640,11 @@ border-radius: 0px;
 					<div class="form-group row">
 						<label class="col-sm-2 control-label" for="username">User Name<span class="require-field">*</span></label>
 						<div class="col-sm-8">
-							<input class="form-control " type="text" name="username" maxlength="30" value="">
+							<input class="form-control" id="txt_username" type="text" name="username" maxlength="30" value="">
 						</div>
+						<div style="margin-left: 212px;margin-top: 36px;color: red;">
+				    		<span id="available"></span>
+				    	</div>
 					</div>
 					<div class="form-group row">
 						<label class="col-sm-2 control-label" for="password">Password<span class="require-field">*</span></label>
@@ -655,34 +658,34 @@ border-radius: 0px;
 						
 							<div class="col-sm-8">
 							<input class="form-control file" type="file" name="profileimage" accept="image/*" 
-											onchange="document.getElementById('coveredit').src = window.URL.createObjectURL(this.files[0])">
+											onchange="document.getElementById('coveredit1').src = window.URL.createObjectURL(this.files[0])">
 							</div>
 							
 							<div class="form-group row">
 						    		<div class="image">
-						    			<img id="coveredit" alt="your image" width="150" height="150" style="margin-left: 290px; margin-top: 10px;" />
+						    			<img id="coveredit1" alt="your image" width="150" height="150" style="margin-left: 290px; margin-top: 10px;" />
 						    		</div>
 			  					</div>
 						</div>	
 						<div class="col-sm-offset-2 col-sm-8">
 			        	<input type="hidden" name="flag" value="insert">
-			        	<input type="hidden" name="count" id="count" >
-			        	<input type="submit" value="Patient Registration" name="registration_front_patient" class="btn btn-success">
+			        	<input type="submit" value="Patient Registration" id="btnSubmit" name="registration_front_patient" class="btn btn-success">
 			        </div>
 			    </form>
 			</div>
 			<div id="menu2" class="tab-pane">
+			<div style="margin-top: 20px;"></div>
 				<form id="update_form" enctype="multipart/form-data">
 					<div class="form-group row">
 						<label class="col-sm-2 control-label" for="first_name">First Name<span class="require-field">*</span></label>
 						<div class="col-sm-8">
-							<input id="first_name" class="form-control validate[required,custom[onlyLetter_specialcharacter]] text-input" maxlength="50" type="text" value="" name="first_name">
+							<input id="first_name" class="form-control" maxlength="50" type="text" value="" name="first_name">
 						</div>
 					</div>
 					<div class="form-group row">
 						<label class="col-sm-2 control-label" for="middle_name" >Middle Name</label>
 						<div class="col-sm-8">
-							<input id="middle_name" class="form-control validate[custom[onlyLetter_specialcharacter]]" maxlength="50" type="text" value="" name="middle_name">
+							<input id="middlename" class="form-control validate[custom[onlyLetter_specialcharacter]]" maxlength="50" type="text" value="" name="middle_name">
 						</div>
 					</div>
 					<div class="form-group row">
@@ -705,14 +708,14 @@ border-radius: 0px;
 					<div class="form-group row">
 						<label class="col-sm-2 control-label" for="birth_date">Date of birth<span class="require-field">*</span></label>
 						<div class="col-sm-8">
-							<input id="birth_date" class="form-control validate[required] " type="date"  name="birth_date">
+							<input id="dob" class="form-control" type="date"  name="birth_date">
 						</div>
 					</div>		
 					<div class="form-group row">
 						<label class="col-sm-2 control-label" for="blood_group">Blood Group<span class="require-field">*</span></label>
 						<div class="col-sm-8">
-											<select id="blood_group" class="form-control validate[required]" name="blood_group">
-							<option value="">Select Blood Group</option>
+											<select id="blood_group" class="form-control " name="blood_group">
+													<option value="" disabled selected hidden="">Select Blood Group</option>
 													<option value="O+">O+ </option>
 													<option value="O-">O- </option>
 													<option value="A+">A+ </option>
@@ -727,107 +730,109 @@ border-radius: 0px;
 								<div class="form-group row">
 							<label class="col-sm-2 control-label" for="symptoms">Symptoms<span class="require-field">*</span></label>
 							<div class="col-sm-8">
-								<input class="form-control validate[required]" type="text" name="symptoms" >
+								<input id="symptoms" class="form-control" type="text" name="symptoms" >
 							</div>					
 						</div>	
-					<div class="diagnosissnosis_div">
-						<div class="form-group row">
-							<label class="col-sm-2 control-label" for="diagnosis">Diagnosis Report</label>
-							<div class="col-sm-8">
-								<input type="file" class="form-control file dignosisreport" name="diagnosis1">
-							</div>
-						</div>	
-					</div>
 					<div class="form-group row">
-						<div class="col-sm-2">
-						</div>
-						<div class="col-sm-8 row">
-							<input type="button" value="Add More Report" name="add_more_report" class="add_more_report btn btn-default" style="margin-left: 15px;">
-						</div>
-					</div>
+			    		<label  class="col-sm-2 col-form-label text" >Diagnosis Report</label>
+			    		<div class="col-sm-8">
+			      			<input type="file" id="diagnosis" name="diagnosis" accept="application/pdf ">
+			      			<span id="experiencecertificateid" hidden></span><a hidden href="#" id="experiencecertificatebuttonid"  target="_blank" class="w3-btn w3-black" >Link Button</a>
+			    		</div>
+			    	</div>
 					<div class="form-group row">
 						<label class="col-sm-2 control-label" for="address">Address<span class="require-field">*</span></label>
 						<div class="col-sm-8">
-							<input id="address" class="form-control validate[required,custom[address_description_validation]]" type="text" maxlength="150" name="address" value="">
+							<input id="address" class="form-control " type="text" maxlength="150" name="address" value="">
 						</div>
 					</div>
 					
 					<div class="form-group row">
 						<label class="col-sm-2 control-label" for="city_name">City<span class="require-field">*</span></label>
 						<div class="col-sm-8">
-							<input id="city_name" class="form-control validate[required,custom[city_state_country_validation]]" type="text" name="city_name" maxlength="50" value="">
+							<input id="homecity" class="form-control " type="text" name="city_name" maxlength="50" value="">
 						</div>
 					</div>
 					<div class="form-group row">
 						<label class="col-sm-2 control-label" for="state_name">State</label>
 						<div class="col-sm-8">
-							<input id="state_name" class="form-control validate[custom[city_state_country_validation]]" type="text" name="state_name" maxlength="50" value="">
+							<input id="state_name" class="form-control " type="text" name="state_name" maxlength="50" value="">
 						</div>
 					</div>
 					<div class="form-group row">
 						<label class="col-sm-2 control-label" for="state_name">Country</label>
 						<div class="col-sm-8">
-							<input id="country_name" class="form-control validate[custom[city_state_country_validation]]" type="text" name="country_name" maxlength="50" value="">
+							<input id="homecountry" class="form-control " type="text" name="country_name" maxlength="50" value="">
 						</div>
 					</div>
 					<div class="form-group row">
 						<label class="col-sm-2 control-label" for="zip_code">Zip Code<span class="require-field">*</span></label>
 						<div class="col-sm-8">
-							<input id="zip_code" class="form-control  validate[required,custom[onlyLetterNumber]]" type="text" maxlength="15" name="zip_code" value="">
+							<input id="zip_code" class="form-control  " type="text" maxlength="15" name="zip_code" value="">
 						</div>
 					</div>
 					<div class="form-group row">
 						<label class="col-sm-2 control-label " for="mobile">Mobile<span class="require-field">*</span></label>
 						<div class="col-sm-1" style="padding-right: 0px;">
-						<input type="text" value="+91" class="form-control  validate[required] onlynumber_and_plussign" name="phonecode" maxlength="5">
+						<input type="text" value="+91" class="form-control " name="phonecode" maxlength="5" id="standardcode">
 						</div>
 						<div class="col-sm-7">
-							<input id="mobile" class="form-control validate[required,custom[phone_number]] text-input" minlength="6" maxlength="15" type="text" value="" name="mobile">				
+							<input id="mobile" class="form-control  text-input" minlength="6" maxlength="15" type="text" value="" name="mobile">				
 						</div>
 					</div>
 					<div class="form-group row">
 						<label class="col-sm-2 control-label " for="phone">Phone</label>
 						<div class="col-sm-8">
-							<input id="phone" class="form-control validate[custom[phone_number]] text-input" minlength="6" maxlength="15" type="text" value="" name="phone">				
+							<input id="phone" class="form-control  " minlength="6" maxlength="15" type="text" value="" name="phone">				
 						</div>
 					</div>
 					<div class="form-group row">
 						<label class="col-sm-2 control-label " for="email">Email<span class="require-field">*</span></label>
 						<div class="col-sm-8">
-							<input id="email" class="form-control validate[required,custom[email]] text-input" maxlength="100" type="text" name="email" value="">
+							<input id="email" class="form-control  text-input" maxlength="100" type="text" name="email" value="">
 						</div>
 					</div>
 					
 					<div class="form-group row">
 						<label class="col-sm-2 control-label" for="username">User Name<span class="require-field">*</span></label>
 						<div class="col-sm-8">
-							<input id="username" class="form-control validate[required,custom[username_validation]]" type="text" name="username" maxlength="30" value="">
+							<input id="username" class="form-control " type="text" name="username" maxlength="30" value="">
 						</div>
+						<div style="margin-left: 212px;margin-top: 36px;color: red;">
+				    		<span id="available1"></span>
+				    	</div>
 					</div>
 					<div class="form-group row">
 						<label class="col-sm-2 control-label" for="password">Password<span class="require-field">*</span></label>
 						<div class="col-sm-8">
-							<input id="password" class="form-control validate[required,minSize[8]]" type="password" name="password" maxlength="12" value="">
+							<input id="password" class="form-control " type="password" name="password" maxlength="12" value="">
 						</div>
 					</div>
-				
-						<div class="form-group row">
-						<label class="col-sm-2 control-label" for="photo">Image</label>
-						
-							<div class="col-sm-8">
-							<input class="form-control file" type="file" name="profileimage" accept="image/*" 
-											onchange="document.getElementById('coveredit').src = window.URL.createObjectURL(this.files[0])">
-							</div>
-							
-							<div class="form-group row">
-						    		<div class="image">
-						    			<img id="coveredit" alt="your image" width="150" height="150" style="margin-left: 290px; margin-top: 10px;" />
-						    		</div>
-			  					</div>
-						</div>	
+					<div class="form-group row">
+			    		<label  class="col-sm-2 col-form-label control-label" >Image</label>
+			    		<div class="col-sm-4">
+			      			<input type="text" class="form-control"style="background-color: #f1f4f9; " readonly="readonly">
+			    		</div>
+			    		<div class="col-sm-4">
+			    			<span hidden id="profileimageid"></span>
+			      			<input id="updateprofileimage" type="file" name="profileimage" accept="image/*" 
+								onchange="document.getElementById('coveredit').src = window.URL.createObjectURL(this.files[0])">
+			    		</div>
+			    	</div>
+			    	 <div class="form-group row">
+			    		<div class="image">
+			    			<img id="coveredit" alt="your image" width="150" height="150" style="margin-left: 210px;" />
+			    		</div>
+  					</div>
 						<div class="col-sm-offset-2 col-sm-8">
-			        	<input type="hidden" name="flag" value="insert">
-			        	<input type="hidden" name="count" id="count" >
+			        	<input type="hidden" id="editprofileImage" name="editprofileImage">
+			    		<input type="hidden" id="editexperienceCertificate" name="editdignosis">
+			    		
+			    		<input type="hidden" id="patientId" name="Id">
+			    		<input type="hidden" id="adminid" name="adminid" >
+			    		<input type="hidden" id="patientid" name="patientId" >
+			    		<input type="hidden" id="joiningdateid" name="joinig" >
+			    		<input type="hidden" name="flag" value="update">
 			        	<input type="submit" value="Patient Registration" name="registration_front_patient" class="btn btn-success">
 			        </div>
 			    </form>

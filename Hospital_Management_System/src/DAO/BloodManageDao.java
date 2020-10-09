@@ -10,6 +10,8 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.AnnotationConfiguration;
 
 import VO.BloodManageVo;
+import VO.BloodOutwordVo;
+import VO.BloodStockVo;
 import VO.TreatmentVo;
 
 public class BloodManageDao {
@@ -74,7 +76,7 @@ public class BloodManageDao {
 			session.close();
 			}
 		catch (Exception e) {
-			return chack="error";
+			e.printStackTrace();
 		}
 		return chack="true";
 	}
@@ -95,5 +97,109 @@ public class BloodManageDao {
 			return message = "error";
 		}
 		return message = "true";
+	}
+
+	public ArrayList<BloodManageVo> checkBloodStock(BloodManageVo bloodManageVo) {
+		List<BloodManageVo> bloodManageList = new ArrayList<BloodManageVo>();
+		try {
+			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+			Session session = sessionfactory.openSession();
+			Transaction transaction = session.beginTransaction();
+			Query q = session.createQuery("from BloodManageVo AS b where b.bloodgroup =:blood And b.adminid =:id ");
+			q.setParameter("blood", bloodManageVo.getBloodgroup());
+			q.setParameter("id", bloodManageVo.getAdminid());
+			bloodManageList = q.list();
+			transaction.commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return (ArrayList<BloodManageVo>) bloodManageList;
+	}
+
+	public ArrayList<BloodManageVo> getBloodDonorHistry(BloodManageVo bloodManageVo) {
+		List<BloodManageVo> bloodManageList = new ArrayList<BloodManageVo>();
+		try {
+			System.out.println(bloodManageVo.getDonorid());
+			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+			Session session = sessionfactory.openSession();
+			Transaction transaction = session.beginTransaction();
+			Query q = session.createQuery("from BloodManageVo AS b where b.donorid =:id");
+			q.setParameter("id", bloodManageVo.getDonorid());
+			bloodManageList = q.list();
+			transaction.commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return (ArrayList<BloodManageVo>) bloodManageList;
+	}
+
+	public String bloodDonorInsert(BloodOutwordVo bloodOutwordVo) {
+		String message;
+		try {
+			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+			Session session = sessionfactory.openSession();
+			Transaction transaction = session.beginTransaction();
+			session.save(bloodOutwordVo);
+			transaction.commit();
+			session.close();
+		} catch (Exception e) {
+			return message = "error";
+		}
+		return message = "true";
+	}
+
+	public ArrayList<BloodStockVo> bloodGroupList(BloodStockVo bloodStockVo) {
+		List<BloodStockVo> bloodManageList = new ArrayList<BloodStockVo>();
+		try {
+			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+			Session session = sessionfactory.openSession();
+			Transaction transaction = session.beginTransaction();
+			Query q = session.createQuery("from BloodStockVo AS n where n.bloodgroup =:blood And n.adminid =:id");
+			q.setParameter("blood", bloodStockVo.getBloodgroup());
+			q.setParameter("id", bloodStockVo.getAdminid());
+			bloodManageList = q.list();
+			transaction.commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return (ArrayList<BloodStockVo>) bloodManageList;
+	}
+
+	public String bloodStockUpdate(BloodStockVo bloodStockVo) {
+		String message;
+		try {
+			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+			Session session = sessionfactory.openSession();
+			Transaction transaction = session.beginTransaction();
+			Query q = session.createQuery("update BloodStockVo as a set a.numberofbags =:bag where a.bloodgroup =:id");
+			q.setParameter("id", bloodStockVo.getBloodgroup());
+			q.setParameter("bag", bloodStockVo.getNumberofbags());
+			q.executeUpdate();
+			transaction.commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return message="true";
+	}
+
+	public ArrayList<BloodStockVo> bloodGroupStock(BloodStockVo bloodStockVo) {
+		List<BloodStockVo> bloodManageList = new ArrayList<BloodStockVo>();
+		try {
+			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+			Session session = sessionfactory.openSession();
+			Transaction transaction = session.beginTransaction();
+			Query q = session.createQuery("from BloodStockVo AS n where n.adminid =:id");
+			q.setParameter("id", bloodStockVo.getAdminid());
+			bloodManageList = q.list();
+			transaction.commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return (ArrayList<BloodStockVo>) bloodManageList;
 	}
 }

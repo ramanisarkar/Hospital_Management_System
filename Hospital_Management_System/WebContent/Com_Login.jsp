@@ -71,14 +71,13 @@
 							<button type="submit" class="btn btn-primary" style="width: 30%">Login</button>
 						</form>
 						<div class="col" style="margin-top: -103px;margin-left: 398px;">
-								<a href="#"> Forget Password?</a>
-							</div>
+							<a href="#"> Forget Password?</a>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</section>
-	
 </div>
 </body>
 <footer

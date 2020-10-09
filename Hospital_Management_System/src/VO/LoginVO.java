@@ -62,9 +62,9 @@ public class LoginVO {
 	@JoinColumn(name="accountantLoginId")
 	private AccountantStaffVo  accountantloginid;
 	
-//	@ManyToOne
-//	@JoinColumn(name="loginid")
-//	private PatientVo patientid;
+	@ManyToOne
+	@JoinColumn(name="patientLoginId")
+	private PatientVo patientloginid;
 
 	public int getId() {
 		return id;
@@ -169,14 +169,13 @@ public class LoginVO {
 	public void setAccountantloginid(AccountantStaffVo accountantloginid) {
 		this.accountantloginid = accountantloginid;
 	}
+
+	public PatientVo getPatientloginid() {
+		return patientloginid;
+	}
+
+	public void setPatientloginid(PatientVo patientloginid) {
+		this.patientloginid = patientloginid;
+	}
 	
-
-//	public PatientVo getPatientid() {
-//		return patientid;
-//	}
-//
-//	public void setPatientid(PatientVo patientid) {
-//		this.patientid = patientid;
-//	}
-
 }

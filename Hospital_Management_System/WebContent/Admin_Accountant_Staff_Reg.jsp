@@ -41,20 +41,20 @@ $(document).ready(function(){
 	});
 	$("#txt_username").keyup(function(){
 		
-	      var pharmacist = $(this).val().trim();
+	      var accountstaff = $(this).val().trim();
 	      var username = "chackusername";
-	      console.log(pharmacist);
+	      console.log(accountstaff);
 	      if(pharmacist != ''){
 	         $.ajax({
 	            url: 'AccountantStaff',
 	            type: 'post',
-	            data: {flag:username , pharmacistusername1:pharmacist},
+	            data: {flag:username , accountantStaffUserName:accountstaff},
 	            success: function(response){
 	            	var obj = JSON.parse(response);
 	            	console.log(response);
 	            	if(obj[0].chackusername == "false"){
 	        			$("#btnSubmit").prop("disabled", true);
-		                $('#available').html("Username Already Taken");		
+		                $('#available').html("Username Already Taken");
 	             	}
 		        	else if (obj[0].chackusername == "true") {
 		                $('#available').html("");
@@ -73,7 +73,7 @@ $(document).ready(function(){
 	         $.ajax({
 	            url: 'AccountantStaff',
 	            type: 'post',
-	            data: {flag:username , pharmacistusername1:pharmacist},
+	            data: {flag:username , accountantStaffUserName:pharmacist},
 	            success: function(response){
 	            	var obj = JSON.parse(response);
 	            	console.log(response);

@@ -128,11 +128,8 @@ public class DoctorVo {
 	@OneToMany( mappedBy = "doctorid", cascade = CascadeType.REMOVE)
 	private List<MedicineVo> medicinid;
 	
-	/*
-	 * @OneToMany( mappedBy = "doctorid", cascade = CascadeType.REMOVE) private
-	 * List<PatientDoctorVo> patientdoctorid;
-	 */
-
+	@OneToMany( mappedBy = "doctorid", cascade = CascadeType.REMOVE)
+	private List<PatientVo> patientloginid;	
 
 	public int getId() {
 		return id;
@@ -406,11 +403,20 @@ public class DoctorVo {
 		this.degree = degree;
 	}
 
-//	public List<PatientDoctorVo> getPatientdoctorid() {
-//		return patientdoctorid;
-//	}
-//
-//	public void setPatientdoctorid(List<PatientDoctorVo> patientdoctorid) {
-//		this.patientdoctorid = patientdoctorid;
-//	}	
+	public List<MedicineVo> getMedicinid() {
+		return medicinid;
+	}
+
+	public void setMedicinid(List<MedicineVo> medicinid) {
+		this.medicinid = medicinid;
+	}
+
+	public List<PatientVo> getPatientloginid() {
+		return patientloginid;
+	}
+
+	public void setPatientloginid(List<PatientVo> patientloginid) {
+		this.patientloginid = patientloginid;
+	}
+
 }

@@ -6,314 +6,68 @@
 <head>
 
 
-<link href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css"/>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ 
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap.min.js"></script>
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
-
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script src="js/Patient_Reg.js"></script>
+<script src="js/Patient_Reg2.js"></script>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
-<script>
-$(document).ready(function(){	
-	$('#departmentid').change(function(event){  
-        var username="searchdepartment";
-        var departmentid=$('#departmentid').val();
-        console.log()  
-     	$.get('Doctor',{flag:username , department:departmentid},function(response) {
-    	var obj = JSON.parse(response);
-    	var select = $('#specializationid');
-    	select.find('option').remove();
-    	$('<option disabled selected hidden="">').val("").text("Select Specialization").appendTo(select);  
-		   	 $.each(obj, function(index, value) {
-		   		$('<option>').val(obj[index].id).text(obj[index].specialization).appendTo(select);
-			 });
-    	 });
-  	});
-	$('#departmentupdateid').change(function(event){  
-        var username="searchdepartment";
-        var departmentid=$('#departmentupdateid').val();
-        console.log()  
-     	$.get('Doctor',{flag:username , department:departmentid},function(response) {
-    	var obj = JSON.parse(response);
-    	var select = $('#specializationupdateid');
-    	select.find('option').remove();
-    	$('<option disabled selected hidden>').val("").text("Select Specialization").appendTo(select);  
-		   	 $.each(obj, function(index, value) {
-		   		$('<option>').val(obj[index].id).text(obj[index].specialization).appendTo(select);
-			 });
-    	 });
-  	});
-	
-	/* var count = 0;
-	var username="doctorlist";
-		$.get('Doctor',{flag:username},function(response) {
-			count++;
-			var obj = JSON.parse(response);
-			$.each(obj, function(index, value) {
-		   	var html = '';
-		   	html += '<tr id='+count+'>';
-		   	html += '<td><img src="Doctor_Image/'+obj[index].profileimage+'" height="50px" width="50px" class="img-circle"></td>';
-		   	html += '<td style="padding-left: 15px;" ><a href="#">'+obj[index].firstname+'</a></td>';
-		   	html += '<td style="padding-left: 15px;" >'+obj[index].departmentname+'</td>';
-			html += '<td style="padding-left: 15px;">'+obj[index].specailizationname+'</td>';
-			html += '<td style="padding-left: 15px;">'+obj[index].degree+'</td>';
-		   	html += '<td style="padding-left: 15px;">'+obj[index].email+'</td>';
-			html += '<td style="padding-left: 15px;">'+obj[index].mobileno+'</td>';
-			html += '<td><button type="button" class="btn btn-info  edit" data-edit_id="'+count+'" id="doctorid'+count+'" value="'+obj[index].id+'">Edit</button></td>';
-			html += '<td><button type="button" class="btn btn-danger delete" data-delete_id="'+count+'" id="doctorid'+count+'" value="'+obj[index].id+'">Delete</button></td></tr>';
-			$('.doctor').append(html);
-	 	});
-			$('#myTable').DataTable(); 
-	});  */
-
-   	$('#insert_form').on('submit' , function(event){
-        event.preventDefault();
-        var form = $('#insert_form')[0];
-        var data = new FormData(form);
-        $("#btnSubmit").prop("disabled", true);
-        $.ajax({
-            type: "POST",
-            enctype: 'multipart/form-data',
-            url: "Doctor",
-            data: data,
-            processData: false,
-            contentType: false,
-            cache: false,
-            timeout: 600000,
-            success: function(response ,textStatus , jqXHR ){
-            	var obj = JSON.parse(response);
-            	console.log(obj);
-            	if(obj[0].doctorupdate == "true"){
-            		$('#message1').show();
-            		$('#message2').show();
-            		$('#message3').show();
-            		$('#messagepass').text("Recored Add Successsfully");
-            		$('.doctor').children('tr').remove();
-            		$.each(obj, function(index, value) {
-                		count++;
-            		   	var html = '';
-            		   	html += '<tr id='+count+'>';
-            		   	html += '<td><img src="Doctor_Image/'+obj[index].profileimage+'" height="50px" width="50px" class="img-circle"></td>';
-            		   	html += '<td style="padding-left: 15px;" ><a href="#">'+obj[index].firstname+'</a></td>';
-            		   	html += '<td style="padding-left: 15px;" >'+obj[index].departmentname+'</td>';
-             			html += '<td style="padding-left: 15px;">'+obj[index].specailizationname+'</td>';
-             			html += '<td style="padding-left: 15px;">'+obj[index].degree+'</td>';
-            		   	html += '<td style="padding-left: 15px;">'+obj[index].email+'</td>';
-             			html += '<td style="padding-left: 15px;">'+obj[index].mobileno+'</td>';
-             			html += '<td><button type="button" class="btn btn-info  edit" data-edit_id="'+count+'" id="doctorid'+count+'" value="'+obj[index].id+'">Edit</button></td>';
-            			html += '<td><button type="button" class="btn btn-danger delete" data-delete_id="'+count+'" id="doctorid'+count+'" value="'+obj[index].id+'">Delete</button></td></tr>';
-            			$('.doctor').append(html);
-                 	});
-            		$("#insert_form")[0].reset();
-            	}
-            	else if(obj[0].doctoremail == "false"){
-            		$('#message1').show();
-            		$('#message2').show();
-            		$('#message3').show();
-            		$('#messagepass').text("Email Id & User Name invalid , Please try again");
-            	}
-            	else if(obj[0].doctoruser == "false"){
-            		$('#message1').show();
-            		$('#message2').show();
-            		$('#message3').show();
-            		$('#messagepass').text("User Name invalid , Please try again");
-            	}
-            	else if(obj[0].doctoremailinvalid == "false"){
-            		$('#message1').show();
-            		$('#message2').show();
-            		$('#message3').show();
-            		$('#messagepass').text("Email Id was not coreact ,  Please try again");
-            	}
-                $("#btnSubmit").prop("disabled", false);
-            },
-            error: function (e) {
-                $("#result").text(e.responseText);
-                console.log("ERROR : ", e);
-                $("#btnSubmit").prop("disabled", false);
-            }
-        });
-    });
-   	$(document).on('click', '.edit', function(){
-  		var editid = $(this).data('edit_id');
-  		var doctor = $('#doctorid'+editid).val();
- 		var username = "editDoctor";
- 		$.get('Doctor',{flag:username , doctorid:doctor},function(response){
-  			var obj = JSON.parse(response);
-  			console.log(response);
-  			$("#doctortab2").show();
-  			$('.nav-tabs a[href="#menu2"]').tab('show');
-  			$('#doctorid').val(obj[0].id);
-  			$('#adminid').val(obj[0].adminid);
-  			$('#joiningdateid').val(obj[0].joiningdate);
-  			$('#firstname').val(obj[0].firstname);
-  			$('#middlename').val(obj[0].midalname);
-  			$('#lastname').val(obj[0].lastname);
-  			$('#dob').val(obj[0].date);
-  			var gender = obj[0].gender;
-  			if(gender=="male"){
-  				$("#male").prop("checked", true);
-  			}
-  			else {
-  				$("#female").prop("checked", true);
-			}
-  			$('#officeaddress').val(obj[0].officeaddrss);
-  			$('#officecity').val(obj[0].officecity);
-  			$('#officestate').val(obj[0].officestate);
-  			$('#officecountry').val(obj[0].officecountry);
-  			$('#officezipcode').val(obj[0].officezipcode);
-  			$('#hometownaddress').val(obj[0].homeeaddrss);
-  			$('#homecity').val(obj[0].homecity);
-  			$('#homestate').val(obj[0].homestate);
-  			$('#homecountry').val(obj[0].homecountry);
-  			$('#homezipcode').val(obj[0].homezipcode);
-  			$('#degree').val(obj[0].degree);
-  			$('#standardcode').val(obj[0].mobilecountrycode);
-  			$('#mobilenumber').val(obj[0].mobileno);
-  			$('#phonenumber').val(obj[0].phoneno);
-  			$('#email').val(obj[0].email);
-  			$('#username').val(obj[0].username);
-  			$('#password').val(obj[0].password);
-  			$('<option>').val(obj[0].departmentid).text(obj[0].departmentname).appendTo('#departmentupdateid');
-  			$('<option>').val(obj[0].specializationid).text(obj[0].specailizationname).appendTo('#specializationupdateid');
-  			$('#visitingchargeid').val(obj[0].visitingcharge);
-  			$('#consultingchargeid').val(obj[0].consultingcharge);
-  			if(obj[0].profileimagename){
-  				$('#profileimageid').show();
-  				$('#profileimageid').text(obj[0].profileimagename);
-  				$('#editprofileImage').val(obj[0].profileimage);
-  				$("#coveredit").attr("src", "Doctor_Image/"+obj[0].profileimage+"");
-  			}
-  			if(obj[0].curriculumvitaename){
-  				$('#curriculumvitaeid').show();
-  				$('#curriculumvitaebuttonid').show();
-  				$('#curriculumvitaeid').text(obj[0].curriculumvitaename);
-  				$('#editcurriculumvitae').val(obj[0].curriculumvitae);
-  				$("#curriculumvitaebuttonid").attr("href","Doctor_Document/"+obj[0].curriculumvitae+"");
-  			}
-  			if(obj[0].educationcertificatename){
-  				$('#educationcertificateid').show();
-  				$('#educationcertificatebuttonid').show();
-  	  			$('#educationcertificateid').text(obj[0].educationcertificatename);
-  	  			$('#editeducationCertificate').val(obj[0].educationcertificate);
-  	  			$('#educationcertificatebuttonid').attr("href","Doctor_Document/"+obj[0].educationcertificate+"");
-  			}if(obj[0].experiencecertificatename){
-  				$('#experiencecertificateid').show();
-  				$('#experiencecertificatebuttonid').show();
-  				$('#experiencecertificateid').text(obj[0].experiencecertificatename);
-  				$('#editexperienceCertificate').val(obj[0].experiencecertificate);
-  				$('#experiencecertificatebuttonid').attr("href","Doctor_Document/"+obj[0].experiencecertificate+"");
-  			}
-  		});
-   	});
-   	$('#update_form').on('submit', function(event){
-        event.preventDefault();
-        var form = $('#update_form')[0];
-        var data = new FormData(form);
-        console.log(form);
-        console.log(data);
-        $("#update").prop("disabled", true);
-        $.ajax({
-            type: "POST",
-            enctype: 'multipart/form-data',
-            url: "Doctor",
-            data: data,
-            processData: false,
-            contentType: false,
-            cache: false,
-            timeout: 600000,
-            success: function(response ,textStatus , jqXHR ){
-            	var obj = JSON.parse(response);
-            	console.log(obj);
-            	if(obj[0].doctorupdate == "true"){
-            		$('#message1').show();
-            		$('#message2').show();
-            		$('#message3').show();
-            		$('#messagepass').text("Recored Update Successsfully");
-            		
-            	}
-            	else if(obj[0].doctoremail == "false"){
-            		$('#message1').show();
-            		$('#message2').show();
-            		$('#message3').show();
-            		$('#messagepass').text("Email Id & User Name invalid , Please try again");
-            	}
-            	else if(obj[0].doctoruser == "false"){
-            		$('#message1').show();
-            		$('#message2').show();
-            		$('#message3').show();
-            		$('#messagepass').text("User Name invalid , Please try again");
-            	}
-            	else if(obj[0].doctoremailinvalid == "false"){
-            		$('#message1').show();
-            		$('#message2').show();
-            		$('#message3').show();
-            		$('#messagepass').text("Email Id was not coreact ,  Please try again");
-            	}
-            },
-            error: function (e) {
-                console.log("ERROR : ", e);
-                $("#update").prop("disabled", false);
-            }
-        });
-    });
-	$(document).on('click', '.delete', function(){
-  		var deleteid = $(this).data('delete_id');
-  		console.log(deleteid);
-  		var doctor = $('#doctorid'+deleteid).val();
- 		var username = "deleteDoctor";
- 		$.get('Doctor',{flag:username , doctorid:doctor},function(response){
- 			var message=response;
- 			console.log(message)
- 			if(message == "seccess"){
- 				count--;
-	        	$('#'+deleteid+'').closest('tr').remove();
- 				$('#message1').show();
-        		$('#message2').show();
-        		$('#message3').show();
-        		$('#messagepass').text("Recored Delete Successsfully");
-        	}
- 		});
-  	});
-
-   	$(".nav-tabs a").click(function(){
-   		$("#doctortab2").hide();
-   		$('#message1').hide();
-		$('#message2').hide();
-		$('#message3').hide();
-   	    $(this).tab('show');
-   	 	var nurselist =  $(this).text(); 
-	    console.log(nurselist);
-	    if(nurselist== "Doctor list"){
-	    	console.log("--------------------");
-	    	location.reload();
-	    }
-	    	
-	    
-});
-</script>
 <style>
-
-.ullist {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-	width: 15%;
-	background-color: #2c3542;
-	height: 100%;
-	overflow: auto;
+.require-field{
+color: red;
 }
-
+.multiselect-container {
+    width: 653px;
+    overflow: scroll;
+    overflow-x: scroll;
+    overflow-y: scroll;
+    height: 140px;
+}
 .title {
 	color: white;
 	padding: 8px;
 }
 .text{
+
 text-align: right;
 }
+.ullist {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	width: 15%;
+	background:  #364150;
+	height: 100%;
+	overflow: auto;
+}
+.nav>li>a:focus, .nav>li>a:hover {
+    text-decoration: none;
+    background-color: #2C3542; !important;
+}
 
+.tabcalss>li>a {
+	color:#555555;
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    background-color: #f1f4f9;
+}
+.tabcalss>li>a:hover {
+	color:#555555;
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    background-color: white;
+}
 #message1 {
     background: #fff none repeat scroll 0 0;
     border-left: 4px solid #7ad03a;
@@ -321,9 +75,80 @@ text-align: right;
     margin: 5px 15px 9px;
     padding: 9px 0px 1px 13px;
 }
-.updated.below-h2 {
-    text-transform: capitalize;
+table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:after, table.dataTable thead .sorting_asc_disabled:after, table.dataTable thead .sorting_desc_disabled:after {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    display: block;
+    font-family: 'Glyphicons Halflings';
+    opacity: 0.5;
+}table.dataTable thead .sorting_asc:after {
+    content: "\e155";
 }
+
+table.dataTable thead .sorting_desc:after {
+     content: "\e156";
+}
+table.dataTable thead .sorting_asc:last-child:after {
+    display:none !important;
+}
+
+table.dataTable thead .sorting_desc:last-child:after {
+display:none !important;
+}
+table.dataTable thead .sorting:after {
+    content: "\e156";
+}
+table.dataTable thead .sorting:last-child:after{
+display:none !important;
+}
+
+.table th:focus {
+	outline: 0 !important;
+}
+.table th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #ddd;
+    position: relative;
+}
+.dataTables_filter {
+    margin-left: 301px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+#example_length{
+	margin-left: 4px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+#example_paginate{
+    margin-left: 298px;
+    margin-top: -29px;
+}
+#tableBloodDoner_length{
+	margin-left: 4px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+#tableBloodDoner_paginate{
+    margin-left: 298px;
+    margin-top: -29px;
+}
+.btn {
+border-radius: 0px;
+}
+.active_tab1
+  {
+   background-color:#fff;
+   color:#333;
+   font-weight: 600;
+  }
+  .inactive_tab1
+  {
+   background-color: #f5f5f5;
+   color: #333;
+   cursor: not-allowed;
+  }
 </style>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 </head>
@@ -412,141 +237,124 @@ text-align: right;
 	<div id="message2" style="margin-top: 149px;"hidden="" ></div>
 	<div style="margin-left: 236px; padding: 0px 16px; margin-top: -77%; background-color: white;">
 		<div style="color: green; margin-top: 3px;" id="specializationadd"></div>
-		<div style="padding-top: 15px;"></div>
 		<div class="container" style="margin-right: 90px;">
-			<ul class="nav nav-tabs tabcalss">
+		<div id="patientregistrationdiv1">
+			<form id="register_form">
+			<ul class="nav nav-tabs tabcalss" style="margin-top: 15px;">
 				<li class="active" id="tab1doctorlist"><a href="#home"
-					style="background-color: f1f4f9;"><i class="fa fa-bars"
-						aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Patient list</a>
+					style="background-color: f1f4f9;"><i class="fa fa-bars"aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Patient List</a>
 				</li>
-				<li id="tabdoctoradd"style="margin-left: 15px; background-color: f1f4f9;"><a 
-					href="#addmenu1"  ><i class="fa fa-plus-circle"
+				<li id="tabdoctoradd"style="margin-left: 15px; background-color: f1f4f9;"><a href="#addmenu1" id="list_login_details"data-toggle="tab"><i class="fa fa-plus-circle"
 						aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Add
 						New Patient</a>
 				</li>
 				<li style="margin-left: 15px; background-color: f1f4f9;"><a 
-					href="#addmenu2">
-					<i class="fa fa-plus-circle" aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Add New Patient Stap2</a>
+					href="#addmenu2" id="list_personal_details" >
+					<i class="fa fa-plus-circle" aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>
+					Add New Patient Stap2</a>
 				</li>
-				<li id="tabdoctoradd"style="margin-left: 15px; background-color: f1f4f9;"><a id="doctortab2"
-					href="#addmenu3" style="display: none;"><i class="fas fa-edit"
-						aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Edit
-						Doctor</a>
-				</li>
-				<li id="tabdoctoradd"style="margin-left: 15px; background-color: f1f4f9;"><a id="doctortab2"
-					href="#editmenu1" style="display: none;"><i class="fas fa-edit"
-						aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Edit
-						Doctor</a>
-				</li>
-				<li id="tabdoctoradd"style="margin-left: 15px; background-color: f1f4f9;"><a id="doctortab2"
-					href="#editmenu2" style="display: none;"><i class="fas fa-edit"
-						aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Edit
-						Doctor</a>
-				</li>
-				<li id="tabdoctoradd"style="margin-left: 15px; background-color: f1f4f9;"><a id="doctortab2"
-					href="#editmenu3" style="display: none;"><i class="fas fa-edit"
-						aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Edit
-						Doctor</a>
+				<li style="margin-left: 15px; background-color: f1f4f9;" id="list_contact_details"><a 
+					href="#addmenu3"  >
+					<i class="fa fa-plus-circle" aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>
+					Add New Patient Stap3</a>
 				</li>
 			</ul>
 			<div class="tab-content">
 				<div id="home" class="tab-pane fade in active" style="margin-top: 10px;">
-					<div class="container">
-       					<table id="myTable" class="display" style="width:100%">
+       			<table id="example" class="display table table-striped table-hover" style="width:100%">
 				        <thead>
 				            <tr>
    				                 <th>Photo</th>
-								 <th > Doctor Name</th>
-								 <th >Department</th>
-								 <th > Specialization</th>
-								 <th > Degree</th>
-								 <th > Doctor Email</th>
-								 <th > Mobile Number</th>
-								 <th colspan="2">Action</th>
+								 <th>Patient Name</th>
+								 <th>Patient ID</th>
+								 <th>Mobile Number</th>
+								 <th>Status</th>
+								 <th>BloodGroup</th>
+								 <th>Assigned Doctor Name</th>
+								 <th>Admitted Date</th>
+								 <th>Action</th>
 				            </tr>
 				        </thead>
-				        <tbody class="doctor" >
+				        <tbody class="patient" >
 						</tbody>
 						<tfoot>
 				            <tr>
-				            <th >Photo</th>
-				            <th >Doctor Name</th>
-				            <th >Department</th>
-				            <th >Specialization</th>
-				            <th >Degree</th>
-				            <th >Doctor Email</th>
-				            <th >Mobile Number</th>
-				            <th colspan="2">Action</th></tr>
+				            	 <th>Photo</th>
+								 <th>Patient Name</th>
+								 <th>Patient ID</th>
+								 <th>Mobile Number</th>
+								 <th>Status</th>
+								 <th>BloodGroup</th>
+								 <th>Assigned Doctor Name</th>
+								 <th>Admitted Date</th>
+								 <th>Action</th>
+							</tr>
 				        </tfoot>
-				        </table>
-				 		</div>
-					</div>
-				<div id="addmenu1" class="tab-pane fade">
-				<form id="insert_form" enctype="multipart/form-data">
-				<div style="margin-top: 15px;"><h4>Personal Information</h4></div>
+				   	</table>
+				</div>
+				<div id="addmenu1" id="checkdiv" class="tab-pane fade">
+					<div style="margin-top: 15px;"><h4>Personal Information</h4></div>
 					<div style="border-bottom: 1px solid gray;"></div>
 					<div>
 						<div style="margin-top: 10px;">
 							<div class="form-group row">
+					    		<label class="col-sm-2 col-form-label text" >Patient Id<span style="color: red;">*</span></label>
+					    		
+								<div class="col-sm-4">
+									<select id="insertpatientid" class="form-control " name="patientId">
+										<option value="" disabled selected hidden="">Select Patient</option>
+										<c:forEach items="${sessionScope.patientRagistrationList }" var="q">
+											<option value="${q.patientid }">${q.firstname }</option>
+										</c:forEach>
+								   </select>
+								   <span id="error_patient_id" class="text-danger"></span>
+								</div>
 					    		<label class="col-sm-2 col-form-label text" >First Name<span style="color: red;">*</span></label>
 					    		<div class="col-sm-4">
-					      			<input type="text" class="form-control" name="firstname" placeholder="First Name"  required>
+					      			<input type="text" id="insertfirstname" class="form-control" name="firstname" placeholder="First Name">
+					      			<span id="error_first_name" class="text-danger"></span>
 					    		</div>
-
+					    	</div>
+				  			<div class="form-group row">
+				  				
 					    		<label class="col-sm-2 col-form-label text" >Middle Name</label>
 					    		<div class="col-sm-4">
-					      			<input type="text" class="form-control" name="middlename"  placeholder="Middle Name">
+					      			<input type="text" id="insertmiddlename"  class="form-control" name="middlename"  placeholder="Middle Name">
 					    		</div>
-					    	</div>
-				  			<div class="form-group row">
+				  				
 					    		<label  class="col-sm-2 col-form-label text" >Last Name<span style="color: red;">*</span></label>
 					    		<div class="col-sm-4">
-					      			<input type="text" class="form-control" name="lastname" placeholder="Last Name" required>
-					    		</div>
-					    		<label class="col-sm-2 col-form-label text" >Date of birth<span style="color: red;">*</span></label>
-					    		<div class="col-sm-4">
-					      			<input type="date" class="form-control" name="dob" placeholder="Date of birth" required>
-					    		</div>
-					    		
-				  			</div>
-				  			<div class="form-group row">
-					    		<label  class="col-sm-2 col-form-label text" >Gender<span style="color: red;">*</span></label>
-					    		<div class="col-sm-4">
-					      			<label class="radio-inline"><input type="radio" name="gender" value="male" required>Male</label>
-									<label class="radio-inline"><input type="radio" name="gender" value="female" required>Female</label>
+					      			<input type="text" id="insertlastname"class="form-control" name="lastname" placeholder="Last Name" required>
+					      			<span id="error_last_name" class="text-danger"></span>
 					    		</div>
 				  			</div>
-						</div>
-					</div>
-				<div style="margin-top: 20px;"><h4>Office Address Information</h4></div>
-				<div style="margin-top: 40px;">
-						<div style="margin-top: 10px;">
-							<div class="form-group row">
-					    		<label class="col-sm-2 col-form-label text" >Office Address<span style="color: red;">*</span></label>
-					    		<div class="col-sm-4">
-					      			<input type="text" class="form-control" name="officeaddress" placeholder="Office Address"  required>
-					    		</div>
-
-					    		<label class="col-sm-2 col-form-label text" >City<span style="color: red;">*</span></label>
-					    		<div class="col-sm-4">
-					      			<input type="text" class="form-control" name="officecity" placeholder="city" required>
-					    		</div>
-					    	</div>
 				  			<div class="form-group row">
-					    		<label  class="col-sm-2 col-form-label text" >State</label>
+				  				<label class="col-sm-2 col-form-label text" >Date of birth<span style="color: red;">*</span></label>
 					    		<div class="col-sm-4">
-					      			<input type="text" class="form-control" name="officestate" placeholder="State">
+					      			<input type="date" id="insertdob" class="form-control" name="dob" placeholder="Date of birth" required>
+					      			<span id="error_date_of_birth" class="text-danger"></span>
 					    		</div>
-					    		<label class="col-sm-2 col-form-label text" >Country</label>
+					    		<label class="col-sm-2 col-form-label text" >Blood Group<span style="color: red;">*</span></label>
 					    		<div class="col-sm-4">
-					      			<input type="text" class="form-control" name="officecountry" placeholder="Country">
+					      			<select id="insertbloodgroup" class="form-control " name="blood_group" > 
+										<option value="" disabled selected hidden="">Select Blood Group</option>
+										<option value="O+">O+ </option>
+										<option value="O-">O- </option>
+										<option value="A+">A+ </option>
+										<option value="B+">B+ </option>
+										<option value="A-">A- </option>
+										<option value="B-">B- </option>
+										<option value="AB+">AB+ </option>
+										<option value="AB-">AB- </option>
+									</select>
+									<span id="error_blood_group" class="text-danger"></span>
 					    		</div>
-					    		
 				  			</div>
 				  			<div class="form-group row">
-					    		<label  class="col-sm-2 col-form-label text" >Zip Code<span style="color: red;">*</span></label>
+				  				<label  class="col-sm-2 col-form-label text" >Gender<span style="color: red;">*</span></label>
 					    		<div class="col-sm-4">
-					      			<input type="tel" class="form-control"  name="officezipcode" pattern="[0-9]{6}"  placeholder="Zip Code">
+					      			<label class="radio-inline"><input type="radio" id="insertmale" name="gender" value="male" checked>Male</label>
+									<label class="radio-inline"><input type="radio" id="insertfemale" name="gender" value="female" >Female</label>
 					    		</div>
 				  			</div>
 						</div>
@@ -558,56 +366,51 @@ text-align: right;
 							<div class="form-group row">
 					    		<label class="col-sm-2 col-form-label text" >Home Town Address<span style="color: red;">*</span></label>
 					    		<div class="col-sm-4">
-					      			<input type="text" class="form-control" name="hometownaddress" placeholder="Home Town Address"  required>
+					      			<input type="text" id="inserthomeaddress"class="form-control" name="hometownaddress" placeholder="Home Town Address">
+					      			<span id="error_home_address" class="text-danger"></span>
 					    		</div>
 
 					    		<label class="col-sm-2 col-form-label text" >City<span style="color: red;">*</span></label>
 					    		<div class="col-sm-4">
-					      			<input type="text" class="form-control" name="homecity" placeholder="city" required>
+					      			<input type="text" id="inserthomecity"class="form-control" name="homecity" placeholder="city">
+					      			<span id="error_home_city" class="text-danger"></span>
 					    		</div>
 					    	</div>
 				  			<div class="form-group row">
 					    		<label  class="col-sm-2 col-form-label text" >State</label>
 					    		<div class="col-sm-4">
-					      			<input type="text" class="form-control" name="homestate" placeholder="State">
+					      			<input type="text" id="inserthomestate" class="form-control" name="homestate" placeholder="State">
 					    		</div>
 					    		<label class="col-sm-2 col-form-label text" >Country</label>
 					    		<div class="col-sm-4">
-					      			<input type="text" class="form-control" name="homecountry" placeholder="Country">
+					      			<input type="text" id="inserthomecountry" class="form-control" name="homecountry" placeholder="Country">
 					    		</div>
 				  			</div>
 				  			<div class="form-group row">
 					    		<label  class="col-sm-2 col-form-label text" >Zip Code<span style="color: red;">*</span></label>
 					    		<div class="col-sm-4">
-					      			<input type="tel" class="form-control" name="homezipcode" pattern="[0-9]{6}"  placeholder="Zip Code">
+					      			<input type="tel" id="inserthomezip" class="form-control" name="homezipcode" pattern="[0-9]{6}"  placeholder="Zip Code">
+					      			<span id="error_zip_code" class="text-danger"></span>
 					    		</div>
 				  			</div>
 						</div>
 					</div>
-				<div style="margin-top: 20px;"><h4>Education Information</h4></div>
-				<div style="border-bottom: 1px solid gray;"></div>
-				<div style="margin-top: 10px;">
-					<div class="form-group row">
-			    		<label class="col-sm-2 col-form-label text" >Degree<span style="color: red;">*</span></label>
-			    		<div class="col-sm-4">
-			      			<input type="text" class="form-control" name="degree" placeholder="Degree"  required>
-			    		</div>
-			    	</div>
-			    </div>
 			    <div style="margin-top: 20px;"><h4>Contact Information</h4></div>
 				<div style="border-bottom: 1px solid gray;"></div>
 				<div style="margin-top: 10px;">
 					<div class="form-group row">
 			    		<label class="col-sm-2 col-form-label text" >Mobile Number<span style="color: red;">*</span></label>
 			    		<div class="col-sm-1">
-			      			<input type="tel" class="form-control" name="standardcode"  required>
+			      			<input type="tel" id="insertcode" class="form-control" name="standardcode">
+			      			<span id="error_code" class="text-danger"></span>
 			    		</div>
 			    		<div class="col-sm-3">
-			      			<input type="tel" class="form-control" name="mobilenumber" placeholder="123-456-7890" pattern="[0-9]{3}[0-9]{3}[0-9]{4}" required>
+			      			<input type="tel"id="insertmobile" class="form-control" name="mobilenumber" placeholder="123-456-7890" pattern="[0-9]{3}[0-9]{3}[0-9]{4}">
+			      			<span id="error_mobile_number" class="text-danger"></span>
 			    		</div>
-			    		<label class="col-sm-2 col-form-label text" >Phone Number</label>
+			    		<label class="col-sm-2 col-form-label text" >Phone</label>
 			    		<div class="col-sm-4">
-			      			<input type="tel" class="form-control" name="phonenumber" placeholder="123-456-7890" pattern="[0-9]{3}[0-9]{3}[0-9]{4}">
+			      			<input type="tel" id="insertphone" class="form-control" name="phonenumber" placeholder="123-456-7890" pattern="[0-9]{3}[0-9]{3}[0-9]{4}">
 			    		</div>
 			    	</div>
 			    </div>
@@ -617,185 +420,94 @@ text-align: right;
 						<div class="form-group row">
 				    		<label class="col-sm-2 col-form-label text" >Email<span style="color: red;">*</span></label>
 				    		<div class="col-sm-4">
-				      			<input type="email" class="form-control" name="email" required>
+				      			<input type="email" id="insertemail" class="form-control" name="email">
+				      			<span id="error_email" class="text-danger"></span>
 				    		</div>
 				    		<label class="col-sm-2 col-form-label text"> User Name<span style="color: red;">*</span></label>
 				    		<div class="col-sm-4">
-				      			<input type="text" class="form-control"  name="username" id="userid" placeholder="User Name" required>
+				      			<input type="text" id="insertusername" class="form-control"  name="username" id="userid" placeholder="User Name" >
+				      			<span id="error_user_name" class="text-danger"></span>
+				    		</div>
+				    		<div style="margin-left: 797px;margin-top: 36px;color: red;">
+					    		<span id="available"></span>
 				    		</div>
 				    	</div>
 			  			<div class="form-group row">
 				    		<label  class="col-sm-2 col-form-label text" >Password<span style="color: red;">*</span></label>
 				    		<div class="col-sm-4">
-				      			<input type="password" class="form-control" name="password" required>
+				      			<input type="password"id="insertpassword" class="form-control" name="password">
+				      			<span id="error_password" class="text-danger"></span>
 				    		</div>
 				    	</div>
 				   	</div>
 		   	    <div style="margin-top: 20px;"><h4>Other Information</h4></div>
 				<div style="border-bottom: 1px solid gray;"></div>
 				<div style="margin-top: 10px;">
-					<div class="form-group row">
-			    		<label class="col-sm-2 col-form-label text" >Department<span style="color: red;">*</span></label>
-			    		<div class="col-sm-4">
-							<select class="form-control" name="departmentid" id="departmentid" required>
-								<option value="" disabled selected hidden="">Select Department</option>	
-								<c:forEach items="${sessionScope.departmentlist }" var="q">
-									<option value="${q.id }">${q.department }</option>
-								</c:forEach>
-							</select>
-						</div>
-					</div>
-					<div class="form-group row">
-			    		<label  class="col-sm-2 col-form-label text" >Specialization<span style="color: red;">*</span></label>
-			    		<div class="col-sm-4">
-			      			<select class="form-control"  id="specializationid" name="specialization"  required>
-			      				<option value="" disabled selected hidden="">Select Specialization</option>	
-							</select>
-						</div>
-					</div>
-					<div class="form-group row">
-			    		<label class="col-sm-2 col-form-label text" >Visiting Charges(&#x20B9;)</label>
-			    		<div class="col-sm-4">
-			      			<input type="text" class="form-control" name="visitingcharge" required>
-			    		</div>
-			    		<div  class="form-group" style="margin-top: 10px;">
-			      			<p>/ Per Session</p>
-			    		</div>
-				    </div>
-				    <div class="form-group row" style="margin-top: -10px;">
-			    		<label class="col-sm-2 col-form-label text" >consulting charge(&#x20B9;)</label>
-			    		<div class="col-sm-4">
-			      			<input type="text" class="form-control" name="consultingcharge"required>
-			    		</div>
-			    		<div  class="form-group" style="margin-top: 10px;">
-			      			<p>/ Per Session</p>
-			    		</div>
-				    </div>
-				    <div class="form-group row">
+				   <div class="form-group row">
 			    		<label  class="col-sm-2 col-form-label text" >Image</label>
 			    		<div class="col-sm-4">
 			      			<input type="text" class="form-control"style="background-color: #f1f4f9; " readonly="readonly">
 			    		</div>
 			    		<div class="col-sm-4">
 			      			<input type="file" name="profileimage" accept="image/*" 
-								onchange="document.getElementById('cover').src = window.URL.createObjectURL(this.files[0])">
+								onchange="document.getElementById('insertcoveredit').src = window.URL.createObjectURL(this.files[0])">
 			    		</div>
 			    	</div>
 			    	 <div class="form-group row">
 			    		<div class="image">
-			    			<img id="cover"  alt="your image" width="150" height="150" style="margin-left: 210px;" />
+			    			<img id="insertcoveredit" alt="your image" width="150" height="150" style="margin-left: 210px;" />
 			    		</div>
   					</div>
   					<div class="form-group row">
-			    		<label  class="col-sm-2 col-form-label text" >Curriculum Vitae</label>
-			    		<div class="col-sm-4">
-			      			<input type="file" name="curriculumvitae" accept="application/pdf">
-			    		</div>
-			    	</div>
-			    	 <div class="form-group row">
-			    		<div style="margin-left: 210px;">
-			    			Upload document PDF
-			    		</div>
-  					</div>
-				    <div class="form-group row">
-			    		<label  class="col-sm-2 col-form-label text" >Education Certificate</label>
-			    		<div class="col-sm-4">
-			      			<input type="file" name="educationcertificate" accept="application/pdf">
-			    		</div>
-			    	</div>
-			    	 <div class="form-group row">
-			    		<div style="margin-left: 210px;">
-			    			Upload document PDF
-			    		</div>
-  					</div>
-  					<div class="form-group row">
-			    		<label  class="col-sm-2 col-form-label text" >Experience Certificate</label>
-			    		<div class="col-sm-4">
-			      			<input type="file" name="experiencecertificate" accept="application/pdf ">
-			    		</div>
-			    	</div>
-			    	 <div class="form-group row">
-			    		<div style="margin-left: 210px;">
-			    			Upload document PDF
-			    		</div>
-			    		<input type="hidden" name="flag" value="insert">
-  					</div>
-  					<div class="form-group row">
-			    		<input  class="btn btn-info" type="submit" id="btnSubmit" style="margin-left: 210px;background-color:green;"/>
+			    		<input  class="btn btn-success" id="btn_patient_details" value="Save And Next Step"  type="button" style="margin-left: 210px;background-color: #22BAA0;" >
   					</div>
 				</div>
-				</form>
-			</div>
-			<div id="menu2" class="tab-pane fade">
-				<form id="update_form" enctype="multipart/form-data">
-				<div style="margin-top: 15px;"><h4>Personal Information</h4></div>
-					<div style="border-bottom: 1px solid gray;"></div>
-					<div>
-						<div style="margin-top: 10px;">
-							<div class="form-group row">
-					    		<label class="col-sm-2 col-form-label text" >First Name<span style="color: red;">*</span></label>
-					    		<div class="col-sm-4">
-					      			<input type="text" id="firstname" class="form-control" name="firstname" placeholder="First Name"  required>
-					    		</div>
-
-					    		<label class="col-sm-2 col-form-label text" >Middle Name</label>
-					    		<div class="col-sm-4">
-					      			<input type="text" class="form-control" id="middlename" name="middlename"  placeholder="Middle Name">
-					    		</div>
-					    	</div>
-				  			<div class="form-group row">
-					    		<label  class="col-sm-2 col-form-label text" >Last Name<span style="color: red;">*</span></label>
-					    		<div class="col-sm-4">
-					      			<input type="text" class="form-control" id="lastname" name="lastname" placeholder="Last Name" required>
-					    		</div>
-					    		<label class="col-sm-2 col-form-label text" >Date of birth<span style="color: red;">*</span></label>
-					    		<div class="col-sm-4">
-					      			<input type="date" class="form-control" id="dob" name="dob" placeholder="Date of birth" required>
-					    		</div>
-					    		
-				  			</div>
-				  			<div class="form-group row">
-					    		<label  class="col-sm-2 col-form-label text" >Gender<span style="color: red;">*</span></label>
-					    		<div class="col-sm-4">
-					      			<label class="radio-inline"><input type="radio" id="male" name="gender" value="male" required>Male</label>
-									<label class="radio-inline"><input type="radio" id="female" name="gender" value="female" required>Female</label>
-					    		</div>
-				  			</div>
-						</div>
-					</div>
-				<div style="margin-top: 20px;"><h4>Office Address Information</h4></div>
-				<div style="margin-top: 40px;">
-						<div style="margin-top: 10px;">
-							<div class="form-group row">
-					    		<label class="col-sm-2 col-form-label text" >Office Address<span style="color: red;">*</span></label>
-					    		<div class="col-sm-4">
-					      			<input type="text" class="form-control" id="officeaddress" name="officeaddress" placeholder="Office Address"  required>
-					    		</div>
-
-					    		<label class="col-sm-2 col-form-label text" >City<span style="color: red;">*</span></label>
-					    		<div class="col-sm-4">
-					      			<input type="text" class="form-control" id="officecity" name="officecity" placeholder="city" required>
-					    		</div>
-					    	</div>
-				  			<div class="form-group row">
-					    		<label  class="col-sm-2 col-form-label text" >State</label>
-					    		<div class="col-sm-4">
-					      			<input type="text" class="form-control" id="officestate" name="officestate" placeholder="State">
-					    		</div>
-					    		<label class="col-sm-2 col-form-label text" >Country</label>
-					    		<div class="col-sm-4">
-					      			<input type="text" class="form-control" id="officecountry" name="officecountry" placeholder="Country">
-					    		</div>
-					    		
-				  			</div>
-				  			<div class="form-group row">
-					    		<label  class="col-sm-2 col-form-label text" >Zip Code<span style="color: red;">*</span></label>
-					    		<div class="col-sm-4">
-					      			<input type="tel" class="form-control" id="officezipcode" name="officezipcode" pattern="[0-9]{6}"  placeholder="Zip Code">
-					    		</div>
-				  			</div>
-						</div>
-					</div>
+			</div>				
+			<div id="addmenu2"  class="tab-pane fade" style="des">
+				<div style="margin-top: 15px; font: bold;"><h4>Guardian Information</h4></div>
+				<div style="border-bottom: 1px solid gray;"></div>
+				<div style="margin-top: 10px;">
+					<div class="form-group row">
+			    		<label class="col-sm-2 col-form-label text" >Guardian Id<span style="color: red;">*</span></label>
+			    		<div class="col-sm-4">
+			      			<input type="text" id="insertguardian" class="form-control" name="guardianid" required readonly="readonly">
+			    		</div>
+			    		<label class="col-sm-2 col-form-label text" >Patient Id<span style="color: red;">*</span></label>
+			    		<div class="col-sm-4">
+			      			<input type="text" id="insertstep2patientid" class="form-control" name="guardpationtid" required readonly="readonly">
+			    		</div>
+			    	</div>
+		  			<div class="form-group row">
+		  				<label class="col-sm-2 col-form-label text" >First Name<span style="color: red;">*</span></label>
+			    		<div class="col-sm-4">
+			      			<input type="text" id="insert_guardian_first_name"class="form-control" name="guardfirstname" placeholder="First Name">
+			      			<span id="error_guardian_first_name" class="text-danger"></span>
+			    		</div>
+			    		<label class="col-sm-2 col-form-label text" >Middle Name</label>
+			    		<div class="col-sm-4">
+			      			<input type="text" class="form-control" name="guardmiddlename"  placeholder="Middle Name">
+			    		</div>
+		  			</div>
+		  			<div class="form-group row">
+			    		<label  class="col-sm-2 col-form-label text" >Last Name<span style="color: red;">*</span></label>
+			    		<div class="col-sm-4">
+			      			<input type="text" class="form-control" id="insert_guardian_last_name" name="guardlastname" placeholder="Last Name">
+			      			<span id="error_guardian_last_name" class="text-danger"></span>
+			    		</div>
+			    		<label  class="col-sm-2 col-form-label text" >Gender<span style="color: red;">*</span></label>
+			    		<div class="col-sm-4">
+			      			<label class="radio-inline"><input type="radio" name="guardgender" value="male" checked>Male</label>
+							<label class="radio-inline"><input type="radio" name="guardgender" value="female">Female</label>
+			    		</div>
+		  			</div>
+		  			<div class="form-group row">
+		  				<label  class="col-sm-2 col-form-label text" >Relation With Patient<span style="color: red;">*</span></label>
+			    		<div class="col-sm-4">
+			      			<input type="text" id="insert_guardian_raletion" class="form-control" name="raletionwithpatient" placeholder="Relation With Patient">
+			      			<span id="error_guardian_raletion" class="text-danger"></span>
+			    		</div>
+		  			</div>
+				</div>
 				<div style="margin-top: 20px;"><h4>Home Town Address Information</h4></div>
 				<div style="border-bottom: 1px solid gray;"></div>
 				<div>
@@ -803,187 +515,504 @@ text-align: right;
 							<div class="form-group row">
 					    		<label class="col-sm-2 col-form-label text" >Home Town Address<span style="color: red;">*</span></label>
 					    		<div class="col-sm-4">
-					      			<input type="text" class="form-control" id="hometownaddress" name="hometownaddress" placeholder="Home Town Address"  required>
+					      			<input type="text" id="insert_guardian_home_address" class="form-control" name="guardhometownaddress" placeholder="Home Town Address">
+					      			<span id="error_guardian_home_address" class="text-danger"></span>
 					    		</div>
 
 					    		<label class="col-sm-2 col-form-label text" >City<span style="color: red;">*</span></label>
 					    		<div class="col-sm-4">
-					      			<input type="text" class="form-control" id="homecity" name="homecity" placeholder="city" required>
+					      			<input type="text" id="insert_guardian_home_city" class="form-control" name="guardhomecity" placeholder="city">
+					      			<span id="error_guardian_home_city" class="text-danger"></span>
 					    		</div>
 					    	</div>
 				  			<div class="form-group row">
 					    		<label  class="col-sm-2 col-form-label text" >State</label>
 					    		<div class="col-sm-4">
-					      			<input type="text" class="form-control" id="homestate" name="homestate" placeholder="State">
+					      			<input type="text" class="form-control" name="guardhomestate" placeholder="State">
 					    		</div>
 					    		<label class="col-sm-2 col-form-label text" >Country</label>
 					    		<div class="col-sm-4">
-					      			<input type="text" class="form-control" id="homecountry" name="homecountry" placeholder="Country">
+					      			<input type="text" class="form-control" name="guardhomecountry" placeholder="Country">
 					    		</div>
 				  			</div>
 				  			<div class="form-group row">
 					    		<label  class="col-sm-2 col-form-label text" >Zip Code<span style="color: red;">*</span></label>
 					    		<div class="col-sm-4">
-					      			<input type="tel" class="form-control" id="homezipcode" name="homezipcode" pattern="[0-9]{6}"  placeholder="Zip Code">
+					      			<input type="tel" id="insert_guardian_zip_code" class="form-control" name="guardhomezipcode" pattern="[0-9]{6}"  placeholder="Zip Code">
+					      			<span id="error_guardian_zip_code" class="text-danger"></span>
 					    		</div>
 				  			</div>
 						</div>
 					</div>
-				<div style="margin-top: 20px;"><h4>Education Information</h4></div>
-				<div style="border-bottom: 1px solid gray;"></div>
-				<div style="margin-top: 10px;">
-					<div class="form-group row">
-			    		<label class="col-sm-2 col-form-label text" >Degree<span style="color: red;">*</span></label>
-			    		<div class="col-sm-4">
-			      			<input type="text" class="form-control" id="degree" name="degree" placeholder="Degree"  required>
-			    		</div>
-			    	</div>
-			    </div>
 			    <div style="margin-top: 20px;"><h4>Contact Information</h4></div>
 				<div style="border-bottom: 1px solid gray;"></div>
 				<div style="margin-top: 10px;">
 					<div class="form-group row">
 			    		<label class="col-sm-2 col-form-label text" >Mobile Number<span style="color: red;">*</span></label>
-			    		<div class="col-sm-1">
-			      			<input type="tel" class="form-control" id="standardcode" name="standardcode"  required>
-			    		</div>
 			    		<div class="col-sm-3">
-			      			<input type="tel" class="form-control" id="mobilenumber" name="mobilenumber" placeholder="123-456-7890" pattern="[0-9]{3}[0-9]{3}[0-9]{4}" required>
+			      			<input type="tel" id="insert_guardian_mobile"class="form-control" name="guardmobilenumber" placeholder="123-456-7890" pattern="[0-9]{3}[0-9]{3}[0-9]{4}">
+			      			<span id="error_guardian_mobile" class="text-danger"></span>
 			    		</div>
-			    		<label class="col-sm-2 col-form-label text" >Phone Number</label>
+			    		<label class="col-sm-2 col-form-label text" >Phone</label>
 			    		<div class="col-sm-4">
-			      			<input type="tel" class="form-control" id="phonenumber" name="phonenumber" placeholder="123-456-7890" pattern="[0-9]{3}[0-9]{3}[0-9]{4}">
+			      			<input type="tel" class="form-control" name="guardphonenumber" placeholder="123-456-7890" pattern="[0-9]{3}[0-9]{3}[0-9]{4}">
 			    		</div>
 			    	</div>
 			    </div>
-			    <div style="margin-top: 20px;"><h4>Login Information</h4></div>
-				<div style="border-bottom: 1px solid gray;"></div>
-				<div style="margin-top: 10px;">
-						<div class="form-group row">
-				    		<label class="col-sm-2 col-form-label text" >Email<span style="color: red;">*</span></label>
-				    		<div class="col-sm-4">
-				      			<input type="email" class="form-control" id="email" name="email" required>
-				    		</div>
-				    		<label class="col-sm-2 col-form-label text"> User Name<span style="color: red;">*</span></label>
-				    		<div class="col-sm-4">
-				      			<input type="text" class="form-control" id="username" name="username" id="userid" placeholder="User Name" required>
-				    		</div>
-				    	</div>
-			  			<div class="form-group row">
-				    		<label  class="col-sm-2 col-form-label text" >Password<span style="color: red;">*</span></label>
-				    		<div class="col-sm-4">
-				      			<input type="text" class="form-control"id="password" name="password" required>
-				    		</div>
-				    	</div>
-				   	</div>
+			   
 		   	    <div style="margin-top: 20px;"><h4>Other Information</h4></div>
 				<div style="border-bottom: 1px solid gray;"></div>
 				<div style="margin-top: 10px;">
-					<div class="form-group row">
-			    		<label class="col-sm-2 col-form-label text" >Department<span style="color: red;">*</span></label>
-			    		<div class="col-sm-4">
-							<select class="form-control" name="departmentupdateid" id="departmentupdateid" required>
-								<c:forEach items="${sessionScope.departmentlist }" var="q">
-									<option value="${q.id }">${q.department }</option>
-								</c:forEach>
-							</select>
-						</div>
-					</div>
-					<div class="form-group row">
-			    		<label  class="col-sm-2 col-form-label text" >Specialization<span style="color: red;">*</span></label>
-			    		<div class="col-sm-4">
-			      			<select class="form-control"  id="specializationupdateid" name="specialization"  required>
-							</select>
-						</div>
-					</div>
-					<div class="form-group row">
-			    		<label class="col-sm-2 col-form-label text" >Visiting Charges(&#x20B9;)</label>
-			    		<div class="col-sm-4">
-			      			<input type="text" class="form-control"  id="visitingchargeid" name="visitingcharge" required>
-			    		</div>
-			    		<div  class="form-group" style="margin-top: 10px;">
-			      			<p>/ Per Session</p>
-			    		</div>
-				    </div>
-				    <div class="form-group row" style="margin-top: -10px;">
-			    		<label class="col-sm-2 col-form-label text" >consulting charge(&#x20B9;)</label>
-			    		<div class="col-sm-4">
-			      			<input type="text" class="form-control" id="consultingchargeid" name="consultingcharge"required>
-			    		</div>
-			    		<div  class="form-group" style="margin-top: 10px;">
-			      			<p>/ Per Session</p>
-			    		</div>
-				    </div>
 				    <div class="form-group row">
 			    		<label  class="col-sm-2 col-form-label text" >Image</label>
 			    		<div class="col-sm-4">
 			      			<input type="text" class="form-control"style="background-color: #f1f4f9; " readonly="readonly">
 			    		</div>
 			    		<div class="col-sm-4">
-			    			<span hidden id="profileimageid"></span>
-			      			<input id="updateprofileimage" type="file" name="profileimage" accept="image/*" 
-								onchange="document.getElementById('coveredit').src = window.URL.createObjectURL(this.files[0])">
+			      			<input type="file" name="guardianimage" accept="image/*" 
+								onchange="document.getElementById('guardianimage').src = window.URL.createObjectURL(this.files[0])">
 			    		</div>
 			    	</div>
 			    	 <div class="form-group row">
 			    		<div class="image">
-			    			<img id="coveredit" alt="your image" width="150" height="150" style="margin-left: 210px;" />
+			    			<img id="guardianimage"  alt="your image" width="150" height="150" style="margin-left: 210px;" />
 			    		</div>
   					</div>
   					<div class="form-group row">
-			    		<label  class="col-sm-2 col-form-label text" >Curriculum Vitae</label>
-			    		<div class="col-sm-4">
-			      			<input id="curriculumvitae" type="file" name="curriculumvitae" accept="application/pdf">
-			      			<span id="curriculumvitaeid" hidden></span><a href="#" hidden id="curriculumvitaebuttonid"  target="_blank" class="w3-btn w3-black" >Link Button</a>
-			    		</div>
-			    	</div>
-			    	 <div class="form-group row">
-			    		<div style="margin-left: 210px;">
-			    			Upload document PDF
-			    		</div>
-  					</div>
-				    <div class="form-group row">
-			    		<label  class="col-sm-2 col-form-label text" >Education Certificate</label>
-			    		<div class="col-sm-4">
-			      			<input id="educationcertificate" type="file" name="educationcertificate" accept="application/pdf">
-			      			<span id="educationcertificateid" hidden></span><a hidden href="#" id="educationcertificatebuttonid"  target="_blank" class="w3-btn w3-black" >Link Button</a>
-			    		</div>
-			    	</div>
-			    	 <div class="form-group row">
-			    		<div style="margin-left: 210px;">
-			    			Upload document PDF
-			    		</div>
-  					</div>
-  					<div class="form-group row">
-			    		<label  class="col-sm-2 col-form-label text" >Experience Certificate</label>
-			    		<div class="col-sm-4">
-			      			<input type="file" id="experiencecertificate" name="experiencecertificate" accept="application/pdf ">
-			      			<span id="experiencecertificateid" hidden></span><a hidden href="#" id="experiencecertificatebuttonid"  target="_blank" class="w3-btn w3-black" >Link Button</a>
-			      			
-			    		</div>
-			    	</div>
-			    	 <div class="form-group row">
-			    		<div style="margin-left: 210px;">
-			    			Upload document PDF
-			    		</div>
-			    		<input type="hidden" id="editprofileImage" name="editprofileImage">
-			    		<input type="hidden" id="editcurriculumvitae" name="editcurriculumvitae">
-			    		<input type="hidden" id="editeducationCertificate" name="editeducationCertificate">
-			    		<input type="hidden" id="editexperienceCertificate" name="editexperienceCertificate">
-			    		
-			    		<input type="hidden" id="doctorid" name="doctorid">
-			    		<input type="hidden" id="adminid" name="adminid" >
-			    		<input type="hidden" id="joiningdateid" name="joinig" >
-			    		<input type="hidden" name="flag" value="update">
-  					</div>
-  					<div class="form-group row">
-			    		<input  class="btn btn-info"  id="update" type="submit" style="margin-left: 210px;background-color:green;"/>
+			    		<input  class="btn btn-success"  id="btn_back_to_login_patient" value="Back to Last Step"  type="button" style="margin-left: 210px;background-color: #22BAA0;" >
+			    		<input  class="btn btn-success"  id="btn_guardian_details" value="Save And Next Step"  type="button" style="margin-left: 10px;background-color: #22BAA0;" >
   					</div>
 				</div>
-				</form>
+			</div>
+			<div id="addmenu3" class="tab-pane fade">
+				<div style="margin-top: 15px;"></div>
+				<div style="margin-top: 10px;">
+					<div class="form-group row">
+			    		<label class="col-sm-2 col-form-label text" >Admit Date<span style="color: red;">*</span></label>
+			    		<div class="col-sm-7">
+			      			<input type="date" id="insert_admiit_date" class="form-control" name="admitdate" required>
+			      			<span id="error_admiit_date" class="text-danger"></span>
+			    		</div>
+			    	</div>
+			    	<div class="form-group row">
+			    		<label class="col-sm-2 col-form-label text" >Admit time<span style="color: red;">*</span></label>
+			    		<div class="col-sm-7">
+			      			<input type="time" id="insert_admint_time" class="form-control" name="admittime"  required>
+			      			<span id="error_admiit_time" class="text-danger"></span>
+			    		</div>
+			    	</div>
+		  			<div class="form-group row">
+		  				<label class="col-sm-2 col-form-label text" >Patient Status<span style="color: red;">*</span></label>
+			    		<div class="col-sm-7">
+			      			<select class="form-control " name="patientstatus" > 
+								<option value="" disabled selected hidden="">Select Status</option>
+								<option value="Admit">Admit</option>
+								<option value="Discharge">Discharge</option>
+							</select>
+			    		</div>
+		  			</div>
+		  			<div class="form-group row">
+			    		<label class="col-sm-2 col-form-label text" >Assign Doctor<span style="color: red;">*</span></label>
+			    		<div class="col-sm-7">
+					     	<select  class="form-control " name="doctor" required>
+								<option value="" disabled selected hidden="">Select Doctor</option>
+								<c:forEach items="${sessionScope.doctorlist }" var="q">
+									<option value="${q.id }">${q.firstname }</option>
+								</c:forEach>
+						   </select>
+				     	</div>
+			    	</div>
+				    <div class="form-group row">
+				     	<label class="col-sm-2 col-form-label text" >Symptoms<span style="color: red;">*</span></label>
+				     	<div class="col-sm-7">
+			      			<input type="text"id="insertsymptoms" class="form-control" name="symptoms"  required>
+			    		</div>
+				    </div>
+  					<div class="form-group row">
+  					<div class="col-sm-7" style="margin-top: 15px;">
+  						<input type="hidden" name="flag" value="insert">
+			    		<input class="btn btn-success" id="btn_back_to_guardian_tab"  type="button" value="Back to Last Step"  style="margin-left: 195px; background-color: #22BAA0;">
+			    		<input type="submit" class="btn btn-success" value="Save Patient"  style="margin-left: 10px; background-color: #22BAA0;">
+  					</div>
+  					</div>
+				</div>
 			</div>
 		</div>
+		</form>
+		</div>
+		<div id="editpatientragistration" style="display: none;">
+		<form id="update_form" enctype="multipart/form-data">	 
+		<div class="container" style="margin-right: 90px;">
+						<ul class="nav nav-tabs tabcalss" style="margin-top: 15px;">
+							<li class="active" id="tab1doctorlist"><a href="#edithome"
+								style="background-color: f1f4f9;"><i class="fa fa-bars"aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Patient List</a></li>
+							<li style="margin-left: 15px; background-color: f1f4f9;"><a data-toggle="tab"
+								id="editpatienttab2" href="#editmenu1"><i
+									class="fas fa-edit" aria-hidden="true"
+									style="border-radius: 50%; padding: 8px;"></i>Edit Patient</a></li>
+							<li style="margin-left: 15px; background-color: f1f4f9;"><a
+								id="editpatienttab3" href="#editmenu2"><i
+									class="fas fa-edit" aria-hidden="true"
+									style="border-radius: 50%; padding: 8px;"></i>Edit Patient
+									Stap2</a></li>
+							<li style="margin-left: 15px; background-color: f1f4f9;"><a
+								id="editpatienttab4" href="#editmenu3"><i
+									class="fas fa-edit" aria-hidden="true"
+									style="border-radius: 50%; padding: 8px;"></i>Edit Patient
+									Stap3</a></li>
+						</ul>
+						<div class="tab-content">
+				<div id="edithome" class="tab-pane fade " style="margin-top: 10px;">
+				</div>
+				
+				<div id="editmenu1" class="tab-pane fade">
+					<div style="margin-top: 15px;"><h4>Personal Information</h4></div>
+					<div style="border-bottom: 1px solid gray;"></div>
+					<div>
+						<div style="margin-top: 10px;">
+							<div class="form-group row">
+					    		<label class="col-sm-2 col-form-label text" >Patient Id<span style="color: red;">*</span></label>
+								<div class="col-sm-4">
+								   <input type="text" id="editpatientid" class="form-control" name="patientId" readonly>
+								</div>
+					    		<label class="col-sm-2 col-form-label text" >First Name<span style="color: red;">*</span></label>
+					    		<div class="col-sm-4">
+					      			<input type="text" id="editfirstname" class="form-control" name="firstname" placeholder="First Name">
+					      			<span id="error_edit_first_name" class="text-danger"></span>
+					    		</div>
+					    	</div>
+				  			<div class="form-group row">
+				  				
+					    		<label class="col-sm-2 col-form-label text" >Middle Name</label>
+					    		<div class="col-sm-4">
+					      			<input type="text" id="editmiddlename"  class="form-control" name="middlename"  placeholder="Middle Name">
+					    		</div>
+				  				
+					    		<label  class="col-sm-2 col-form-label text" >Last Name<span style="color: red;">*</span></label>
+					    		<div class="col-sm-4">
+					      			<input type="text" id="editlastname"class="form-control" name="lastname" placeholder="Last Name" required>
+					      			<span id=error_edit_last_name" class="text-danger"></span>
+					    		</div>
+				  			</div>
+				  			<div class="form-group row">
+				  				<label class="col-sm-2 col-form-label text" >Date of birth<span style="color: red;">*</span></label>
+					    		<div class="col-sm-4">
+					      			<input type="date" id="editdob" class="form-control" name="dob" placeholder="Date of birth" required>
+					      			<span id="error_edit_date_of_birth" class="text-danger"></span>
+					    		</div>
+					    		<label class="col-sm-2 col-form-label text" >Blood Group<span style="color: red;">*</span></label>
+					    		<div class="col-sm-4">
+					      			<select id="editbloodgroup" class="form-control " name="blood_group" > 
+										<option value="" disabled selected hidden="">Select Blood Group</option>
+										<option value="O+">O+ </option>
+										<option value="O-">O- </option>
+										<option value="A+">A+ </option>
+										<option value="B+">B+ </option>
+										<option value="A-">A- </option>
+										<option value="B-">B- </option>
+										<option value="AB+">AB+ </option>
+										<option value="AB-">AB- </option>
+									</select>
+									<span id="error_edit_blood_group" class="text-danger"></span>
+					    		</div>
+				  			</div>
+				  			<div class="form-group row">
+				  				<label  class="col-sm-2 col-form-label text" >Gender<span style="color: red;">*</span></label>
+					    		<div class="col-sm-4">
+					      			<label class="radio-inline"><input type="radio" id="editmale" name="gender" value="male">Male</label>
+									<label class="radio-inline"><input type="radio" id="editfemale" name="gender" value="female" >Female</label>
+					    		</div>
+				  			</div>
+						</div>
+					</div>
+				<div style="margin-top: 20px;"><h4>Home Town Address Information</h4></div>
+				<div style="border-bottom: 1px solid gray;"></div>
+				<div>
+					<div style="margin-top: 10px;">
+						<div class="form-group row">
+				    		<label class="col-sm-2 col-form-label text" >Home Town Address<span style="color: red;">*</span></label>
+				    		<div class="col-sm-4">
+				      			<input type="text" id="edithomeaddress"class="form-control" name="hometownaddress" placeholder="Home Town Address">
+				      			<span id="error_edit_home_address" class="text-danger"></span>
+				    		</div>
+
+				    		<label class="col-sm-2 col-form-label text" >City<span style="color: red;">*</span></label>
+				    		<div class="col-sm-4">
+				      			<input type="text" id="edithomecity"class="form-control" name="homecity" placeholder="city">
+				      			<span id="error_edit_home_city" class="text-danger"></span>
+				    		</div>
+				    	</div>
+			  			<div class="form-group row">
+				    		<label  class="col-sm-2 col-form-label text" >State</label>
+				    		<div class="col-sm-4">
+				      			<input type="text" id="edithomestate" class="form-control" name="homestate" placeholder="State">
+				    		</div>
+				    		<label class="col-sm-2 col-form-label text" >Country</label>
+				    		<div class="col-sm-4">
+				      			<input type="text" id="edithomecountry" class="form-control" name="homecountry" placeholder="Country">
+				    		</div>
+			  			</div>
+			  			<div class="form-group row">
+				    		<label  class="col-sm-2 col-form-label text" >Zip Code<span style="color: red;">*</span></label>
+				    		<div class="col-sm-4">
+				      			<input type="tel" id="edithomezip" class="form-control" name="homezipcode" pattern="[0-9]{6}"  placeholder="Zip Code">
+				      			<span id="error_edit_zip_code" class="text-danger"></span>
+				    		</div>
+			  			</div>
+					</div>
+				</div>
+			    <div style="margin-top: 20px;"><h4>Contact Information</h4></div>
+				<div style="border-bottom: 1px solid gray;"></div>
+				<div style="margin-top: 10px;">
+					<div class="form-group row">
+			    		<label class="col-sm-2 col-form-label text" >Mobile Number<span style="color: red;">*</span></label>
+			    		<div class="col-sm-1">
+			      			<input type="tel" id="editcode" class="form-control" name="standardcode">
+			      			<span id="error_edit_code" class="text-danger"></span>
+			    		</div>
+			    		<div class="col-sm-3">
+			      			<input type="tel"id="editmobile" class="form-control" name="mobilenumber" placeholder="123-456-7890" pattern="[0-9]{3}[0-9]{3}[0-9]{4}">
+			      			<span id="error_edit_mobile_number" class="text-danger"></span>
+			    		</div>
+			    		<label class="col-sm-2 col-form-label text" >Phone</label>
+			    		<div class="col-sm-4">
+			      			<input type="tel" id="editphone" class="form-control" name="phonenumber" placeholder="123-456-7890" pattern="[0-9]{3}[0-9]{3}[0-9]{4}">
+			    		</div>
+			    	</div>
+			    </div>
+			    <div style="margin-top: 20px;"><h4>Login Information</h4></div>
+				<div style="border-bottom: 1px solid gray;"></div>
+				<div style="margin-top: 10px;">
+					<div class="form-group row">
+			    		<label class="col-sm-2 col-form-label text" >Email<span style="color: red;">*</span></label>
+			    		<div class="col-sm-4">
+			      			<input type="email" id="editemail" class="form-control" name="email">
+			      			<span id="error_edit_email" class="text-danger"></span>
+			    		</div>
+			    		<label class="col-sm-2 col-form-label text"> User Name<span style="color: red;">*</span></label>
+			    		<div class="col-sm-4">
+			      			<input type="text" id="editusername" class="form-control"  name="username" id="userid" placeholder="User Name" >
+			      			<span id="error_edit_user_name" class="text-danger"></span>
+			    		</div>
+			    		<div style="margin-left: 797px;margin-top: 36px;color: red;">
+				    		<span id="available"></span>
+			    		</div>
+			    	</div>
+		  			<div class="form-group row">
+			    		<label  class="col-sm-2 col-form-label text" >Password<span style="color: red;">*</span></label>
+			    		<div class="col-sm-4">
+			      			<input type="password"id="editpassword" class="form-control" name="password">
+			      			<span id="error_edit_password" class="text-danger"></span>
+			    		</div>
+			    	</div>
+			   	</div>
+		   	    <div style="margin-top: 20px;"><h4>Other Information</h4></div>
+				<div style="border-bottom: 1px solid gray;"></div>
+				<div style="margin-top: 10px;">
+				   <div class="form-group row">
+			    		<label  class="col-sm-2 col-form-label text" >Image</label>
+			    		<div class="col-sm-4">
+			      			<input type="text" class="form-control"style="background-color: #f1f4f9; " readonly="readonly">
+			    		</div>
+			    		<div class="col-sm-4">
+			    			<span hidden id="editpatientimageid"></span>
+			      			<input id="updateprofileimage" type="file" name="profileimage" accept="image/*" 
+								onchange="document.getElementById('editpatientimage').src = window.URL.createObjectURL(this.files[0])">
+			    		</div>
+			    	</div>
+			    	 <div class="form-group row">
+			    		<div class="image">
+			    			<img id="editpatientimage" alt="your image" width="150" height="150" style="margin-left: 210px;" />
+			    		</div>
+  					</div>
+  					<div class="form-group row">
+			    		<input  class="btn btn-success" id="btn_edit_patient_details" value="Save And Next Step"  type="button" style="margin-left: 210px;background-color: #22BAA0;" >
+  					</div>
+				</div>
+			</div>				
+			<div id="editmenu2" class="tab-pane fade">
+				<div style="margin-top: 15px; font: bold;"><h4>Guardian Information</h4></div>
+				<div style="border-bottom: 1px solid gray;"></div>
+				<div style="margin-top: 10px;">
+					<div class="form-group row">
+			    		<label class="col-sm-2 col-form-label text" >Guardian Id<span style="color: red;">*</span></label>
+			    		<div class="col-sm-4">
+			      			<input type="text" id="editguardianid" class="form-control" name="guardianid" required readonly="readonly">
+			    		</div>
+			    		<label class="col-sm-2 col-form-label text" >Patient Id<span style="color: red;">*</span></label>
+			    		<div class="col-sm-4">
+			      			<input type="text" id="editstep2patientid" class="form-control" name="guardpationtid" required readonly="readonly">
+			    		</div>
+			    	</div>
+		  			<div class="form-group row">
+		  				<label class="col-sm-2 col-form-label text" >First Name<span style="color: red;">*</span></label>
+			    		<div class="col-sm-4">
+			      			<input type="text" id="edit_guardian_first_name"class="form-control" name="guardfirstname" placeholder="First Name">
+			      			<span id="error_edit_guardian_first_name" class="text-danger"></span>
+			    		</div>
+			    		<label class="col-sm-2 col-form-label text" >Middle Name</label>
+			    		<div class="col-sm-4">
+			      			<input type="text" id="edit_guardian_middle_name" class="form-control" name="guardmiddlename"  placeholder="Middle Name">
+			    		</div>
+		  			</div>
+		  			<div class="form-group row">
+			    		<label  class="col-sm-2 col-form-label text" >Last Name<span style="color: red;">*</span></label>
+			    		<div class="col-sm-4">
+			      			<input type="text" class="form-control" id="edit_guardian_last_name" name="guardlastname" placeholder="Last Name">
+			      			<span id="error_edit_guardian_last_name" class="text-danger"></span>
+			    		</div>
+			    		<label  class="col-sm-2 col-form-label text" >Gender<span style="color: red;">*</span></label>
+			    		<div class="col-sm-4">
+			      			<label class="radio-inline"><input type="radio" id="editgurdianmail" name="guardgender" value="male" >Male</label>
+							<label class="radio-inline"><input type="radio" id="editgurdianfemail" name="guardgender" value="female">Female</label>
+			    		</div>
+		  			</div>
+		  			<div class="form-group row">
+		  				<label  class="col-sm-2 col-form-label text" >Relation With Patient<span style="color: red;">*</span></label>
+			    		<div class="col-sm-4">
+			      			<input type="text" id="edit_guardian_raletion" class="form-control" name="raletionwithpatient" placeholder="Relation With Patient">
+			      			<span id="error_edit_guardian_raletion" class="text-danger"></span>
+			    		</div>
+		  			</div>
+				</div>
+				<div style="margin-top: 20px;"><h4>Home Town Address Information</h4></div>
+				<div style="border-bottom: 1px solid gray;"></div>
+				<div>
+						<div style="margin-top: 10px;">
+							<div class="form-group row">
+					    		<label class="col-sm-2 col-form-label text" >Home Town Address<span style="color: red;">*</span></label>
+					    		<div class="col-sm-4">
+					      			<input type="text" id="edit_guardian_home_address" class="form-control" name="guardhometownaddress" placeholder="Home Town Address">
+					      			<span id="error_edit_guardian_home_address" class="text-danger"></span>
+					    		</div>
+
+					    		<label class="col-sm-2 col-form-label text" >City<span style="color: red;">*</span></label>
+					    		<div class="col-sm-4">
+					      			<input type="text" id="edit_guardian_home_city" class="form-control" name="guardhomecity" placeholder="city">
+					      			<span id="error_edit_guardian_home_city" class="text-danger"></span>
+					    		</div>
+					    	</div>
+				  			<div class="form-group row">
+					    		<label  class="col-sm-2 col-form-label text" >State</label>
+					    		<div class="col-sm-4">
+					      			<input type="text" id="edit_guardian_home_state" class="form-control" name="guardhomestate" placeholder="State">
+					    		</div>
+					    		<label class="col-sm-2 col-form-label text" >Country</label>
+					    		<div class="col-sm-4">
+					      			<input type="text" id="edit_guardian_home_country" class="form-control" name="guardhomecountry" placeholder="Country">
+					    		</div>
+				  			</div>
+				  			<div class="form-group row">
+					    		<label  class="col-sm-2 col-form-label text" >Zip Code<span style="color: red;">*</span></label>
+					    		<div class="col-sm-4">
+					      			<input type="tel" id="edit_guardian_zip_code" class="form-control" name="guardhomezipcode" pattern="[0-9]{6}"  placeholder="Zip Code">
+					      			<span id="error_edit_guardian_zip_code" class="text-danger"></span>
+					    		</div>
+				  			</div>
+						</div>
+					</div>
+			    <div style="margin-top: 20px;"><h4>Contact Information</h4></div>
+				<div style="border-bottom: 1px solid gray;"></div>
+				<div style="margin-top: 10px;">
+					<div class="form-group row">
+			    		<label class="col-sm-2 col-form-label text" >Mobile Number<span style="color: red;">*</span></label>
+			    		<div class="col-sm-3">
+			      			<input type="tel" id="edit_guardian_mobile"class="form-control" name="guardmobilenumber" placeholder="123-456-7890" pattern="[0-9]{3}[0-9]{3}[0-9]{4}">
+			      			<span id="error_edit_guardian_mobile" class="text-danger"></span>
+			    		</div>
+			    		<label class="col-sm-2 col-form-label text" >Phone</label>
+			    		<div class="col-sm-4">
+			      			<input type="tel" id="edit_guardian_phone" class="form-control" name="guardphonenumber" placeholder="123-456-7890" pattern="[0-9]{3}[0-9]{3}[0-9]{4}">
+			    		</div>
+			    	</div>
+			    </div>
+		   	    <div style="margin-top: 20px;"><h4>Other Information</h4></div>
+				<div style="border-bottom: 1px solid gray;"></div>
+				<div style="margin-top: 10px;">
+				    <div class="form-group row">
+			    		<label  class="col-sm-2 col-form-label text" >Image</label>
+			    		<div class="col-sm-4">
+			      			<input type="text" class="form-control"style="background-color: #f1f4f9; " readonly="readonly">
+			    		</div>
+			    		<div class="col-sm-4">
+			    			<span hidden id="editguardianimagid"></span>
+			      			<input type="file" name="gurdianimage" accept="image/*" 
+								onchange="document.getElementById('editpatientimage').src = window.URL.createObjectURL(this.files[0])">
+			    		</div>
+			    	</div>
+			    	 <div class="form-group row">
+			    		<div class="image">
+			    			<img id="editgurdianimage" alt="your image" width="150" height="150" style="margin-left: 210px;" />
+			    		</div>
+  					</div>
+  					<div class="form-group row">
+			    		<input  class="btn btn-success"  id="btn_edit_back_to_login_patient" value="Back to Last Step"  type="button" style="margin-left: 210px;background-color: #22BAA0;" >
+			    		<input  class="btn btn-success"  id="btn_edit_guardian_details" value="Save And Next Step"  type="button" style="margin-left: 10px;background-color: #22BAA0;" >
+  					</div>
+				</div>
+			</div>
+			<div id="editmenu3" class="tab-pane fade">
+				<div style="margin-top: 15px;"></div>
+				<div style="margin-top: 10px;">
+					<div class="form-group row">
+			    		<label class="col-sm-2 col-form-label text" >Admit Date<span style="color: red;">*</span></label>
+			    		<div class="col-sm-7">
+			      			<input type="date" id="edit_admiit_date" class="form-control" name="admitdate" required>
+			    		</div>
+			    	</div>
+			    	<div class="form-group row">
+			    		<label class="col-sm-2 col-form-label text" >Admit time<span style="color: red;">*</span></label>
+			    		<div class="col-sm-7">
+			      			<input type="time" id="edit_admint_time" class="form-control" value="10:15:00" name="admittime"  required>
+			      			<span id="error_edit_admiit_time" class="text-danger"></span>
+			    		</div>
+			    	</div>
+		  			<div class="form-group row">
+		  				<label class="col-sm-2 col-form-label text" >Patient Status<span style="color: red;">*</span></label>
+			    		<div class="col-sm-7">
+			      			<select class="form-control" id="edit_status" name="patientstatus" > 
+								<option value="" disabled selected hidden="">Select Status</option>
+								<option value="Admit">Admit</option>
+								<option value="Discharge">Discharge</option>
+							</select>
+			    		</div>
+		  			</div>
+		  			<div class="form-group row">
+			    		<label class="col-sm-2 col-form-label text" >Assign Doctor<span style="color: red;">*</span></label>
+			    		<div class="col-sm-7">
+					     	<select  class="form-control" id="edit_doctor" name="doctor" required>
+								<option value="" disabled selected hidden="">Select Doctor</option>
+								<c:forEach items="${sessionScope.doctorlist }" var="q">
+									<option value="${q.id }">${q.firstname }</option>
+								</c:forEach>
+						   </select>
+				     	</div>
+			    	</div>
+				    <div class="form-group row">
+				     	<label class="col-sm-2 col-form-label text" >Symptoms<span style="color: red;">*</span></label>
+				     	<div class="col-sm-7">
+			      			<input type="text"id="editsymptoms" class="form-control" name="symptoms"  required>
+			    		</div>
+				    </div>
+  					<div class="form-group row">
+  					<div class="col-sm-7" style="margin-top: 15px;">
+  						<input type="hidden" name="editprofileImage" id="editprofileImage">
+  						<input type="hidden" name="editgurdianImage" id="editgurdianImage">
+  						<input type="hidden" name="id" id="patientid">
+  						<input type="hidden" name="adminId" id="adminid">
+  						<input type="hidden" id="joiningdateid" name="joinig">
+  						<input type="hidden" name="flag" value="update">
+			    		<input class="btn btn-success" id="btn_edit_back_to_guardian_tab"  type="button" value="Back to Last Step"  style="margin-left: 195px; background-color: #22BAA0;">
+			    		<input type="submit" class="btn btn-success" value="Save Patient"  style="margin-left: 10px; background-color: #22BAA0;">
+  					</div>
+  					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+	</form>
 	</div>
+</div>
 </div>
 </body>
 </html>

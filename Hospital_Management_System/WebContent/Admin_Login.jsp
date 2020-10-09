@@ -6277,7 +6277,7 @@ li a:hover:not(.active) {
 		<span class="icone"> <img src="ing/outpatient-logo.png"></span>
 		<span class="title">Outpatient</span></a></li>
 		
-		<li><a href="" class="left-tooltip" data-tooltip="Inpatient" title="Inpatient">
+		<li><a href="<%=request.getContextPath()%>/Patient?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Inpatient" title="Inpatient">
 		<span class="icone"> <img src="ing/Patient-logo.png"></span>
 		<span class="title">Inpatient</span></a></li>
 		

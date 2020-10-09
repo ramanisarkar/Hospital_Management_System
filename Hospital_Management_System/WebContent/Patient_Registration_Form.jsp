@@ -10,18 +10,26 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script>
 $(document).ready(function(){
-	  var count = 1;
-  	$(document).on('click', '.add_more_report', function(){
-		count++;
-		$(".diagnosissnosis_div").append('<div class="form-group"><label class="col-sm-1 control-label" >Diagnosis Report</label><div class="col-sm-2"><input type="file" class="form-control" name="diagnosis'+count+'"></div><div class="col-sm-2"><input type="button" value="Delete" onclick="deleteParentElement(this)" class="remove_cirtificate btn btn-default"></div></div>');
-		$('#count').val(count);
+	var count = 0;
+	var supportstaffusername;
+	var username="patientList";
+		$.get('PatientRegistration',{flag:username},function(response) {
+			var obj = JSON.parse(response);
+			$.each(obj, function(index, value) {
+			count++;
+		   	var html = '';
+		   	html += '<tr id='+count+'>';
+		   	html += '<td><img src="Laboratory_Staff_Image/'+obj[index].profileimage+'" height="50px" width="50px" class="img-circle"></td>';
+		   	html += '<td style="padding-left: 15px; padding-top: 23px;" ><a href="#">'+obj[index].firstname+'</a></td>';
+		  	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].email+'</td>';
+		   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].mobileno+'</td>';
+			html += '<td><button style="margin-top: 10px;" type="button" class="btn btn-info  edit" data-edit_id="'+count+'" id="laboratoryStaffId'+count+'" value="'+obj[index].id+'">Edit</button>';
+			html += '<button style="margin-left: 10px; margin-top: 10px;" type="button" class="btn btn-danger delete" data-delete_id="'+count+'" id="laboratoryStaffId'+count+'" value="'+obj[index].id+'">Delete</button></td></tr>';
+			$('.laboratory').append(html);
+	 	});
+			 $('#example').DataTable();
 	});
-	$(document).on("click", ".remove_cirtificate", function()
-	{
-		alert("Do you really want to delete this record ?");
-		$(this).parent().parent().remove();
-	});
-
+		
 	 $('#insert_form').on('submit', function(event){
 	        event.preventDefault();
 	        var form = $('#insert_form')[0];
