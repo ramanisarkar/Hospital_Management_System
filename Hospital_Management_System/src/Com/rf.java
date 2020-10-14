@@ -14,5 +14,9 @@ public class rf {
 		String sdsa = localTime.format(formatter);
 		System.out.println(sdsa);
 		
+		String s6 ="";
+		String s1 = "ds";
+		String sds = s6.concat(s1);
+		System.out.println(sds);
 	}
 }

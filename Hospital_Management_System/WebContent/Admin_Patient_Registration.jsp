@@ -18,8 +18,22 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js"></script>
 <script>
 $(document).ready(function(){
+	$("body").on("click", ".add_more_report", function(){
+		$(".diagnosissnosis_div").append('<div class="form-group"style="d margin-left: -10px;"><label class="col-sm-2 control-label" for="diagnosis">Diagnosis Report</label><div class="col-sm-8"><input type="file" class="dignosisreport form-control file" name="diagnosis[]"></div><div class="col-sm-2"><input type="button" value="Delete" onclick="deleteParentElement(this)" class="remove_cirtificate btn btn-default"></div></div>');
+	});
+	
+	$("body").on("click", ".remove_cirtificate", function(){
+		alert("Do you really want to delete this record ?");
+		$(this).parent().parent().remove();
+	});
+	$(document).on('click', '.edit', function(){
+		
+	});
+	$('.input-group.date').datepicker({format: "dd/mm/yyyy"});
 	var count = 0;
 	var supportstaffusername;
 	var username="PatientRegistrationList";
@@ -101,6 +115,15 @@ $(document).ready(function(){
 	    event.preventDefault();
 	    var form = $('#insert_form')[0];
 	    var data = new FormData(form);
+	    console.log("---------------");
+		var dob = $('#dateofbarth').val();
+		console.log(dob);
+		var pattern =/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
+	    if (dob == null || dob == "" || !pattern.test(dob)) {
+	    	alert("Invalid date of birth");
+	        $('#dateofbarth').text("");
+	        return false;
+	    }
 	    console.log(form);
 	    console.log(data);
 	    $("#btnSubmit").prop("disabled", true);
@@ -522,7 +545,7 @@ text-align: right;
 					<div class="form-group row">
 						<label class="col-sm-2 control-label" for="first_name">First Name<span class="require-field">*</span></label>
 						<div class="col-sm-8">
-							<input  class="form-control  text-input" maxlength="50" type="text" value="" name="first_name">
+							<input  class="form-control  text-input" maxlength="50" type="text" value="" name="first_name" required>
 						</div>
 					</div>
 					<div class="form-group row">
@@ -534,24 +557,26 @@ text-align: right;
 					<div class="form-group row">
 						<label class="col-sm-2 control-label" for="last_name">Last Name<span class="require-field">*</span></label>
 						<div class="col-sm-8">
-							<input class="form-control  " maxlength="50" type="text" value="" name="last_name">
+							<input class="form-control  " maxlength="50" type="text" value="" name="last_name"required>
 						</div>
 					</div>
 					
 					<div class="form-group row">
 						<label class="col-sm-2 control-label" for="gender">Gender<span class="require-field">*</span></label>
 						<div class="col-sm-8">
-										<label class="radio-inline">
-						     <input type="radio" value="male" class="tog " name="gender">Male			    </label>
-						    <label class="radio-inline">
-						      <input type="radio" value="female" class="tog" name="gender">Female 
-						    </label>
+							<label class="radio-inline"><input type="radio" value="male" class="tog " name="gender" checked>Male</label>
+						    <label class="radio-inline"><input type="radio" value="female" class="tog" name="gender">Female</label>
 						</div>
 					</div>
 					<div class="form-group row">
 						<label class="col-sm-2 control-label" for="birth_date">Date of birth<span class="require-field">*</span></label>
 						<div class="col-sm-8">
-							<input  class="form-control" type="date"  name="birth_date">
+							<div class="input-group date" data-date-format="dd/mm/yyyy">
+				            	<input  type="text" name="birth_date" id="dateofbarth" class="form-control" placeholder="dd/mm/yyyy" required>
+					            <div class="input-group-addon" >
+					              <span class="glyphicon glyphicon-th"></span>
+					            </div>
+				          	</div>
 						</div>
 					</div>		
 					<div class="form-group row">
@@ -583,6 +608,13 @@ text-align: right;
 								<input type="file" class="form-control" name="diagnosis"accept="application/pdf">
 							</div>
 						</div>	
+					</div>
+					<div class="form-group row" >			
+						<div class="col-sm-2 ">
+						</div>
+						<div class="col-sm-8">
+							<input type="button" value="Add More Report" name="add_more_report" class="add_more_report btn btn-default">
+						</div>
 					</div>
 					<div class="form-group row">
 						<label class="col-sm-2 control-label" for="address">Address<span class="require-field">*</span></label>
@@ -708,31 +740,36 @@ text-align: right;
 					<div class="form-group row">
 						<label class="col-sm-2 control-label" for="birth_date">Date of birth<span class="require-field">*</span></label>
 						<div class="col-sm-8">
-							<input id="dob" class="form-control" type="date"  name="birth_date">
+							<div class="input-group date" data-date-format="dd/mm/yyyy">
+				            	<input id="dob"  type="text" name="birth_date"  class="form-control" placeholder="dd/mm/yyyy">
+					            <div class="input-group-addon" >
+					              <span class="glyphicon glyphicon-th"></span>
+					            </div>
+				          	</div>
 						</div>
 					</div>		
 					<div class="form-group row">
 						<label class="col-sm-2 control-label" for="blood_group">Blood Group<span class="require-field">*</span></label>
 						<div class="col-sm-8">
-											<select id="blood_group" class="form-control " name="blood_group">
-													<option value="" disabled selected hidden="">Select Blood Group</option>
-													<option value="O+">O+ </option>
-													<option value="O-">O- </option>
-													<option value="A+">A+ </option>
-													<option value="B+">B+ </option>
-													<option value="A-">A- </option>
-													<option value="B-">B- </option>
-													<option value="AB+">AB+ </option>
-													<option value="AB-">AB- </option>
-										</select>
+							<select id="blood_group" class="form-control " name="blood_group">
+								<option value="" disabled selected hidden="">Select Blood Group</option>
+								<option value="O+">O+ </option>
+								<option value="O-">O- </option>
+								<option value="A+">A+ </option>
+								<option value="B+">B+ </option>
+								<option value="A-">A- </option>
+								<option value="B-">B- </option>
+								<option value="AB+">AB+ </option>
+								<option value="AB-">AB- </option>
+							</select>
 						</div>
 					</div>
-								<div class="form-group row">
-							<label class="col-sm-2 control-label" for="symptoms">Symptoms<span class="require-field">*</span></label>
-							<div class="col-sm-8">
-								<input id="symptoms" class="form-control" type="text" name="symptoms" >
-							</div>					
-						</div>	
+					<div class="form-group row">
+						<label class="col-sm-2 control-label" for="symptoms">Symptoms<span class="require-field">*</span></label>
+						<div class="col-sm-8">
+							<input id="symptoms" class="form-control" type="text" name="symptoms" >
+						</div>					
+					</div>	
 					<div class="form-group row">
 			    		<label  class="col-sm-2 col-form-label text" >Diagnosis Report</label>
 			    		<div class="col-sm-8">

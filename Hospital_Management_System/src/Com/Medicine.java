@@ -1,6 +1,5 @@
 package Com;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
@@ -15,22 +14,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
 
 import com.google.gson.Gson;
 
-import DAO.CategoryDao;
-import DAO.LoginDAO;
 import DAO.MedicineDao;
-import DAO.NurseDao;
 import VO.AdminVo;
 import VO.CategoryVo;
-import VO.DepartmentVo;
-import VO.LoginVO;
 import VO.MedicineList;
 import VO.MedicineVo;
-import VO.NurseList;
-import VO.NurseVo;
 
 /**
  * Servlet implementation class Medicine
@@ -74,6 +65,7 @@ public class Medicine extends HttpServlet {
 		}
 		if (flag.equalsIgnoreCase("deleteMedicine")) {
 			medicineDelete(request, response);
+			medicineList(request, response);
 		}
 	}
 
@@ -87,9 +79,11 @@ public class Medicine extends HttpServlet {
 		String flag = request.getParameter("flag");
 		if (flag.equalsIgnoreCase("insert")) {
 			medicineInsert(request, response);
+			medicineList(request, response);
 		}
 		if (flag.equalsIgnoreCase("update")) {
 			medicineUpdate(request, response);
+			medicineList(request, response);
 		}
 		if (flag.equalsIgnoreCase("chackMedicineName")) {
 			medicineNameChack(request, response);
@@ -97,7 +91,6 @@ public class Medicine extends HttpServlet {
 		if (flag.equalsIgnoreCase("chackMedicineId")) {
 			chackMedicineId(request, response);
 		}
-
 	}
 
 	private void medicineList(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -124,7 +117,7 @@ public class Medicine extends HttpServlet {
 			java.sql.Date expiry = medicine.getExpirydate();
 			String expirydate = expiry.toString();
 			int quantity = medicine.getMedicinequantity();
-
+			
 			if (quantity > 0) {
 				stock = "In";
 			} else {
@@ -141,6 +134,7 @@ public class Medicine extends HttpServlet {
 			common.setExpirydate(expirydate);
 			common.setMedicinequantity(quantity);
 			common.setStock(stock);
+			common.setMedicineupdate(medicineupdate);
 
 			list.add(common);
 		}
@@ -189,7 +183,6 @@ public class Medicine extends HttpServlet {
 
 	private void chackMedicineId(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String medicineId = request.getParameter("medicineId");
-		System.out.println(medicineId);
 
 		MedicineVo medicineVo = new MedicineVo();
 		medicineVo.setMedicineid(medicineId);
@@ -302,19 +295,6 @@ public class Medicine extends HttpServlet {
 					medicineupdate = "false";
 				}
 			}
-			System.out.println(medicineupdate);
-			if (medicineupdate == "true") {
-				String respose = "seccess";
-				response.setContentType("text/plain");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().write(respose);
-			} else {
-				String respose = "error";
-				response.setContentType("text/plain");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().write(respose);
-			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -323,7 +303,6 @@ public class Medicine extends HttpServlet {
 
 	private void medicineEdit(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		int medicineId = Integer.parseInt(request.getParameter("medicineId"));
-		System.out.println(medicineId);
 
 		MedicineVo medicineVo = new MedicineVo();
 		medicineVo.setId(medicineId);
@@ -383,11 +362,6 @@ public class Medicine extends HttpServlet {
 			int id = Integer.parseInt(request.getParameter("Id"));
 			int adminid = Integer.parseInt(request.getParameter("adminId"));
 			int categoryId = Integer.parseInt(request.getParameter("edit_medicine_category"));
-			System.out.println("----------------------------------");
-			System.out.println(categoryId);
-			System.out.println(id);
-			System.out.println(adminid);
-			System.out.println("------------------------------");
 			String joiningdate = request.getParameter("joinig");
 			String medicineName = request.getParameter("medicine_name");
 			String medicineDesrciption = request.getParameter("description");
@@ -437,18 +411,6 @@ public class Medicine extends HttpServlet {
 				medicineupdate = "false";
 			}
 			System.out.println(medicineupdate);
-			if (medicineupdate == "true") {
-				String respose = "seccess";
-				response.setContentType("text/plain");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().write(respose);
-			} else {
-				String respose = "error";
-				response.setContentType("text/plain");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().write(respose);
-			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -465,18 +427,11 @@ public class Medicine extends HttpServlet {
 			MedicineDao medicineDao = new MedicineDao();
 			String message = medicineDao.deleteMedicine(medicineVo);
 			if (message == "true") {
-				System.out.println(message);
-				String respose = "seccess";
-				response.setContentType("text/plain");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().write(respose);
+				medicineupdate= "true";
 			} else {
-				String respose = "error";
-				response.setContentType("text/plain");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().write(respose);
+				medicineupdate="false";
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

@@ -93,6 +93,9 @@ public class PatientRegistretionVo {
 	@JoinColumn(name="Adminid")
 	private AdminVo adminid;
 	
+	@OneToMany( mappedBy = "patientregistreationid", cascade = CascadeType.REMOVE)
+	private List<PatientVo> patientadmintid;	
+	
 	public int getId() {
 		return id;
 	}
@@ -107,6 +110,14 @@ public class PatientRegistretionVo {
 
 	public void setPatientid(String patientid) {
 		this.patientid = patientid;
+	}
+
+	public List<PatientVo> getPatientadmintid() {
+		return patientadmintid;
+	}
+
+	public void setPatientadmintid(List<PatientVo> patientadmintid) {
+		this.patientadmintid = patientadmintid;
 	}
 
 	public String getFirstname() {

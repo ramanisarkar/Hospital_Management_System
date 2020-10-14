@@ -38,7 +38,7 @@ $(document).ready(function(){
 			html += '<button style="margin-left: 10px; margin-top: 10px;" type="button" class="btn btn-danger delete" data-delete_id="'+count+'" id="abulanceStaffId'+count+'" value="'+obj[index].id+'">Delete</button></td></tr>';
 			$('.ambulance').append(html);
 	 	});
-			 $('#example').DataTable();
+			$('#example').DataTable();
 	});
 	
 	$(document).on('click', '#ambulancetab1', function(){

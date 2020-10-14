@@ -1,10 +1,10 @@
 package VO;
 
 public class PatientList {
-	private int id,adminid,doctorid;
-	private String firstname,midalname,lastname,date,gender,homeeaddrss,homecity,homestate,homecountry,bloodgroup,chackusername,joiningdate,
+	private int id,adminid,doctorid,patientintid;
+	private String firstname,midalname,lastname,date,gender,patientid,homeeaddrss,homecity,homestate,homecountry,bloodgroup,chackusername,joiningdate,
 	
-	homezipcode,mobilecountrycode,mobileno,phoneno,email,username,password,profileimage,profileimagename,patientid,guardianid,symptoms,
+	homezipcode,mobilecountrycode,mobileno,phoneno,email,username,password,profileimage,profileimagename,guardianid,symptoms,
 	
 	doctorname,guardianfirstname,guardianmidalname,guardianlastname,Guardiangender,relationwithpatient,guardianhomeeaddrss,guardianhomecity,guardianhomestate
 	
@@ -26,6 +26,7 @@ public class PatientList {
 	public int getDoctorid() {
 		return doctorid;
 	}
+
 	public void setDoctorid(int doctorid) {
 		this.doctorid = doctorid;
 	}
@@ -149,11 +150,17 @@ public class PatientList {
 	public void setDoctorname(String doctorname) {
 		this.doctorname = doctorname;
 	}
-	public String getPatientid() {
-		return patientid;
+	public int getPatientintid() {
+		return patientintid;
+	}
+	public void setPatientintid(int patientintid) {
+		this.patientintid = patientintid;
 	}
 	public void setPatientid(String patientid) {
 		this.patientid = patientid;
+	}
+	public String getPatientid() {
+		return patientid;
 	}
 	public String getSymptoms() {
 		return symptoms;

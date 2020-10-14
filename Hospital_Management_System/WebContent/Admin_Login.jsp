@@ -6195,7 +6195,7 @@ a.reset_time {
     margin: 0;
     padding: 0;
     width: 15%;
-    background-color: #2c3542;
+    background-color: #364150;
     height: 100%;
     overflow: auto;
 }
@@ -6230,12 +6230,11 @@ ul {
 
 
 li a:hover:not(.active) {
-    background-color: #777777;
-}
-
-.navbar-right> li >a:hover {
-	
-}   
+    background-color: #2C3542;;
+} 
+.extended li a:hover:not(.active) {
+    background-color: white;
+} 
 </style>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 </head>
@@ -6302,7 +6301,7 @@ li a:hover:not(.active) {
 		<span class="icone"> <img src="ing/Medicine-logo.png"></span><span class="title">Medicine</span></a></li>
 		<li><a href="<%=request.getContextPath()%>/TreatmentUpdate?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Treatment" title="Treatment">
 		<span class="icone"> <img src="ing/Treatment-logo.png"></span><span class="title">Treatment</span></a></li>
-		<li><a href="" class="left-tooltip" data-tooltip="Prescription" title="Prescription">
+		<li><a href="<%=request.getContextPath()%>/Prescription?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Prescription" title="Prescription">
 		<span class="icone"> <img src="ing/Prescription-logo.png"></span><span class="title">Prescription</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Assign Bed-Nurse" title="Assign Bed-Nurse">
 		<span class="icone"> <img src="ing/Assign-Bed-logo.png"></span><span class="title">Assign Bed-Nurse</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Operation List" title="Operation List">
 		<span class="icone"> <img src="ing/Operation-List-logo.png"></span><span class="title">Operation List</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Diagnosis" title="Diagnosis">
@@ -6310,7 +6309,8 @@ li a:hover:not(.active) {
 		<li><a href="<%=request.getContextPath()%>/BloodManage?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Blood Bank" title="Blood Bank">
 		<span class="icone"> <img src="ing/Blood-Bank-logo.png"></span><span class="title">Blood Bank</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Appointment" title="Appointment">
 		<span class="icone"> <img src="ing/Appointment-logo.png"></span><span class="title">Appointment</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Invoice" title="Invoice">
-		<span class="icone"> <img src="ing/payment-logo.png"></span><span class="title">Invoice</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Event" title="Event">
+		<span class="icone"> <img src="ing/payment-logo.png"></span><span class="title">Invoice</span></a></li><li>
+		<a href="<%=request.getContextPath()%>/Event?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Event" title="Event">
 		<span class="icone"> <img src="ing/notice-logo.png"></span><span class="title">Event</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Message" title="Message">
 		<span class="icone"> <img src="ing/message-logo.png"></span><span class="title">Message</span></a></li>
 		<li><a href="<%=request.getContextPath()%>/Ambulance?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Ambulance" title="Ambulance">
@@ -6320,6 +6320,7 @@ li a:hover:not(.active) {
 		<span class="icone"> <img src="ing/account-logo.png"></span><span class="title">Account</span></a></li>
 	</ul>
 
+.
 <div style="margin-top: 221.5%;">
 </div>
 	<div style="margin-left:15%;padding:1px 16px; margin-top: -332%;">

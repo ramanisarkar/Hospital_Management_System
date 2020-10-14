@@ -20,287 +20,12 @@
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js"></script>
-<script src="js/BloodManage.js"></script>
+<script src="js/BloodBank.js"></script>
  
 <script>
 
 $(document).ready(function(){
  	$('.input-group.date').datepicker({format: "dd/mm/yyyy"}); 
-	
- 	$('#updateBloodInword_form').on('submit', function(event) {
-		event.preventDefault();
-		var form = $('#updateBloodInword_form')[0];
-		var data = new FormData(form);
-		console.log(form);
-		console.log(data);
-		$("#update").prop("disabled", true);
-		$.ajax({
-			type: "POST",
-			enctype: 'multipart/form-data',
-			url: "BloodManage",
-			data: data,
-			processData: false,
-			contentType: false,
-			cache: false,
-			timeout: 600000,
-			success: function(response) {
-				var obj = JSON.parse(response);
-				console.log(response);
-				var count1 =0;
-				$.each(obj, function(index, value) {
-					if (obj[index].numberofbags <= 5) {
-						$("#stockchak"+count1+"").addClass("info-box1");
-					} else if (obj[index].numberofbags > 5 && obj[index].numberofbags <= 10) {
-						$("#stockchak"+count1+"").addClass("info-box2");
-					}
-					else if (obj[index].numberofbags > 10) {
-						$("#stockchak"+count1+"").addClass("info-box3");
-					}
-					count1++;
-				});
-				$('#obloodstock').text(obj[0].numberofbags);
-				$('#o-bloodstock1').text(obj[1].numberofbags);
-				$('#abloodstock2').text(obj[2].numberofbags);
-				$('#a-bloodstock3').text(obj[3].numberofbags);
-				$('#bbloodstock4').text(obj[4].numberofbags);
-				$('#b-bloodstock5').text(obj[5].numberofbags);
-				$('#abbloodstock6').text(obj[6].numberofbags);
-				$('#ab-bloodstock7').text(obj[7].numberofbags);
-
-				var status = obj[0].bloodmanageupdate;
-				if (status == "true") {
-					$('#message1').show();
-					$('#message2').show();
-					$('#message3').show();
-					$('#messagepass').text("Record Added Successsfully");
-					$("#bloodInword_form")[0].reset();
-					var bloodinword;
-					var username = "bloodinwordlist";
-					$.get('BloodManage', { flag: username }, function(response) {
-						var obj = JSON.parse(response);
-						table = $('#tableBloodInword').DataTable();
-						table.destroy();
-						$('.bloodinwordList').children('tr').remove();
-						$.each(obj, function(index, value) {
-							bloodinword++;
-							var html = '';
-							html += '<tr id=' + bloodinword + '>';
-							html += '<td style="padding-left: 15px; padding-top: 15px;">' + obj[index].name + '</td>';
-							html += '<td style="padding-left: 15px; padding-top: 15px;">' + obj[index].bloodgroup + '</a></td>';
-							html += '<td style="padding-left: 15px; padding-top: 15px;">' + obj[index].age + '</td>';
-							html += '<td style="padding-left: 15px; padding-top: 15px;">' + obj[index].address + '</a></td>';
-							html += '<td style="padding-left: 15px; padding-top: 15px;">' + obj[index].numberofbags + '</td>';
-							html += '<td style="padding-left: 15px; padding-top: 15px;">' + obj[index].lastdonationdate + '</td>';
-							html += '<td style="text-align: center;"><button style="" type="button" class="btn btn-info  editBloodInword" data-edit_id="' + bloodinword + '" id="bloodInwordId' + bloodinword + '"value="' + obj[index].id + '">Edit</button>';
-							html += '<button style="margin-left: 10px; " type="button" class="btn btn-danger deleteBloodInword" data-delete_id="' + bloodinword + '" id="bloodInwordId' + bloodinword + '" value="' + obj[index].id + '">Delete</button></td></tr>';
-							$('.bloodinwordList').append(html);
-						});
-						$('#tableBloodInword').DataTable();
-					});
-				}
-				$("#inwordsubmit").prop("disabled", false);
-			},
-			error: function(e) {
-				$("#result").text(e.responseText);
-				console.log("ERROR : ", e);
-				$("#inwordsubmit").prop("disabled", false);
-			}
-		});
-	});
- 	
- 	$('#insertpatientid').change(function() {
-		var patient = $('#insertpatientid').val();
-		var username = "insertPatientId";
-		$.get('Patient', { flag: username, patientId: patient }, function(response) {
-			var obj = JSON.parse(response);
-			console.log(response);
-			$('#insertfirstname').val(obj[0].firstname);
-			$('#insertmiddlename').val(obj[0].midalname);
-			$('#insertlastname').val(obj[0].lastname);
-			$('#insertdob').val(obj[0].date);
-			var gender = obj[0].gender;
-			if (gender == "male") {
-				$("#insertmale").prop("checked", true);
-			}
-			else {
-				$("#insertfemale").prop("checked", true);
-			}
-			$('#insertbloodgroup').val(obj[0].bloodgroup);
-			$('#insertsymptoms').val(obj[0].symptoms);
-			$('#inserthomeaddress').val(obj[0].homeeaddrss);
-			$('#inserthomecity').val(obj[0].homecity);
-			$('#inserthomestate').val(obj[0].homestate);
-			$('#inserthomecountry').val(obj[0].homecountry);
-			$('#inserthomezip').val(obj[0].homezipcode);
-			$('#insertcode').val(obj[0].mobilecountrycode);
-			$('#insertmobile').val(obj[0].mobileno);
-			$('#insertphone').val(obj[0].phoneno);
-			$('#insertguardian').val(obj[0].guardianid);
-			$('#insertstep2patientid').val(obj[0].patientid);
-		});
-	});
-
-	$('.totalcharg').keyup(function(event) {
-		console.log("-------------------------------------");
-		var charge = $('#bloodoutwordchage').val();
-		var noofbag = $('#blooddispachbag').val();
-		console.log(charge);
-		console.log(noofbag);
-
-		var total = charge * noofbag;
-		console.log(total);
-		$('#totalcost').val(total);
-	});
-
-	$('#bloodOutword_form').on('submit', function(event) {
-		event.preventDefault();
-		var form = $('#bloodOutword_form')[0];
-		var data = new FormData(form);
-		var count1 = 0;
-		console.log("data");
-		console.log("form");
-		$("#inwordsubmit").prop("disabled", true);
-		$.ajax({
-			type: "POST",
-			enctype: 'multipart/form-data',
-			url: "BloodManage",
-			data: data,
-			processData: false,
-			contentType: false,
-			cache: false,
-			timeout: 600000,
-			success: function(response, textStatus, jqXHR) {
-				var obj = JSON.parse(response);
-				console.log(response);
-				$.each(obj, function(index, value) {
-					if (obj[index].numberofbags <= 5) {
-						$("#stockchak" + count1 + "").addClass("info-box1");
-					} else if (obj[index].numberofbags > 5 && obj[index].numberofbags <= 10) {
-						$("#stockchak" + count1 + "").addClass("info-box2");
-					}
-					else if (obj[index].numberofbags > 10) {
-						$("#stockchak" + count1 + "").addClass("info-box3");
-					}
-					count1++;
-				});
-				$('#obloodstock').text(obj[0].numberofbags);
-				$('#o-bloodstock1').text(obj[1].numberofbags);
-				$('#abloodstock2').text(obj[2].numberofbags);
-				$('#a-bloodstock3').text(obj[3].numberofbags);
-				$('#bbloodstock4').text(obj[4].numberofbags);
-				$('#b-bloodstock5').text(obj[5].numberofbags);
-				$('#abbloodstock6').text(obj[6].numberofbags);
-				$('#ab-bloodstock7').text(obj[7].numberofbags);
-
-				var status = obj[0].bloodmanageupdate;
-				if (status == "true") {
-					$('#message1').show();
-					$('#message2').show();
-					$('#message3').show();
-					$('#messagepass').text("Record Added Successsfully");
-					$("#bloodOutword_form")[0].reset();
-					var bloodinword;
-					var username = "bloodinwordlist";
-					$.get('BloodManage', { flag: username }, function(response) {
-						var obj = JSON.parse(response);
-						table = $('#tableBloodInword').DataTable();
-						table.destroy();
-						$('.bloodinwordList').children('tr').remove();
-						$.each(obj, function(index, value) {
-							bloodinword++;
-							var html = '';
-							html += '<tr id=' + bloodinword + '>';
-							html += '<td style="padding-left: 15px; padding-top: 15px;">' + obj[index].name + '</td>';
-							html += '<td style="padding-left: 15px; padding-top: 15px;">' + obj[index].bloodgroup + '</a></td>';
-							html += '<td style="padding-left: 15px; padding-top: 15px;">' + obj[index].age + '</td>';
-							html += '<td style="padding-left: 15px; padding-top: 15px;">' + obj[index].address + '</a></td>';
-							html += '<td style="padding-left: 15px; padding-top: 15px;">' + obj[index].numberofbags + '</td>';
-							html += '<td style="padding-left: 15px; padding-top: 15px;">' + obj[index].lastdonationdate + '</td>';
-							html += '<td style="text-align: center;"><button style="" type="button" class="btn btn-info  editBloodInword" data-edit_id="' + bloodinword + '" id="bloodInwordId' + bloodinword + '"value="' + obj[index].id + '">Edit</button>';
-							html += '<button style="margin-left: 10px; " type="button" class="btn btn-danger deleteBloodInword" data-delete_id="' + bloodinword + '" id="bloodInwordId' + bloodinword + '" value="' + obj[index].id + '">Delete</button></td></tr>';
-							$('.bloodinwordList').append(html);
-						});
-						$('#tableBloodInword').DataTable();
-					});
-				}
-				$("#inwordsubmit").prop("disabled", false);
-			},
-			error: function(e) {
-				$("#result").text(e.responseText);
-				console.log("ERROR : ", e);
-				$("#inwordsubmit").prop("disabled", false);
-			}
-		});
-	});
- 	
-	$(document).on('click', '.deleteBloodManage', function(){
-		var deleteid = $(this).data('delete_id');
-		console.log(deleteid);
-		var bloodManage = $('#bloodManageId'+deleteid).val();
-		var username = "deleteBloodManage";
-		$.get('BloodManage',{flag:username , bloodManageId:bloodManage},function(response){
-			var obj = JSON.parse(response);
-        	table = $('#example').DataTable();
-        	table.destroy();
-        	$('.bloodManage').children('tr').remove();
-    		$.each(obj, function(index, value) {
-    			count++;
-    		   	var html = '';
-    		   	html += '<tr id='+count+'>';
-    		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].bloodgroup+'</a></td>';
-    		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].numberofbags+'</td>';
-    			html += '<td style="text-align: center;"><button style=" margin-left: 93px;" type="button" class="btn btn-info  editBloodManage" data-edit_id="'+count+'" id="bloodManageId'+count+'" value="'+obj[index].id+'">Edit</button>';
-    			html += '<button style="margin-left: 10px; " type="button" class="btn btn-danger deleteBloodManage" data-delete_id="'+count+'" id="bloodManageId'+count+'" value-="'+obj[index].id+'">Delete</button></td></tr>';
-    			$('.bloodManage').append(html);
-    	 	});
-    		var message=obj[0].bloodmanageupdate;
-			console.log(message)
-			if(message == "true"){
-				$('#message1').show();
-        		$('#message2').show();
-        		$('#message3').show();
-        		$('#example').DataTable();
-        		$('#messagepass').text("Recored Delete Successsfully");
-        		$('#example').DataTable();
-    		}
-		});
-	});
-	
-	$(document).on('click', '.deleteBloodDonor', function(){
-		var deleteid = $(this).data('delete_id');
-		console.log(deleteid);
-		var bloodDonor = $('#bloodDonorId'+deleteid).val();
-		var username = "deleteBloodDonor";
-		$.get('BloodManage',{flag:username , bloodDonorId:bloodDonor},function(response){
-			var obj = JSON.parse(response);
-        	table = $('#tableBloodDoner').DataTable();
-        	table.destroy();
-        	$('.bloodDonor').children('tr').remove();
-        	$.each(obj, function(index, value) {
-    			blooddoner++;
-    		   	var html = '';
-    		   	html += '<tr id='+blooddoner+'>';
-    		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].name+'</a></td>';
-    		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].bloodgroup+'</td>';
-    		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].age+'</a></td>';
-    		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].gender+'</td>';
-    		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].numberofbags+'</a></td>';
-    		   	html += '<td style="padding-left: 15px; padding-top: 15px;">'+obj[index].lastdonationdate+'</td>';
-    			html += '<td style="text-align: center;"><button style="" type="button" class="btn btn-info  editBloodDonor" data-edit_id="'+blooddoner+'" id="bloodDonorId'+blooddoner+'" value="'+obj[index].id+'">Edit</button>';
-    			html += '<button style="margin-left: 10px; " type="button" class="btn btn-danger deleteBloodDonor" data-delete_id="'+blooddoner+'" id="bloodDonorId'+blooddoner+'" value-="'+obj[index].id+'">Delete</button></td></tr>';
-    			$('.bloodDonor').append(html);
-    	 	});
-        	var message=obj[0].bloodmanageupdate;
-			console.log(message);
-			if(message == "true"){
-				$('#message1').show();
-        		$('#message2').show();
-        		$('#message3').show();
-        		$('#messagepass').text("Recored Delete Successsfully");
-        		$('#tableBloodDoner').DataTable();
-    		}
-		});
-	});
 	
  	$("#datechange").on("change", function() {
  	    this.setAttribute(
@@ -309,6 +34,8 @@ $(document).ready(function(){
  	        .format( this.getAttribute("data-date-format") )
  	    )
  	}).trigger("change")
+ 	
+ 	
  	$("#datechange1").on("change", function() {
  	    this.setAttribute(
  	        "data-date",
@@ -321,12 +48,15 @@ $(document).ready(function(){
    		$("#Bloodtab3").hide();
    		$("#Bloodtab10").hide();
    		$("#Bloodtab6").hide();
+   		$("#Bloodta9").hide();
    		$('#message1').hide();
 		$('#message2').hide();
 		$('#message3').hide();
 		$("#Bloodtab2").show();
 		$("#Bloodtab5").show();
+		$("#Bloodtab8").show();
    	    $(this).tab('show');
+   	    
    	});
 });
 </script>
@@ -377,24 +107,24 @@ font-family: 'Open Sans';
   padding: 0 !important;
 }
 .info-box{
-	box-shadow: 0px 0px 8px #22baa0;
+	box-shadow: 0px 0px 8px #22baa0 ;
 	overflow: hidden;
 	border: 1px solid #22baa0;
 }
 .info-box1{
 	box-shadow: 0px 0px 8px red !important;
 	overflow: hidden;
-	border: 1px solid red !important;
+	border: 1px solid red ;
 }
 .info-box2{
 	box-shadow: 0px 0px 10px #f0ad4e !important;
 	overflow: hidden;
-	border: 1px solid #eea236 !important;
+	border: 1px solid #eea236 ;
 }
 .info-box3{
 	box-shadow: 0px 0px 8px green !important;
 	overflow: hidden;
-	border: 1px solid green !important;
+	border: 1px solid green ;
 }
 .img-fludia{
 max-width: 100%;
@@ -573,6 +303,15 @@ border-radius: 0px;
     padding-top: 8px;
     padding-right: 5px;
 }
+#clickBloodOutwordList{
+	border: none;
+	background: none;
+	width: 248.5px;
+	margin-left: -5px;
+}
+#clickBloodOutwordList:focus{
+	outline: none;
+}
 </style>
 </head>
 
@@ -718,7 +457,6 @@ border-radius: 0px;
 					<div style="padding: 50px;">
 					<div class="row">	
 						<div class="col-lg-3">			
-						<a href="">			
 							<div  class="panel info-box panel-white"id="stockchak0" >
 								<div class="panel-body patient" >
 									<div class="info-box-stats">
@@ -729,9 +467,8 @@ border-radius: 0px;
 									<img src="ing/blood (1).png" class="dashboard_background">
 								</div>
 							</div>
-						</a></div>
+						</div>
 						<div class="col-lg-3 ">			
-						<a href="">			
 							<div class="panel info-box panel-white"id="stockchak1" >
 								<div class="panel-body patient">
 									<div class="info-box-stats">
@@ -741,10 +478,8 @@ border-radius: 0px;
 									<img src="ing/blood (1).png" class="dashboard_background"> 	
 								</div>
 							</div>
-							</a>
 						</div>
 						<div class="col-lg-3 ">			
-						<a href="">			
 							<div class="panel info-box panel-white"id="stockchak2">
 								<div class="panel-body patient">
 									<div class="info-box-stats">
@@ -754,10 +489,8 @@ border-radius: 0px;
 									<img src="ing/blood (1).png" class="dashboard_background"> 	
 								</div>
 							</div>
-							</a>
 						</div>
 						<div class="col-lg-3 ">			
-						<a href="">			
 							<div class="panel info-box panel-white"id="stockchak3">
 								<div class="panel-body patient">
 									<div class="info-box-stats">
@@ -767,12 +500,10 @@ border-radius: 0px;
 									<img src="ing/blood (1).png" class="dashboard_background"> 	
 								</div>
 							</div>
-							</a>
 						</div>
 						</div>
 						<div class="row">	
 						<div class="col-lg-3">			
-						<a href="">			
 							<div class="panel info-box panel-white" id="stockchak4">
 								<div class="panel-body patient">
 									<div class="info-box-stats">
@@ -784,9 +515,8 @@ border-radius: 0px;
 									
 								</div>
 							</div>
-						</a></div>
+						</div>
 						<div class="col-lg-3 ">			
-						<a href="">			
 							<div class="panel info-box panel-white"id="stockchak5">
 								<div class="panel-body patient">
 									<div class="info-box-stats">
@@ -796,10 +526,8 @@ border-radius: 0px;
 									<img src="ing/blood (1).png" class="dashboard_background"> 	
 								</div>
 							</div>
-							</a>
 						</div>
 						<div class="col-lg-3 ">			
-						<a href="">			
 							<div class="panel info-box panel-white" id="stockchak6">
 								<div class="panel-body patient">
 									<div class="info-box-stats">
@@ -809,10 +537,8 @@ border-radius: 0px;
 									<img src="ing/blood (1).png" class="dashboard_background"> 	
 								</div>
 							</div>
-							</a>
 						</div>
 						<div class="col-lg-3 ">			
-						<a href="">			
 							<div class="panel info-box panel-white"id="stockchak7">
 								<div class="panel-body patient">
 									<div class="info-box-stats">
@@ -822,22 +548,21 @@ border-radius: 0px;
 									<img src="ing/blood (1).png" class="dashboard_background img-fludia"> 	
 								</div>
 							</div>
-						 </a>
 						</div>
 					</div>
 					<div class="row">	
-						<div class="col-lg-3">			
-						<a href="">			
+						<div class="col-lg-3">
+						<button id="clickBloodOutwordList">
 							<div class="panel info-box panel-white">
 								<div class="panel-body patient">
 									<div class="info-box-stats">
-										<p class="counter" id="donorcount" style="margin-left: 5px; color: #22baa0;">0</p>
+										<p class="counter" id="donorcount" style="margin-left: -43px; color: #22baa0;">0</p>
 										<span class="info-box-title" style="font-size: 30px;">Doner</span>
 									</div>
 									<img src="ing/sasasa.jpg" style="margin-left: 28px;" class="dashboard_background">
 								</div>
 							</div>
-						</a>
+						</button>
 						</div>
 					</div>
 	   			 </div>
@@ -1329,7 +1054,7 @@ border-radius: 0px;
 									<select id="insertpatientid" class="form-control " name="patientId">
 										<option value="" disabled selected hidden="">Select Patient</option>
 										<c:forEach items="${sessionScope.patientRagistrationList }" var="q">
-											<option value="${q.patientid }">${q.firstname }</option>
+											<option value="${q.id }">${q.patientid }</option>
 										</c:forEach>
 								   </select>
 								   <span id="error_patient_id" class="text-danger"></span>
@@ -1416,49 +1141,45 @@ border-radius: 0px;
 							<div class="form-group row">
 					    		<label class="col-sm-2 col-form-label text" >Patient Id<span style="color: red;">*</span></label>
 								<div class="col-sm-4">
-									<select id="insertpatientid" class="form-control " name="patientId">
+									<select id="editpatientid" class="form-control " name="patientId">
 										<option value="" disabled selected hidden="">Select Patient</option>
 										<c:forEach items="${sessionScope.patientRagistrationList }" var="q">
-											<option value="${q.patientid }">${q.firstname }</option>
+											<option value="${q.id }">${q.firstname }</option>
 										</c:forEach>
 								   </select>
-								   <span id="error_patient_id" class="text-danger"></span>
 								</div>
 					    		<label class="col-sm-2 col-form-label text" >First Name<span style="color: red;">*</span></label>
 					    		<div class="col-sm-4">
-					      			<input type="text" id="insertfirstname" class="form-control" name="firstname" readonly="readonly">
-					      			<span id="error_first_name" class="text-danger"></span>
+					      			<input type="text" id="editoutwordfirstname" class="form-control" name="firstname" readonly="readonly">
 					    		</div>
 					    	</div>
 				  			<div class="form-group row">
 				  				
 					    		<label class="col-sm-2 col-form-label text" >Middle Name</label>
 					    		<div class="col-sm-4">
-					      			<input type="text" id="insertmiddlename"  class="form-control" name="middlename" readonly="readonly">
+					      			<input type="text" id="editoutwordmiddlename"  class="form-control" name="middlename" readonly="readonly">
 					    		</div>
 				  				
 					    		<label  class="col-sm-2 col-form-label text" >Last Name<span style="color: red;">*</span></label>
 					    		<div class="col-sm-4">
-					      			<input type="text" id="insertlastname"class="form-control" name="lastname" readonly="readonly">
-					      			<span id="error_last_name" class="text-danger"></span>
+					      			<input type="text" id="editoutwordlastname"class="form-control" name="lastname" readonly="readonly">
 					    		</div>
 				  			</div>
 				  			<div class="form-group row">
 				  				<label class="col-sm-2 col-form-label text" >Date of birth<span style="color: red;">*</span></label>
 					    		<div class="col-sm-4">
-					      			<input type="date" id="insertdob" class="form-control" name="dob" placeholder="Date of birth" readonly="readonly">
-					      			<span id="error_date_of_birth" class="text-danger"></span>
+					      			<input type="date" id="editoutwordbod" class="form-control" name="dob" placeholder="Date of birth" readonly="readonly">
 					    		</div>
 					    		<label class="col-sm-2 col-form-label text" >Blood Group<span style="color: red;">*</span></label>
 					    		<div class="col-sm-4">
-					    			<input type="text" id="insertbloodgroup" class="form-control" name="blood_group" readonly="readonly">
+					    			<input type="text" id="editoutwordbloodgruop" class="form-control" name="blood_group" readonly="readonly">
 					    		</div>
 				  			</div>
 				  			<div class="form-group row">
 				  				<label  class="col-sm-2 col-form-label text" >Gender<span style="color: red;">*</span></label>
 					    		<div class="col-sm-4">
-					      			<label class="radio-inline"><input type="radio" id="insertmale" name="gender" value="male" checked>Male</label>
-									<label class="radio-inline"><input type="radio" id="insertfemale" name="gender" value="female" >Female</label>
+					      			<label class="radio-inline"><input type="radio" id="editoutwordmale" name="gender" value="male" checked>Male</label>
+									<label class="radio-inline"><input type="radio" id="editoutwordfemale" name="gender" value="female" >Female</label>
 					    		</div>
 				  			</div>
 						</div>
@@ -1468,22 +1189,29 @@ border-radius: 0px;
 							<div class="form-group row">
 								<label class="col-sm-2 col-form-label text" >Number Of Bags<span style="color: red;">*</span></label>
 								<div class="col-sm-4 ">
-									<input type="number" class="form-control" name="numberofbags"  min="0" required>
+									<input type="number" id="editoutwordnob" class="form-control edittotalcharg" name="numberofbags"  min="0" required>
 								</div>
 								<label class="col-sm-2 col-form-label text">Charge(&#x20B9;)<span style="color: red;">*</span></label>
 								<div class="col-sm-4 ">
-									<input type="number" class="form-control" name="charge"  min="0" required>
+									<input type="number"id="editoutwordcharge"class="form-control  edittotalcharg" name="charge"  min="0" required>
 								</div>
 							</div>
 							<div class="form-group row">
 								<label class="col-sm-2 col-form-label text">Date<span style="color: red;">*</span></label>
 								<div class="col-sm-4 ">
-									<input type="Date" class="form-control" name="date" min="0" required>
+									<input type="Date" id="editoutworddate" class="form-control" name="date" min="0" required>
+								</div>
+								<label class="col-sm-2 col-form-label text">Total<span style="color: red;">*</span></label>
+								<div class="col-sm-4 ">
+									<input type="number" class="form-control" value="0" id="editoutwordtotal" name="total" min="0" readonly="readonly">
 								</div>
 							</div>
-							<input type="hidden" name="flag" value="insert" />
+							<input type="hidden" name="flag" value="updateoutword" />
+							<input type="hidden" name="adminid" id="outwordadminid"/>
+							<input type="hidden" name="id" id="outworddid" />
+							<input type="hidden" name="joinig" value="outwordjoining" />
 							<div class="col-sm-offset-2 col-sm-8">
-								<input type="submit" value="Save" name="save_medicine" class="btn btn-success"style="margin-bottom: 15px;"/>
+								<input type="submit" value="Update" id="outwordupdate" class="btn btn-success"style="margin-bottom: 15px;"/>
 							</div>
 						</div>
 					</form>

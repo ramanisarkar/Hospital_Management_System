@@ -211,6 +211,8 @@ public class PatientRegistration extends HttpServlet {
    				String middleName = request.getParameter("middle_name");
    				String lastName = request.getParameter("last_name");
    				String dateofbirth = request.getParameter("birth_date");
+   				System.out.println(dateofbirth);
+   				System.out.println(dateofbirth);
    				java.sql.Date dateOfBirth = java.sql.Date.valueOf(dateofbirth);
    				String gender = request.getParameter("gender");
    				String blood_group = request.getParameter("blood_group");

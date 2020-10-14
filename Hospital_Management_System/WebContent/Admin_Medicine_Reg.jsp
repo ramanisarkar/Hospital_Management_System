@@ -21,6 +21,8 @@
 <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
  
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js"></script>
 <script>
 
 $(document).ready(function(){
@@ -73,6 +75,14 @@ $(document).ready(function(){
 	    	   	$.each(obj, function(index, value) {
 	    	   		$('<option>').val(obj[index].id).text(obj[index].categoryname).appendTo(select);
 	    		});
+	    	   	
+	    	   	var editcategory = $('#edit_category_data');
+	    	   	editcategory.find('option').remove();
+	        	$('<option disabled selected hidden="">').val("").text("Select Category").appendTo(editcategory);  
+	    	   	$.each(obj, function(index, value) {
+	    	   		$('<option>').val(obj[index].id).text(obj[index].categoryname).appendTo(editcategory);
+	    		});
+	    	   	
 	    	   	$('.category').children('tr').remove();
 	    	   	$.each(obj, function(index, value) {
 	    			count++;
@@ -96,6 +106,7 @@ $(document).ready(function(){
 			if(message == "seccess"){
 				$('#category_data').find('[value="' + category + '"]').remove();
 				count--;
+				$('#edit_category_data').find('[value="' + category + '"]').remove();
         		$('#'+deleteid+'').closest('tr').remove();
     		}
 		});
@@ -124,7 +135,7 @@ $(document).ready(function(){
 			 $('#example').DataTable();
 	});
 	
-	$(".main_medicine_div").append('<div class="medicine_div"><div class="form-group"><label class="col-sm-2 control-label" for="medicine_name">Medicine<span class="require-field"style="color: red;">*</span></label><div class="col-sm-3 margin_bottom_5px"><input id="medicine_name" class="form-control validate[required,custom[popup_category_validation]] text-input  medicine_name" maxlength="50" type="text" placeholder="Medicine Name" value="" name="medicine_name[]"></div><div class="col-sm-6"><textarea rows="1"  name="description[]"  class="form-control validate[custom[address_description_validation]]" id="description" maxlength="150" placeholder="Description"></textarea></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-3 margin_bottom_5px"><input class="form-control validate[custom[popup_category_validation]]" type="text" maxlength="20" placeholder="Batch Number" value="" name="batch_number[]"></div><div class="col-sm-2 margin_bottom_5px"><input  class="form-control validate[required] text-input" min="0" type="number" onKeyPress="if(this.value.length==6) return false;"  placeholder="Quantity" value="" name="med_quantity[]"></div><div class="col-sm-2 margin_bottom_5px"><input id="med_price" class="form-control validate[required] text-input" min="1" type="number" step="0.01" onKeyPress="if(this.value.length==8) return false;"  placeholder="Price (&#36;)" value="" name="med_price[]"></div><div class="col-sm-2 margin_bottom_5px"><input id="" class="form-control validate[] text-input med_uniqueid validate[custom[popup_category_validation]]" maxlength="10" type="text" placeholder="Medicine ID"	value="" name="med_uniqueid[]"></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-3 margin_bottom_5px"><textarea rows="1"  name="note[]"  class="form-control validate[custom[address_description_validation]]"  maxlength="150" placeholder="Note"></textarea></div><div class="col-sm-2 margin_bottom_5px"><input id="med_discount" class="form-control text-input" type="number" onKeyPress="if(this.value.length==10) return false;" step="0.01"  placeholder="Discount" value="" name="med_discount[]"></div><div class="col-sm-2 margin_bottom_5px">	<select class="form-control" name="med_discount_in[]"><option value="flat">Flat</option><option value="percentage">Percentage</option></select></div>	<div class="col-sm-2"></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-3 margin_bottom_5px"><input id="mfg_cmp_name" class="form-control validate[custom[popup_category_validation]]" type="text" maxlength="50" placeholder="Manufacturer Company Name" value="" name="mfg_cmp_name[]"></div><div class="col-sm-2 margin_bottom_5px"><input id="" class="form-control validate[required] medicine_manufactured_date" type="date"  name="manufactured_date[]" placeholder="Manufactured Date" value="" ></div><div class="col-sm-2 margin_bottom_5px"><input  class="form-control validate[required] medicine_expiry_date" type="date"  name="expiry_date[]" placeholder="Expiry Date" value="" ></div></div></div>');
+	$(".main_medicine_div").append('<div class="medicine_div"><div class="form-group"><label class="col-sm-2 control-label" for="medicine_name">Medicine<span class="require-field"style="color: red;">*</span></label><div class="col-sm-3 margin_bottom_5px"><input id="medicine_name" class="form-control  text-input  medicine_name" maxlength="50" type="text" placeholder="Medicine Name"  name="medicine_name[]"></div><div class="col-sm-6"><textarea rows="1"  name="description[]"  class="form-control " id="description" maxlength="150" placeholder="Description"></textarea></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-3 margin_bottom_5px"><input class="form-control" type="text" maxlength="20" placeholder="Batch Number" name="batch_number[]"></div><div class="col-sm-2 margin_bottom_5px"><input  class="form-control text-input" min="0" type="number" onKeyPress="if(this.value.length==6) return false;"  placeholder="Quantity" name="med_quantity[]"></div><div class="col-sm-2 margin_bottom_5px"><input id="med_price" class="form-control text-input" min="1" type="number" step="0.01" onKeyPress="if(this.value.length==8) return false;"  placeholder="Price (&#36;)"  name="med_price[]"></div><div class="col-sm-2 margin_bottom_5px"><input id="" class="form-control text-input med_uniqueid" maxlength="10" type="text" placeholder="Medicine ID"	value="" name="med_uniqueid[]"></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-3 margin_bottom_5px"><textarea rows="1"  name="note[]"  class="form-control"  maxlength="150" placeholder="Note"></textarea></div><div class="col-sm-2 margin_bottom_5px"><input id="med_discount" class="form-control text-input" type="number" onKeyPress="if(this.value.length==10) return false;" step="0.01"  placeholder="Discount" name="med_discount[]"></div><div class="col-sm-2 margin_bottom_5px"><select class="form-control" name="med_discount_in[]"><option value="flat">Flat</option><option value="percentage">Percentage</option></select></div><div class="col-sm-2"></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-3 margin_bottom_5px"><input id="mfg_cmp_name" class="form-control" type="text" maxlength="50" placeholder="Manufacturer Company Name" name="mfg_cmp_name[]"></div><div class="col-sm-2 margin_bottom_5px"><div class="input-group date" data-date-format="dd/mm/yyyy"><input  type="text" name="manufactured_date[]"  class="form-control" placeholder="dd/mm/yyyy"><div class="input-group-addon" ><span class="glyphicon glyphicon-th"></span></div></div></div><div class="col-sm-2 margin_bottom_5px"><div class="input-group date" data-date-format="dd/mm/yyyy"><input  type="text" name="expiry_date[]"  class="form-control" placeholder="dd/mm/yyyy"><div class="input-group-addon" ><span class="glyphicon glyphicon-th"></span></div></div></div></div></div>');
 	
 	$(document).on("click", ".delete_medicine_div", function(){
 		alert("Do you really want to delete this record ?");
@@ -132,9 +143,10 @@ $(document).ready(function(){
 	});
 	
 	$(document).on("click", "#add_new_entry", function(){
-		$(".main_medicine_div").append('<div class="medicine_div"><div class="form-group"><label class="col-sm-2 	control-label" for="medicine_name">Medicine<span class="require-field">*</span></label><div class="col-sm-3 margin_bottom_5px"><input id="medicine_name" class="form-control validate[required,custom[popup_category_validation]] text-input  medicine_name" maxlength="50" type="text" placeholder="Medicine Name" value="" name="medicine_name[]"></div><div class="col-sm-6"><textarea rows="1"  name="description[]"  class="form-control validate[custom[address_description_validation]]" id="description" maxlength="150" placeholder="Description"></textarea></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-3 margin_bottom_5px"><input class="form-control validate[custom[popup_category_validation]]" type="text" maxlength="20" placeholder="Batch Number" value="" name="batch_number[]"></div><div class="col-sm-2 margin_bottom_5px"><input  class="form-control validate[required] text-input" min="0" type="number" onKeyPress="if(this.value.length==6) return false;"  placeholder="Quantity" value="" name="med_quantity[]"></div><div class="col-sm-2 margin_bottom_5px"><input id="med_price" class="form-control validate[required] text-input" min="1" type="number" step="0.01" onKeyPress="if(this.value.length==8) return false;"  placeholder="Price (&#36;)" value="" name="med_price[]"></div><div class="col-sm-2 margin_bottom_5px"><input id="" class="form-control validate[] text-input med_uniqueid validate[custom[popup_category_validation]]" maxlength="10" type="text" placeholder="Medicine ID"	value="" name="med_uniqueid[]"></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-3 margin_bottom_5px"><textarea rows="1"  name="note[]"  class="form-control validate[custom[address_description_validation]]"  maxlength="150" placeholder="Note"></textarea></div><div class="col-sm-2 margin_bottom_5px"><input id="med_discount" class="form-control text-input" type="number" onKeyPress="if(this.value.length==10) return false;" step="0.01"  placeholder="Discount" value="" name="med_discount[]"></div><div class="col-sm-2 margin_bottom_5px">						<select class="form-control" name="med_discount_in[]"><option value="flat">Flat</option><option value="percentage">Percentage</option></select></div>	<div class="col-sm-2"></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-3 margin_bottom_5px"><input id="mfg_cmp_name" class="form-control validate[custom[popup_category_validation]]" type="text" maxlength="50" placeholder="Manufacturer Company Name" value="" name="mfg_cmp_name[]"></div><div class="col-sm-2 margin_bottom_5px"><input id="" class="form-control validate[required] medicine_manufactured_date" type="date"  name="manufactured_date[]" placeholder="Manufactured Date" value="" ></div><div class="col-sm-2 margin_bottom_5px"><input id="" class="form-control validate[required] medicine_expiry_date" type="date"  name="expiry_date[]" placeholder="Expiry Date" value="" ></div><div class="col-sm-offset-2 col-sm-1"><button type="button" class="btn btn-default delete_medicine_div"><i class="entypo-trash">Delete</i></button></div></div></div>');	
+		$(".main_medicine_div").append('<div class="medicine_div"><div class="form-group"><label class="col-sm-2 control-label" for="medicine_name">Medicine<span class="require-field"style="color: red;">*</span></label><div class="col-sm-3 margin_bottom_5px"><input id="medicine_name" class="form-control  text-input  medicine_name" maxlength="50" type="text" placeholder="Medicine Name"  name="medicine_name[]"></div><div class="col-sm-6"><textarea rows="1"  name="description[]"  class="form-control " id="description" maxlength="150" placeholder="Description"></textarea></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-3 margin_bottom_5px"><input class="form-control" type="text" maxlength="20" placeholder="Batch Number" name="batch_number[]"></div><div class="col-sm-2 margin_bottom_5px"><input  class="form-control text-input" min="0" type="number" onKeyPress="if(this.value.length==6) return false;"  placeholder="Quantity" name="med_quantity[]"></div><div class="col-sm-2 margin_bottom_5px"><input id="med_price" class="form-control text-input" min="1" type="number" step="0.01" onKeyPress="if(this.value.length==8) return false;"  placeholder="Price (&#36;)"  name="med_price[]"></div><div class="col-sm-2 margin_bottom_5px"><input id="" class="form-control text-input med_uniqueid" maxlength="10" type="text" placeholder="Medicine ID"	value="" name="med_uniqueid[]"></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-3 margin_bottom_5px"><textarea rows="1"  name="note[]"  class="form-control"  maxlength="150" placeholder="Note"></textarea></div><div class="col-sm-2 margin_bottom_5px"><input id="med_discount" class="form-control text-input" type="number" onKeyPress="if(this.value.length==10) return false;" step="0.01"  placeholder="Discount" name="med_discount[]"></div><div class="col-sm-2 margin_bottom_5px"><select class="form-control" name="med_discount_in[]"><option value="flat">Flat</option><option value="percentage">Percentage</option></select></div><div class="col-sm-2"></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-3 margin_bottom_5px"><input id="mfg_cmp_name" class="form-control" type="text" maxlength="50" placeholder="Manufacturer Company Name" name="mfg_cmp_name[]"></div><div class="col-sm-2 margin_bottom_5px"><div class="input-group date" data-date-format="dd/mm/yyyy"><input  type="text" name="manufactured_date[]"  class="form-control" placeholder="dd/mm/yyyy"><div class="input-group-addon" ><span class="glyphicon glyphicon-th"></span></div></div></div><div class="col-sm-2 margin_bottom_5px"><div class="input-group date" data-date-format="dd/mm/yyyy"><input  type="text" name="expiry_date[]"  class="form-control" placeholder="dd/mm/yyyy"><div class="input-group-addon" ><span class="glyphicon glyphicon-th"></span></div></div></div><div class="col-sm-offset-2 col-sm-1"><button type="button" class="btn btn-default delete_medicine_div"><i class="entypo-trash">Delete</i></button></div></div></div>');
+		$('.input-group.date').datepicker({format: "dd/mm/yyyy"}); 
 	});
-	
+	$('.input-group.date').datepicker({format: "dd/mm/yyyy"}); 
 	$(document).on("keyup", ".medicine_name", function(){
 		var that = this;
 		var medicine_name = $(this).val();		
@@ -217,14 +229,36 @@ $(document).ready(function(){
 	        cache: false,
 	        timeout: 600000,
 	        success: function(response ,textStatus , jqXHR ){
-	        	var message=response;
-				console.log(message)
-				if(message == "seccess"){
+	        	var obj = JSON.parse(response);
+				var countMedicine = 0;
+				table = $('#example').DataTable();
+				table.destroy();
+				$('.medicine').children('tr').remove();
+				$.each(obj, function(index, value) {
+					countMedicine++;
+				   	var html = '';
+				   	html += '<tr id='+countMedicine+'>';
+				   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].medicinename+'</a></td>';
+				   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].categoryname+'</td>';
+				   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].medicinebatchnumber+'</td>';
+				   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].medicinequantity+'</td>';
+				   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].price+'</td>';
+				   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].discount+'</td>';
+				   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].expirydate+'</td>';
+				   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].stock+'</td>';
+					html += '<td><button style="margin-top: 10px;" type="button" class="btn btn-info  editMedicine" data-edit_id="'+countMedicine+'" id="meicineid'+countMedicine+'" value="'+obj[index].id+'">Edit</button>';
+					html += '<button style="margin-left: 10px; margin-top: 10px;" type="button" class="btn btn-danger deleteMedicine" data-delete_id="'+countMedicine+'" id="meicineid'+countMedicine+'" value-="'+obj[index].id+'">Delete</button></td></tr>';
+					$('.medicine').append(html);
+			 	});
+			 	var message=obj[0].medicineupdate;
+				console.log(message);
+				if(message == "true"){
 					$('#message1').show();
 	        		$('#message2').show();
 	        		$('#message3').show();
-	        		$('#messagepass').text("Recored Add Successsfully");
+	        		$('#messagepass').text("Record Added Successsfully");
 	        		$("#medicine_form")[0].reset();
+	        		$('#example').DataTable();
 	    		}
 	            $("#btnSubmit").prop("disabled", false);
 	        },
@@ -283,12 +317,33 @@ $(document).ready(function(){
         timeout: 600000,
         success: function(response ,textStatus , jqXHR ){
         	var obj = JSON.parse(response);
-        	console.log(obj);
+			var countMedicine = 0;
+			table = $('#example').DataTable();
+			table.destroy();
+			$('.medicine').children('tr').remove();
+			$.each(obj, function(index, value) {
+				countMedicine++;
+			   	var html = '';
+			   	html += '<tr id='+countMedicine+'>';
+			   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].medicinename+'</a></td>';
+			   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].categoryname+'</td>';
+			   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].medicinebatchnumber+'</td>';
+			   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].medicinequantity+'</td>';
+			   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].price+'</td>';
+			   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].discount+'</td>';
+			   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].expirydate+'</td>';
+			   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].stock+'</td>';
+				html += '<td><button style="margin-top: 10px;" type="button" class="btn btn-info  editMedicine" data-edit_id="'+countMedicine+'" id="meicineid'+countMedicine+'" value="'+obj[index].id+'">Edit</button>';
+				html += '<button style="margin-left: 10px; margin-top: 10px;" type="button" class="btn btn-danger deleteMedicine" data-delete_id="'+countMedicine+'" id="meicineid'+countMedicine+'" value-="'+obj[index].id+'">Delete</button></td></tr>';
+				$('.medicine').append(html);
+		 	});
+			var message=obj[0].medicineupdate;
+			console.log(message);
         	if(message == "seccess"){
 				$('#message1').show();
         		$('#message2').show();
         		$('#message3').show();
-        		$('#messagepass').text("Recored Update Successsfully");
+        		$('#messagepass').text("Record Update Successsfully");
         		$("#update").prop("disabled", false);
     		}
         },
@@ -304,15 +359,34 @@ $(document).ready(function(){
 		var medicine = $('#meicineid'+deleteid).val();
 		var username = "deleteMedicine";
 		$.get('Medicine',{flag:username , medicineId:medicine},function(response){
-			var message=response;
-			console.log(message)
-			if(message == "seccess"){
-				countMedicine--;
-        	$('#'+deleteid+'').closest('tr').remove();
+			var obj = JSON.parse(response);
+			var countMedicine = 0;
+			table = $('#example').DataTable();
+			table.destroy();
+			$('.medicine').children('tr').remove();
+			$.each(obj, function(index, value) {
+				countMedicine++;
+			   	var html = '';
+			   	html += '<tr id='+countMedicine+'>';
+			   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].medicinename+'</a></td>';
+			   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].categoryname+'</td>';
+			   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].medicinebatchnumber+'</td>';
+			   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].medicinequantity+'</td>';
+			   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].price+'</td>';
+			   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].discount+'</td>';
+			   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].expirydate+'</td>';
+			   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].stock+'</td>';
+				html += '<td><button style="margin-top: 10px;" type="button" class="btn btn-info  editMedicine" data-edit_id="'+countMedicine+'" id="meicineid'+countMedicine+'" value="'+obj[index].id+'">Edit</button>';
+				html += '<button style="margin-left: 10px; margin-top: 10px;" type="button" class="btn btn-danger deleteMedicine" data-delete_id="'+countMedicine+'" id="meicineid'+countMedicine+'" value-="'+obj[index].id+'">Delete</button></td></tr>';
+				$('.medicine').append(html);
+		 	});
+			var message=obj[0].medicineupdate;
+			console.log(message);
+			if(message == "true"){
 			$('#message1').show();
     		$('#message2').show();
     		$('#message3').show();
-    		$('#messagepass').text("Recored Delete Successsfully");
+    		$('#messagepass').text("Record Deleted Successsfully");
     		}
 		});
 	});
@@ -322,11 +396,6 @@ $(document).ready(function(){
 		$('#message2').hide();
 		$('#message3').hide();
    	    $(this).tab('show');
-   	    var medicinelist =  $(this).text(); 
-   	    console.log(medicinelist);
-   	    if(medicinelist=="Medicine list"){
-   	    	location.reload();
-   	    }
    	});
 });
 </script>
@@ -719,13 +788,13 @@ border-radius: 0px;
 					</div>
 					<div class="form-group">				
 						<div class="col-sm-offset-2 col-sm-3 margin_bottom_5px">
-							<input id="edit_mfg_cmp_name" class="form-control validate[custom[popup_category_validation]]" type="text" maxlength="50" placeholder="Manufacturer Company Name" value="fasffeeee" name="mfg_cmp_name">
+							<input id="edit_mfg_cmp_name" class="form-control " type="text" maxlength="50" placeholder="Manufacturer Company Name" value="fasffeeee" name="mfg_cmp_name">
 						</div>
 						<div class="col-sm-2 margin_bottom_5px">
-							<input id="edit_manufactured_date" class="form-control validate[required]" type="text" name="manufactured_date" placeholder="Manufactured Date" value="2020-03-01" readonly="">
+							<input id="edit_manufactured_date" class="form-control " type="text" name="manufactured_date" placeholder="Manufactured Date" value="2020-03-01" readonly="">
 						</div>	
 						<div class="col-sm-2 margin_bottom_5px">
-							<input id="edit_expiry_date" class="form-control validate[required]" type="text" name="expiry_date" placeholder="Expiry Date" value="2021-01-22" readonly="">
+							<input id="edit_expiry_date" class="form-control " type="text" name="expiry_date" placeholder="Expiry Date" value="2021-01-22" readonly="">
 						</div>									
 					</div>			
 					<div class="col-sm-offset-2 col-sm-8">

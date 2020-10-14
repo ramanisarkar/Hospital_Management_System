@@ -182,15 +182,15 @@ public class Patient extends HttpServlet {
 	}
 
 	private void patientRagistrationList(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String patientId = request.getParameter("patientId");
+		int patientId = Integer.parseInt(request.getParameter("patientId"));
 		System.out.println(patientId);
 
 		PatientRegistretionVo patientRegistretionVo = new PatientRegistretionVo();
-		patientRegistretionVo.setPatientid(patientId);
+		patientRegistretionVo.setId(patientId);
 
 		PatientRegistreationDao patientRegistreationDao = new PatientRegistreationDao();
 		ArrayList<PatientRegistretionVo> patientList = patientRegistreationDao.getPatient(patientRegistretionVo);
-
+		System.out.println(patientList);
 		List<PatientList> list = new ArrayList<PatientList>();
 		for (PatientRegistretionVo patient : patientList) {
 			String patientid = patient.getPatientid();
@@ -217,7 +217,7 @@ public class Patient extends HttpServlet {
 			String bloodgroup = patient.getBloodgroup();
 			PatientList common = new PatientList();
 			common.setGuardianid(gardian);
-			common.setPatientid(patientid);
+			common.setPatientid(patientid.concat("-").concat(firstName));
 			common.setSymptoms(symptoms);
 			common.setFirstname(firstName);
 			common.setBloodgroup(bloodgroup);
@@ -266,7 +266,8 @@ public class Patient extends HttpServlet {
 			int id = patient.getId();
 			String photo = patient.getProfileimage();
 			String name = patient.getFirstname();
-			String psientid = patient.getPatientid();
+			String psientid = patient.getPatientregistreationid().getPatientid();
+			System.out.println(psientid);
 			String mobile = patient.getMobileno();
 			String bloodgroup = patient.getBloodgroup();
 			java.sql.Date admitedate = patient.getAdmintdate();
@@ -332,7 +333,7 @@ public class Patient extends HttpServlet {
 		try {
 			HttpSession session = request.getSession();
 			int adminid = (int) session.getAttribute("patientadminid");
-			String patientid = request.getParameter("patientId");
+			int patientid = Integer.parseInt(request.getParameter("patientId"));
 			String email = request.getParameter("email");
 			String firstName = request.getParameter("firstname");
 			String middleName = request.getParameter("middlename");
@@ -415,9 +416,12 @@ public class Patient extends HttpServlet {
 
 			AdminVo adminVo = new AdminVo();
 			adminVo.setId(adminid);
-
+			
+			PatientRegistretionVo patientRegistretionVo = new PatientRegistretionVo();
+			patientRegistretionVo.setId(patientid);
+			
 			PatientVo patientVo = new PatientVo();
-			patientVo.setPatientid(patientid);
+			patientVo.setPatientregistreationid(patientRegistretionVo);
 			patientVo.setFirstname(firstName);
 			patientVo.setMidalname(middleName);
 			patientVo.setLastname(lastName);
@@ -534,7 +538,8 @@ public class Patient extends HttpServlet {
 		List<PatientList> list = new ArrayList<PatientList>();
 		for (PatientVo patient : patientList) {
 			int adminid = patient.getAdminid().getId();
-			String patientid = patient.getPatientid();
+			int patientid = patient.getPatientregistreationid().getId();
+			String patinet = patient.getPatientregistreationid().getPatientid();
 			String firstName = patient.getFirstname();
 			String middleName = patient.getMidalname();
 			String lastName = patient.getLastname();
@@ -589,9 +594,10 @@ public class Patient extends HttpServlet {
 			String symptoms = patient.getSymptoms();
 			String joiningdate = patient.getJoiningdate();
 			PatientList common = new PatientList();
+			common.setPatientid(patinet.concat("-").concat(firstName));
 			common.setId(patientId);
 			common.setAdminid(adminid);
-			common.setPatientid(patientid);
+			common.setPatientintid(patientid);
 			common.setFirstname(firstName);
 			common.setMidalname(middleName);
 			common.setLastname(lastName);
@@ -647,7 +653,7 @@ public class Patient extends HttpServlet {
 
 		int adminid = Integer.parseInt(request.getParameter("adminId"));
 		int id = Integer.parseInt(request.getParameter("id"));
-		String patientid = request.getParameter("patientId");
+		int patientid = Integer.parseInt(request.getParameter("patientId"));
 		String email = request.getParameter("email");
 		String firstName = request.getParameter("firstname");
 		String middleName = request.getParameter("middlename");
@@ -734,9 +740,12 @@ public class Patient extends HttpServlet {
 		DoctorVo doctorVo = new DoctorVo();
 		doctorVo.setId(doctor);
 
+		PatientRegistretionVo patientRegistretionVo = new PatientRegistretionVo();
+		patientRegistretionVo.setId(patientid);
+		
 		PatientVo patientVo = new PatientVo();
 		patientVo.setId(id);
-		patientVo.setPatientid(patientid);
+		patientVo.setPatientregistreationid(patientRegistretionVo);
 		patientVo.setFirstname(firstName);
 		patientVo.setMidalname(middleName);
 		patientVo.setLastname(lastName);

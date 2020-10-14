@@ -110,8 +110,7 @@ public class Login extends HttpServlet {
 					logindao.logintime(loginvo);
 
 					response.sendRedirect("Admin_Login.jsp");
-					
-				} 
+				}
 //				else if (roll.equalsIgnoreCase("Professor")) {
 //					ProfessorVo professorvo = new ProfessorVo();
 //					professorvo.setEmail(email);

@@ -22,9 +22,6 @@ public class PatientVo {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "Id")
 	private int id;
-	
-	@Column(name = "PatientId")
-	private String patientid;
 
 	@Column(name = "GuardianId")
 	private String guardianid;
@@ -145,6 +142,10 @@ public class PatientVo {
 	private AdminVo adminid;
 	
 	@ManyToOne
+	@JoinColumn(name="PatientRegistretionId")
+	private PatientRegistretionVo patientregistreationid;
+	
+	@ManyToOne
 	@JoinColumn(name="DoctorId")
 	private DoctorVo doctorid;
 
@@ -162,12 +163,12 @@ public class PatientVo {
 		this.id = id;
 	}
 
-	public String getPatientid() {
-		return patientid;
+	public PatientRegistretionVo getPatientregistreationid() {
+		return patientregistreationid;
 	}
 
-	public void setPatientid(String patientid) {
-		this.patientid = patientid;
+	public void setPatientregistreationid(PatientRegistretionVo patientregistreationid) {
+		this.patientregistreationid = patientregistreationid;
 	}
 
 	public String getGuardianid() {

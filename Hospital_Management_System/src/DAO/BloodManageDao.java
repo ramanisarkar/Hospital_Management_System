@@ -153,6 +153,7 @@ public class BloodManageDao {
 	public ArrayList<BloodStockVo> bloodGroupList(BloodStockVo bloodStockVo) {
 		List<BloodStockVo> bloodManageList = new ArrayList<BloodStockVo>();
 		try {
+			System.out.println(bloodStockVo.getBloodgroup());
 			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
 			Session session = sessionfactory.openSession();
 			Transaction transaction = session.beginTransaction();
@@ -201,5 +202,54 @@ public class BloodManageDao {
 			e.printStackTrace();
 		}
 		return (ArrayList<BloodStockVo>) bloodManageList;
+	}
+
+	public ArrayList<BloodOutwordVo> bloodOutwordEdit(BloodOutwordVo bloodOutwordVo) {
+		List<BloodOutwordVo> bloodOutwordList = new ArrayList<BloodOutwordVo>();
+		try {
+			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+			Session session = sessionfactory.openSession();
+			Transaction transaction = session.beginTransaction();
+			Query q = session.createQuery("from BloodOutwordVo AS n where n.id =:id");
+			q.setParameter("id", bloodOutwordVo.getId());
+			bloodOutwordList = q.list();
+			transaction.commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return (ArrayList<BloodOutwordVo>) bloodOutwordList;
+	}
+
+	public String bloodOutwordUpdate(BloodOutwordVo bloodOutwordVo) {
+		String chack;
+		try {
+			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+			Session session = sessionfactory.openSession();
+			Transaction transaction = session.beginTransaction();
+			session.update(bloodOutwordVo);
+			transaction.commit();
+			session.close();
+			}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return chack="true";
+	}
+	public String deleteBloodOutword(BloodOutwordVo bloodOutwordVo) {
+		String message = null;
+		try {
+			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+			Session session = sessionfactory.openSession();
+			Transaction transaction = session.beginTransaction();
+			Query q = session.createQuery("delete from BloodOutwordVo AS n where n.id =:id");
+			q.setParameter("id", bloodOutwordVo.getId());
+			q.executeUpdate();
+			transaction.commit();
+			session.close();
+		} catch (Exception e) {
+			return message = "error";
+		}
+		return message = "true";
 	}
 }

@@ -10,6 +10,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.AnnotationConfiguration;
 
 import VO.CategoryVo;
+import VO.MedicineVo;
 import VO.NurseVo;
 
 public class CategoryDao {
@@ -60,5 +61,23 @@ public class CategoryDao {
 			e.printStackTrace();
 		}
 		return (ArrayList<CategoryVo>) categoryList;
+	}
+	public String deleteMedicine(MedicineVo medicineVo) {
+		String message = null;
+		try {
+			System.out.println(medicineVo.getId());
+			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+			Session session = sessionfactory.openSession();
+			Transaction transaction = session.beginTransaction();
+			Query q = session.createQuery("delete from MedicineVo AS d where d.categoryid =:id");
+			q.setParameter("id", medicineVo.getCategoryid());
+			q.executeUpdate();
+			transaction.commit();
+			session.close();
+		} catch (Exception e) {
+			return message = "error";
+		}
+		return message = "true";
+		
 	}
 }

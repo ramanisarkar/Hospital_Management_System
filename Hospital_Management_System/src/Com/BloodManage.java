@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 
 import DAO.BloodDonorDao;
 import DAO.BloodManageDao;
+import DAO.PatientDao;
 import DAO.PatientRegistreationDao;
 import VO.AdminVo;
 import VO.BloodDonorVo;
@@ -83,13 +84,20 @@ public class BloodManage extends HttpServlet {
 		if (flag.equalsIgnoreCase("editBloodDonor")) {
 			bloodDonorEdit(request, response);
 		}
-		if (flag.equalsIgnoreCase("deleteBloodManage")) {
-			bloodManagetDelete(request, response);
-			bloodManagetList(request, response);
+		if (flag.equalsIgnoreCase("editBloodOutword")) {
+			bloodOutwordEdit(request, response);
+		}
+		if (flag.equalsIgnoreCase("deleteBloodInword")) {
+			bloodInwordDelete(request, response);
+			bloodStock(request, response);
 		}
 		if (flag.equalsIgnoreCase("deleteBloodDonor")) {
 			bloodDonorDelete(request, response);
-			DonorList(request, response);
+			bloodStock(request, response);
+		}
+		if (flag.equalsIgnoreCase("deleteBloodOutword")) {
+			bloodOutwordDelete(request, response);
+			bloodStock(request, response);
 		}
 
 	}
@@ -109,11 +117,14 @@ public class BloodManage extends HttpServlet {
 		}
 		if (flag.equalsIgnoreCase("insertOutword")) {
 			bloodOutwordInsert(request, response);
-			DonorList(request, response);
+			bloodStock(request, response);
 		}
 		if (flag.equalsIgnoreCase("updatebloodinword")) {
+			bloodOutwordUpdate(request, response);
+			bloodStock(request, response);
+		}
+		if (flag.equalsIgnoreCase("updateoutword")) {
 			bloodManagetUpdate(request, response);
-			System.out.println("----------------------------------------------");
 			bloodStock(request, response);
 		}
 		if (flag.equalsIgnoreCase("updatedonor")) {
@@ -132,12 +143,11 @@ public class BloodManage extends HttpServlet {
 		AdminVo adminVo = new AdminVo();
 		adminVo.setId(adminid);
 
-		PatientRegistretionVo patientRegistretionVo = new PatientRegistretionVo();
-		patientRegistretionVo.setAdminid(adminVo);
+		PatientVo patientVo = new PatientVo();
+		patientVo.setAdminid(adminVo);
 
-		PatientRegistreationDao patientRegistreationDao = new PatientRegistreationDao();
-		ArrayList<PatientRegistretionVo> patientRegistration = patientRegistreationDao
-				.patientRegistrationList(patientRegistretionVo);
+		PatientDao patientDao = new PatientDao();
+		ArrayList<PatientVo> patientRegistration = patientDao.patientList(patientVo);
 		session.setAttribute("patientRagistrationList", patientRegistration);
 	}
 
@@ -153,12 +163,11 @@ public class BloodManage extends HttpServlet {
 
 		BloodManageDao bloodManageDao = new BloodManageDao();
 		ArrayList<BloodStockVo> bloodstock = bloodManageDao.bloodGroupStock(bloodStockVo);
-		
-		
+
 		ArrayList<BloodManageList> list = new ArrayList<BloodManageList>();
 		for (BloodStockVo bloodGroup : bloodstock) {
 			int stock = bloodGroup.getNumberofbags();
-			String bloodgroup = bloodGroup.getBloodgroup(); 
+			String bloodgroup = bloodGroup.getBloodgroup();
 			BloodManageList common = new BloodManageList();
 			common.setBloodgroup(bloodgroup);
 			common.setNumberofbags(stock);
@@ -210,8 +219,7 @@ public class BloodManage extends HttpServlet {
 			bloodManageVo.setJoiningdate(joiningdate);
 			bloodManageVo.setBloodgroup(bloodGroup);
 			bloodManageVo.setNumberofbags(numberOfBags);
-			
-			
+
 			BloodManageDao bloodManageDao = new BloodManageDao();
 			String chackblood = bloodManageDao.bloodManageInsert(bloodManageVo);
 			if (chackblood == "true") {
@@ -225,13 +233,13 @@ public class BloodManage extends HttpServlet {
 				System.out.println(st.size());
 				System.out.println(st);
 				int stock = st.get(0).getNumberofbags();
-				stock = stock+numberOfBags;
+				stock = stock + numberOfBags;
 				System.out.println(stock);
 				bloodStockVo.setNumberofbags(stock);
-				
+
 				String bloodstock = bloodManageDao.bloodStockUpdate(bloodStockVo);
-				
-				bloodmanageupdate = bloodstock ;
+
+				bloodmanageupdate = bloodstock;
 			} else {
 				bloodmanageupdate = "false";
 			}
@@ -321,15 +329,14 @@ public class BloodManage extends HttpServlet {
 	private void bloodOutwordInsert(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			HttpSession session = request.getSession();
-
 			int adminid = (int) session.getAttribute("bloodManageAdminId");
 			int patientid = Integer.parseInt(request.getParameter("patientId"));
 			String date = request.getParameter("date");
 			int numberofbag = Integer.parseInt(request.getParameter("numberofbags"));
 			int charge = Integer.parseInt(request.getParameter("charge"));
 			String total = request.getParameter("total");
-			String bloogroup = request.getParameter("bloodgroup");
-
+			String bloogroup = request.getParameter("blood_group");
+			System.out.println(bloogroup);
 			Timestamp t1 = new Timestamp(System.currentTimeMillis());
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy  hh:mm:ss aa");
 			String joiningdate = sdf.format(t1);
@@ -354,9 +361,14 @@ public class BloodManage extends HttpServlet {
 			bloodStockVo.setAdminid(adminVo);
 			BloodManageDao bloodManageDao = new BloodManageDao();
 			ArrayList<BloodStockVo> bloodStock = bloodManageDao.bloodGroupList(bloodStockVo);
+			System.out.println("------------------");
+			System.out.println(bloodStock.size());
+			System.out.println(bloodStock);
 			if (bloodStock.isEmpty() == false) {
 				int stock = bloodStock.get(0).getNumberofbags();
+				System.out.println(stock);
 				if (stock >= numberofbag) {
+					System.out.println("conform");
 					numberofbag = stock - numberofbag;
 					bloodStockVo.setNumberofbags(numberofbag);
 					bloodStockVo.setBloodgroup(bloogroup);
@@ -371,6 +383,8 @@ public class BloodManage extends HttpServlet {
 					} else {
 						bloodmanageupdate = "false";
 					}
+				} else {
+					bloodmanageupdate = "false";
 				}
 			}
 		} catch (Exception e) {
@@ -497,7 +511,7 @@ public class BloodManage extends HttpServlet {
 			common.setName(name);
 			common.setEmail(email);
 			common.setLastdonationdate(date);
-			common.setEmail(email);
+			common.setMobileno(mobile);
 			common.setBloodgroup(bloodgroup);
 			common.setNumberofbags(bag);
 			common.setBloodmanageupdate(bloodmanageupdate);
@@ -510,6 +524,7 @@ public class BloodManage extends HttpServlet {
 		out.flush();
 		out.close();
 	}
+
 	private void bloodManagetEdit(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			HttpSession session = request.getSession();
@@ -683,6 +698,61 @@ public class BloodManage extends HttpServlet {
 		}
 	}
 
+	private void bloodOutwordEdit(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			HttpSession session = request.getSession();
+			int bloodOutwordId = Integer.parseInt(request.getParameter("bloodOutwordId"));
+
+			BloodOutwordVo bloodOutwordVo = new BloodOutwordVo();
+			bloodOutwordVo.setId(bloodOutwordId);
+
+			BloodManageDao bloodManageDao = new BloodManageDao();
+			ArrayList<BloodOutwordVo> bloodOutwordList = bloodManageDao.bloodOutwordEdit(bloodOutwordVo);
+			session.setAttribute("outwordbeg", bloodOutwordList.get(0).getNumberofbag());
+			List<BloodManageList> list = new ArrayList<BloodManageList>();
+			for (BloodOutwordVo bloodOutword : bloodOutwordList) {
+				int adminid = bloodOutword.getAdminid().getId();
+				String date = bloodOutword.getDate();
+				int noofbeg = bloodOutword.getNumberofbag();
+				int charg = bloodOutword.getCharge();
+				String total = bloodOutwordVo.getTotal();
+				int patientId = bloodOutword.getPatientid().getId();
+				String firstname = bloodOutword.getPatientid().getFirstname();
+				String midalname = bloodOutword.getPatientid().getMidalname();
+				String lastname = bloodOutword.getPatientid().getLastname();
+				java.sql.Date dob = bloodOutword.getPatientid().getBirthdate();
+				String bod = dob.toString();
+				String bloodgroup = bloodOutword.getPatientid().getBloodgroup();
+				String gender = bloodOutword.getPatientid().getGender();
+				String joiningdate = bloodOutword.getJoiningdate();
+				BloodManageList common = new BloodManageList();
+				common.setId(bloodOutwordId);
+				common.setAdminid(adminid);
+				common.setName(firstname);
+				common.setMiddelname(midalname);
+				common.setLastname(lastname);
+				common.setDob(date);
+				common.setLastdonationdate(bod);
+				common.setGender(gender);
+				common.setBloodgroup(bloodgroup);
+				common.setDonorId(patientId);
+				common.setCharge(charg);
+				common.setTotal(total);
+				common.setNumberofbags(noofbeg);
+				common.setJoiningdate(joiningdate);
+				list.add(common);
+			}
+			Gson gson = new Gson();
+			System.out.println(gson.toJson(list));
+			PrintWriter out = response.getWriter();
+			out.print(gson.toJson(list));
+			out.flush();
+			out.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	private void bloodManagetUpdate(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			HttpSession session = request.getSession();
@@ -724,25 +794,24 @@ public class BloodManage extends HttpServlet {
 			BloodManageDao bloodManageDao = new BloodManageDao();
 			String chackblood = bloodManageDao.bloodManageUpdate(bloodManageVo);
 			if (chackblood == "true") {
-				
+
 				BloodStockVo bloodStockVo = new BloodStockVo();
 				bloodStockVo.setBloodgroup(bloodGroup);
 				bloodStockVo.setAdminid(adminVo);
 				ArrayList<BloodStockVo> stock = bloodManageDao.bloodGroupList(bloodStockVo);
-				int bag =(int) session.getAttribute("bag");
+				int bag = (int) session.getAttribute("bag");
 				int i = stock.get(0).getNumberofbags();
 				int st = i - bag;
-				st = st+numberOfBags;
-				int bid=stock.get(0).getId();
+				st = st + numberOfBags;
 				bloodStockVo.setBloodgroup(bloodGroup);
 				bloodStockVo.setNumberofbags(numberOfBags);
 				bloodManageDao.bloodStockUpdate(bloodStockVo);
-				
+
 				bloodmanageupdate = "true";
 			} else {
 				bloodmanageupdate = "false";
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -799,17 +868,97 @@ public class BloodManage extends HttpServlet {
 		}
 	}
 
-	private void bloodManagetDelete(HttpServletRequest request, HttpServletResponse response) {
+	private void bloodOutwordUpdate(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			int bloodManageId = Integer.parseInt(request.getParameter("bloodManageId"));
+			HttpSession session = request.getSession();
+			int id = Integer.parseInt(request.getParameter("id"));
+			int adminid = Integer.parseInt(request.getParameter("adminid"));
+			String joiningdate = request.getParameter("joining");
+			int patientid = Integer.parseInt(request.getParameter("patientId"));
+			String date = request.getParameter("date");
+			int numberofbag = Integer.parseInt(request.getParameter("numberofbags"));
+			int charge = Integer.parseInt(request.getParameter("charge"));
+			String total = request.getParameter("total");
+			String bloogroup = request.getParameter("blood_group");
+			System.out.println(bloogroup);
+
+			AdminVo adminVo = new AdminVo();
+			adminVo.setId(adminid);
+
+			PatientVo patientVo = new PatientVo();
+			patientVo.setId(patientid);
+
+			BloodOutwordVo bloodOutwordVo = new BloodOutwordVo();
+			bloodOutwordVo.setId(id);
+			bloodOutwordVo.setAdminid(adminVo);
+			bloodOutwordVo.setCharge(charge);
+			bloodOutwordVo.setDate(date);
+			bloodOutwordVo.setJoiningdate(joiningdate);
+			bloodOutwordVo.setNumberofbag(numberofbag);
+			bloodOutwordVo.setPatientid(patientVo);
+			bloodOutwordVo.setTotal(total);
+
+			BloodManageDao bloodManageDao = new BloodManageDao();
+			String chackblood = bloodManageDao.bloodOutwordUpdate(bloodOutwordVo);
+			if (chackblood == "true") {
+
+				BloodStockVo bloodStockVo = new BloodStockVo();
+				bloodStockVo.setBloodgroup(bloogroup);
+				bloodStockVo.setAdminid(adminVo);
+				ArrayList<BloodStockVo> stock = bloodManageDao.bloodGroupList(bloodStockVo);
+				int bag = (int) session.getAttribute("outwordbeg");
+				int i = stock.get(0).getNumberofbags();
+				int st = i - bag;
+				st = st + numberofbag;
+				bloodStockVo.setBloodgroup(bloogroup);
+				bloodStockVo.setNumberofbags(numberofbag);
+				bloodManageDao.bloodStockUpdate(bloodStockVo);
+
+				bloodmanageupdate = "true";
+			} else {
+				bloodmanageupdate = "false";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	private void bloodInwordDelete(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			HttpSession session = request.getSession();
+			int adminid = (int) session.getAttribute("bloodManageAdminId");
+			int bloodManageId = Integer.parseInt(request.getParameter("bloodInwordId"));
+
+			AdminVo adminVo = new AdminVo();
+			adminVo.setId(adminid);
 
 			BloodManageVo bloodManageVo = new BloodManageVo();
 			bloodManageVo.setId(bloodManageId);
 
 			BloodManageDao bloodManageDao = new BloodManageDao();
+
+			ArrayList<BloodManageVo> bloodinwordlist = bloodManageDao.bloodManageEdit(bloodManageVo);
+			String bloodgroup = bloodinwordlist.get(0).getBloodgroup();
+			int noofbag = bloodinwordlist.get(0).getNumberofbags();
+
 			String message = bloodManageDao.deleteBloodManage(bloodManageVo);
 			if (message == "true") {
-				bloodmanageupdate = "true";
+				BloodStockVo bloodStockVo = new BloodStockVo();
+				bloodStockVo.setAdminid(adminVo);
+				bloodStockVo.setBloodgroup(bloodgroup);
+
+				ArrayList<BloodStockVo> bloodstok = bloodManageDao.bloodGroupList(bloodStockVo);
+				int stock = bloodstok.get(0).getNumberofbags();
+				stock = stock - noofbag;
+
+				bloodStockVo.setNumberofbags(stock);
+				String update = bloodManageDao.bloodStockUpdate(bloodStockVo);
+				if (update == "true") {
+					bloodmanageupdate = "true";
+				} else {
+					bloodmanageupdate = "false";
+				}
 			} else {
 				bloodmanageupdate = "false";
 			}
@@ -820,7 +969,12 @@ public class BloodManage extends HttpServlet {
 
 	private void bloodDonorDelete(HttpServletRequest request, HttpServletResponse response) {
 		try {
+			HttpSession session = request.getSession();
+			int adminid = (int) session.getAttribute("bloodManageAdminId");
 			int bloodDonorId = Integer.parseInt(request.getParameter("bloodDonorId"));
+
+			AdminVo adminVo = new AdminVo();
+			adminVo.setId(adminid);
 
 			BloodDonorVo bloodDonorVo = new BloodDonorVo();
 			bloodDonorVo.setId(bloodDonorId);
@@ -829,12 +983,79 @@ public class BloodManage extends HttpServlet {
 			bloodManageVo.setDonorid(bloodDonorVo);
 
 			BloodDonorDao bloodDonorDao = new BloodDonorDao();
+			BloodManageDao bloodManageDao = new BloodManageDao();
+			ArrayList<BloodManageVo> bloodinwordlist = bloodManageDao.bloodManageEdit(bloodManageVo);
+			
+			int totalbloodbag = 0;
+			String bloodgroup = bloodinwordlist.get(0).getBloodgroup();
+
+			for (BloodManageVo bloodManage : bloodinwordlist) {
+				int stock = bloodManage.getNumberofbags();
+				totalbloodbag = totalbloodbag + stock;
+			}
 
 			String message = bloodDonorDao.deleteBloodManage(bloodManageVo);
 
 			if (message == "true") {
-				String message1 = bloodDonorDao.deleteBloodDonor(bloodDonorVo);
-				if (message1 == "true") {
+				BloodStockVo bloodStockVo = new BloodStockVo();
+				bloodStockVo.setAdminid(adminVo);
+				bloodStockVo.setBloodgroup(bloodgroup);
+
+				ArrayList<BloodStockVo> bloodstok = bloodManageDao.bloodGroupList(bloodStockVo);
+				int stock = bloodstok.get(0).getNumberofbags();
+				stock = stock - totalbloodbag;
+
+				bloodStockVo.setNumberofbags(stock);
+				String update = bloodManageDao.bloodStockUpdate(bloodStockVo);
+				if (update == "true") {
+					String message1 = bloodDonorDao.deleteBloodDonor(bloodDonorVo);
+					if (message1 == "true") {
+						bloodmanageupdate = "true";
+					} else {
+						bloodmanageupdate = "false";
+					}
+				} else {
+					bloodmanageupdate = "false";
+				}
+			} else {
+				bloodmanageupdate = "false";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void bloodOutwordDelete(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			HttpSession session = request.getSession();
+			int adminid = (int) session.getAttribute("bloodManageAdminId");
+			int bloodOutworsId = Integer.parseInt(request.getParameter("bloodOutwordId"));
+
+			AdminVo adminVo = new AdminVo();
+			adminVo.setId(adminid);
+
+			BloodOutwordVo bloodOutwordVo = new BloodOutwordVo();
+			bloodOutwordVo.setId(bloodOutworsId);
+
+			BloodManageDao bloodManageDao = new BloodManageDao();
+
+			ArrayList<BloodOutwordVo> bloodinwordlist = bloodManageDao.bloodOutwordEdit(bloodOutwordVo);
+			String bloodgroup = bloodinwordlist.get(0).getPatientid().getBloodgroup();
+			int noofbag = bloodinwordlist.get(0).getNumberofbag();
+
+			String message = bloodManageDao.deleteBloodOutword(bloodOutwordVo);
+			if (message == "true") {
+				BloodStockVo bloodStockVo = new BloodStockVo();
+				bloodStockVo.setAdminid(adminVo);
+				bloodStockVo.setBloodgroup(bloodgroup);
+
+				ArrayList<BloodStockVo> bloodstok = bloodManageDao.bloodGroupList(bloodStockVo);
+				int stock = bloodstok.get(0).getNumberofbags();
+				stock = stock + noofbag;
+
+				bloodStockVo.setNumberofbags(stock);
+				String update = bloodManageDao.bloodStockUpdate(bloodStockVo);
+				if (update == "true") {
 					bloodmanageupdate = "true";
 				} else {
 					bloodmanageupdate = "false";

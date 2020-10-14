@@ -17,10 +17,14 @@
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-<script src="js/Patient_Reg.js"></script>
-<script src="js/Patient_Reg2.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js"></script>
+
+<script src="js/Patient_Reg_javascript.js"></script>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
+
 <style>
 .require-field{
 color: red;
@@ -304,7 +308,7 @@ border-radius: 0px;
 									<select id="insertpatientid" class="form-control " name="patientId">
 										<option value="" disabled selected hidden="">Select Patient</option>
 										<c:forEach items="${sessionScope.patientRagistrationList }" var="q">
-											<option value="${q.patientid }">${q.firstname }</option>
+											<option value="${q.id }">${q.patientid }-${q.firstname }</option>
 										</c:forEach>
 								   </select>
 								   <span id="error_patient_id" class="text-danger"></span>
@@ -331,7 +335,12 @@ border-radius: 0px;
 				  			<div class="form-group row">
 				  				<label class="col-sm-2 col-form-label text" >Date of birth<span style="color: red;">*</span></label>
 					    		<div class="col-sm-4">
-					      			<input type="date" id="insertdob" class="form-control" name="dob" placeholder="Date of birth" required>
+					    			<div class="input-group date" data-date-format="dd/mm/yyyy">
+						            	<input  type="text" id="insertdob" name="dob"  class="form-control" placeholder="dd/mm/yyyy">
+							            <div class="input-group-addon" >
+							              <span class="glyphicon glyphicon-th"></span>
+							            </div>
+						          	</div>
 					      			<span id="error_date_of_birth" class="text-danger"></span>
 					    		</div>
 					    		<label class="col-sm-2 col-form-label text" >Blood Group<span style="color: red;">*</span></label>
@@ -590,7 +599,12 @@ border-radius: 0px;
 					<div class="form-group row">
 			    		<label class="col-sm-2 col-form-label text" >Admit Date<span style="color: red;">*</span></label>
 			    		<div class="col-sm-7">
-			      			<input type="date" id="insert_admiit_date" class="form-control" name="admitdate" required>
+			    			<div class="input-group date" data-date-format="dd/mm/yyyy">
+				            	<input  type="text" id="insert_admiit_date" name="admitdate"class="form-control" placeholder="dd/mm/yyyy" required>
+					            <div class="input-group-addon" >
+					              <span class="glyphicon glyphicon-th"></span>
+					            </div>
+				          	</div>
 			      			<span id="error_admiit_date" class="text-danger"></span>
 			    		</div>
 			    	</div>
@@ -662,9 +676,6 @@ border-radius: 0px;
 									Stap3</a></li>
 						</ul>
 						<div class="tab-content">
-				<div id="edithome" class="tab-pane fade " style="margin-top: 10px;">
-				</div>
-				
 				<div id="editmenu1" class="tab-pane fade">
 					<div style="margin-top: 15px;"><h4>Personal Information</h4></div>
 					<div style="border-bottom: 1px solid gray;"></div>
@@ -673,7 +684,12 @@ border-radius: 0px;
 							<div class="form-group row">
 					    		<label class="col-sm-2 col-form-label text" >Patient Id<span style="color: red;">*</span></label>
 								<div class="col-sm-4">
-								   <input type="text" id="editpatientid" class="form-control" name="patientId" readonly>
+								   <select id="editpatientid"class="form-control" name="patientId">
+										<option value="" disabled selected hidden="">Select Patient</option>
+										<c:forEach items="${sessionScope.patientRagistrationList }" var="q">
+											<option value="${q.id }">${q.patientid }-${q.firstname }</option>
+										</c:forEach>
+								   </select>
 								</div>
 					    		<label class="col-sm-2 col-form-label text" >First Name<span style="color: red;">*</span></label>
 					    		<div class="col-sm-4">
@@ -691,13 +707,18 @@ border-radius: 0px;
 					    		<label  class="col-sm-2 col-form-label text" >Last Name<span style="color: red;">*</span></label>
 					    		<div class="col-sm-4">
 					      			<input type="text" id="editlastname"class="form-control" name="lastname" placeholder="Last Name" required>
-					      			<span id=error_edit_last_name" class="text-danger"></span>
+					      			<span id="error_edit_last_name" class="text-danger"></span>
 					    		</div>
 				  			</div>
 				  			<div class="form-group row">
 				  				<label class="col-sm-2 col-form-label text" >Date of birth<span style="color: red;">*</span></label>
 					    		<div class="col-sm-4">
-					      			<input type="date" id="editdob" class="form-control" name="dob" placeholder="Date of birth" required>
+					    			<div class="input-group date" data-date-format="dd/mm/yyyy">
+						            	<input  type="text" id="editdob" name="dob"class="form-control" placeholder="dd/mm/yyyy" required>
+							            <div class="input-group-addon" >
+							              <span class="glyphicon glyphicon-th"></span>
+							            </div>
+						          	</div>
 					      			<span id="error_edit_date_of_birth" class="text-danger"></span>
 					    		</div>
 					    		<label class="col-sm-2 col-form-label text" >Blood Group<span style="color: red;">*</span></label>
@@ -957,7 +978,12 @@ border-radius: 0px;
 					<div class="form-group row">
 			    		<label class="col-sm-2 col-form-label text" >Admit Date<span style="color: red;">*</span></label>
 			    		<div class="col-sm-7">
-			      			<input type="date" id="edit_admiit_date" class="form-control" name="admitdate" required>
+			    			<div class="input-group date" data-date-format="dd/mm/yyyy">
+				            	<input  type="text"  name="admitdate" id="edit_admiit_date" class="form-control" placeholder="dd/mm/yyyy">
+					            <div class="input-group-addon" >
+					              <span class="glyphicon glyphicon-th"></span>
+					            </div>
+				          	</div>
 			    		</div>
 			    	</div>
 			    	<div class="form-group row">

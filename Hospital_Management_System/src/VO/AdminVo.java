@@ -116,6 +116,12 @@ public class AdminVo {
 
     @OneToMany( mappedBy = "adminid", cascade = CascadeType.REMOVE)
     private List<BloodOutwordVo> bloodoutwordid;
+    
+	@OneToMany( mappedBy = "adminid" , cascade = CascadeType.REMOVE)
+	private List<EventVo> eventid;
+
+    @OneToMany( mappedBy = "adminid", cascade = CascadeType.REMOVE)
+    private List<EventForVo> eventforid;
 
 	public int getId() {
 		return id;
@@ -379,5 +385,21 @@ public class AdminVo {
 
 	public void setBloodoutwordid(List<BloodOutwordVo> bloodoutwordid) {
 		this.bloodoutwordid = bloodoutwordid;
+	}
+
+	public List<EventVo> getEventid() {
+		return eventid;
+	}
+
+	public void setEventid(List<EventVo> eventid) {
+		this.eventid = eventid;
+	}
+
+	public List<EventForVo> getEventforid() {
+		return eventforid;
+	}
+
+	public void setEventforid(List<EventForVo> eventforid) {
+		this.eventforid = eventforid;
 	}
 }

@@ -19,6 +19,7 @@ import DAO.CategoryDao;
 import VO.AdminVo;
 import VO.CategoryList;
 import VO.CategoryVo;
+import VO.MedicineVo;
 
 /**
  * Servlet implementation class Category
@@ -101,7 +102,11 @@ public class Category extends HttpServlet {
 			CategoryVo categoryVo = new CategoryVo();
 			categoryVo.setId(categoryId);
 			
+			MedicineVo medicineVo = new MedicineVo();
+			medicineVo.setCategoryid(categoryVo);
+			
 			CategoryDao categoryDao = new CategoryDao();
+			categoryDao.deleteMedicine(medicineVo);
 			String message = categoryDao.deleteCategory(categoryVo);
 			if(message == "true") {
 				String respose = "seccess";

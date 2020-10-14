@@ -139,9 +139,10 @@ public class PatientRegistreationDao {
 			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
 			Session session = sessionfactory.openSession();
 			Transaction transaction = session.beginTransaction();
-			Query q = session.createQuery("from PatientRegistretionVo AS n where n.patientid =:id");
-			q.setParameter("id", patientRegistretionVo.getPatientid());
+			Query q = session.createQuery("from PatientRegistretionVo AS n where n.id =:id");
+			q.setParameter("id", patientRegistretionVo.getId());
 			patientList = q.list();
+			System.out.println(patientList);
 			transaction.commit();
 			session.close();
 		} catch (Exception e) {

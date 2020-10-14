@@ -1,8 +1,8 @@
 package VO;
 
 public class BloodManageList {
-	int id,adminid,numberofbags,age,donorId ;
-	String bloodgroup,joiningdate,donorid, bloodmanageupdate,name,middelname,lastname,gender,dob,phone,email,lastdonationdate,address,city,country,state,zipcode,countrycode,mobileno;
+	int id,adminid,numberofbags,age,donorId ,charge ;
+	String bloodgroup,joiningdate,donorid, total,bloodmanageupdate,name,middelname,lastname,gender,dob,phone,email,lastdonationdate,address,city,country,state,zipcode,countrycode,mobileno;
 	public int getId() {
 		return id;
 	}
@@ -32,6 +32,21 @@ public class BloodManageList {
 	}
 	public int getNumberofbags() {
 		return numberofbags;
+	}
+	public String getTotal() {
+		return total;
+	}
+	public void setTotal(String total) {
+		this.total = total;
+	}
+	public int getCharge() {
+		return charge;
+	}
+	public void setCharge(int charge) {
+		this.charge = charge;
+	}
+	public String getDonorid() {
+		return donorid;
 	}
 	public void setNumberofbags(int numberofbags) {
 		this.numberofbags = numberofbags;

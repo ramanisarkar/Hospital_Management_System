@@ -63,5 +63,15 @@
 		
 		<mapping class="VO.BloodStockVo"/>
 		
+		<mapping class="VO.EventVo"/>
+		
+		<mapping class="VO.EventForVo"/>
+		
+		<mapping class="VO.ReportVo"/>
+		
+		<mapping class="VO.SymptomsVo"/>
+
+		<mapping class="VO.OutPatientVo"/>
+		
 	</session-factory>
 </hibernate-configuration>
