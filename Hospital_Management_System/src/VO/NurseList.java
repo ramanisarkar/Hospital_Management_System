@@ -3,8 +3,9 @@ package VO;
 public class NurseList {
 	private int id,adminid,departmentid;
 	private String firstname,midalname,lastname,date,gender,homeeaddrss,homecity,homestate,homecountry,
-	homezipcode,mobilecountrycode,mobileno,phoneno,email,username,password,charge,profileimage,profileimagename,joiningdate
+	homezipcode,mobilecountrycode,mobileno,phoneno,email,username,password,profileimage,profileimagename,joiningdate
 	,departmentname,specailizationname,nurseupdate,nurseemail,nurseuser,nurseemailinvalid,chackusername;
+	float charge;
 	public int getId() {
 		return id;
 	}
@@ -119,10 +120,10 @@ public class NurseList {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getCharge() {
+	public float getCharge() {
 		return charge;
 	}
-	public void setCharge(String charge) {
+	public void setCharge(float charge) {
 		this.charge = charge;
 	}
 	public String getProfileimage() {

@@ -18,48 +18,12 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'  type='text/css'>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js"></script>
-<script src="js/BloodBank.js"></script>
+<script src="js/Blood_Manage.js"></script>
  
-<script>
-
-$(document).ready(function(){
- 	$('.input-group.date').datepicker({format: "dd/mm/yyyy"}); 
-	
- 	$("#datechange").on("change", function() {
- 	    this.setAttribute(
- 	        "data-date",
- 	        moment(this.value, "YYYY-MM-DD")
- 	        .format( this.getAttribute("data-date-format") )
- 	    )
- 	}).trigger("change")
- 	
- 	
- 	$("#datechange1").on("change", function() {
- 	    this.setAttribute(
- 	        "data-date",
- 	        moment(this.value, "YYYY-MM-DD")
- 	        .format( this.getAttribute("data-date-format") )
- 	    )
- 	}).trigger("change")
- 	
- 	$(".nav-tabs a").click(function(){
-   		$("#Bloodtab3").hide();
-   		$("#Bloodtab10").hide();
-   		$("#Bloodtab6").hide();
-   		$("#Bloodta9").hide();
-   		$('#message1').hide();
-		$('#message2').hide();
-		$('#message3').hide();
-		$("#Bloodtab2").show();
-		$("#Bloodtab5").show();
-		$("#Bloodtab8").show();
-   	    $(this).tab('show');
-   	    
-   	});
-});
-</script>
 
 <style type="text/css">
 img.dashboard_background {
@@ -312,24 +276,42 @@ border-radius: 0px;
 #clickBloodOutwordList:focus{
 	outline: none;
 }
+.input-group-addon {
+    background-color: white !important;
+    border: none!important;
+}
+.icone {
+  float: left;
+  height: 20px !important;
+  margin-right: 5px;
+  overflow: hidden;
+  width: 25px !important;
+  text-align: center;
+}
+.nav-tabs>li>a {
+    margin-right: 8px;
+    line-height: 1.42857143;
+    border: 1px solid transparent;
+    border-radius: 4px 4px 0 0;
+}
 </style>
 </head>
 
-<body style="background-color: #f1f4f9; font-family: 'Open Sans',sans-serif;">
+<body style="background-color: #f1f4f9; font-family: 'Open Sans',sans-serif;font-size: 13px;">
 	
 	<c:forEach items="${sessionScope.hospitaldata }" var="q" end="0"> 
-		 <div class="navbar" style="padding-right: 14px;  background-color: white;     height: 69px;" >
+		 <div class="navbar" style="padding-right: 14px;  background-color: white;height: 69px;" >
 		<div class="col-md-3 col-sm-2 col-xs-4">
 			<h3>
 				<img src="ing/hospitalmanagemantlogo.png"
-					class="img-circle head_logo" width="40" height="40" style="    margin-top: -8px;"> <span style="font-size:22px ">Hospital
+					class="img-circle head_logo" width="40" height="40" style="margin-top: -8px;"> <span style="font-size:21px ">Hospital
 					Management System</span>
 			</h3>
 		</div>
 		<ul class="nav navbar-right col-md-9 col-sm-10 col-xs-8">
 			<li class="dropdown"style="margin-left: 80%;">
-				<a style="background-color: white; margin-top: 17px; height: 49px;" data-toggle="dropdown" class="dropdown-toggle " href="javascript:;">
-						<img src="images/<%=session.getAttribute("hospitalimage")%>" height="40px" width="40px" class="img-circle" style="margin-top: -15px;" >								
+				<a style="background-color: white; margin-top: 17px; color: #5f5f5f !important;height: 49px;" data-toggle="dropdown" class="dropdown-toggle " href="javascript:;">
+						<img src="Admin_Images/<%=session.getAttribute("hospitalimage")%>" height="40px" width="40px" class="img-circle" style="margin-top: -15px;" >								
 						<span>${q.hospitalname }</span> <b class="caret"></b>
 				</a>
 				<ul class="dropdown-menu extended logout">
@@ -344,6 +326,7 @@ border-radius: 0px;
 		<div id="message3"style="margin-top:-76px;" hidden=""></div>
 		<ul class="nav nav-pills nav-stacked ullist"style="margin-top: -20px; height: 1170;">
 			<li><a href="Admin_Login.jsp"><span class="icone"><img src="ing/dashboard.png"></span><span class="title">Dashboard</span></a></li>
+			<li><a href="<%=request.getContextPath()%>/PatientRegistration?flag=insert&id=${q.id }"><span class="icone"><i class="fas fa fa-wheelchair" style="color: gray;"></i></span><span class="title">Patient Registration</span></a></li>
 			<li><a href="<%=request.getContextPath()%>/Department?flag=insert&id=${q.id }"><span class="icone"><i class="fas fa-briefcase" style="color: gray;"></i></span><span class="title">Department</span></a></li>
 			<li><a href="<%=request.getContextPath()%>/Specialization?flag=insert&id=${q.id }"><span class="icone"><i class="fa fa-lightbulb" style="color: gray;"></i></span><span class="title">Specialization</span></a></li>
 			<li><a href="<%=request.getContextPath()%>/Doctor?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Doctor" title="Doctor">
@@ -354,7 +337,7 @@ border-radius: 0px;
 			<span class="icone"> <img src="ing/outpatient-logo.png"></span>
 			<span class="title">Outpatient</span></a></li>
 			
-			<li><a href="" class="left-tooltip" data-tooltip="Inpatient" title="Inpatient">
+			<li><a href="<%=request.getContextPath()%>/Patient?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Inpatient" title="Inpatient">
 			<span class="icone"> <img src="ing/Patient-logo.png"></span>
 			<span class="title">Inpatient</span></a></li>
 			
@@ -379,31 +362,36 @@ border-radius: 0px;
 			<span class="icone"> <img src="ing/Medicine-logo.png"></span><span class="title">Medicine</span></a></li>
 			<li><a href="<%=request.getContextPath()%>/TreatmentUpdate?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Treatment" title="Treatment">
 			<span class="icone"> <img src="ing/Treatment-logo.png"></span><span class="title">Treatment</span></a></li>
-			<li><a href="" class="left-tooltip" data-tooltip="Prescription" title="Prescription">
-			<span class="icone"> <img src="ing/Prescription-logo.png"></span><span class="title">Prescription</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Assign Bed-Nurse" title="Assign Bed-Nurse">
+			<li><a href="<%=request.getContextPath()%>/Prescription?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Prescription" title="Prescription">
+			<span class="icone"> <img src="ing/Prescription-logo.png"></span><span class="title">Prescription</span></a></li>
+			<li><a href="<%=request.getContextPath()%>/Patient?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Inpatient" title="Inpatient">
+			<span class="icone"><i class="fa fa-bed" aria-hidden="true" style="color: gray;"></i></span>
+			<span class="title">Add Bad</span></a></li>
+			<li><a href="" class="left-tooltip" data-tooltip="Assign Bed-Nurse" title="Assign Bed-Nurse">
 			<span class="icone"> <img src="ing/Assign-Bed-logo.png"></span><span class="title">Assign Bed-Nurse</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Operation List" title="Operation List">
 			<span class="icone"> <img src="ing/Operation-List-logo.png"></span><span class="title">Operation List</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Diagnosis" title="Diagnosis">
 			<span class="icone"> <img src="ing/Diagnosis-Report-logo.png"></span><span class="title">Diagnosis</span></a></li>
 			<li><a href="<%=request.getContextPath()%>/BloodManage?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Blood Bank" title="Blood Bank">
 			<span class="icone"> <img src="ing/Blood-Bank-logo.png"></span><span class="title">Blood Bank</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Appointment" title="Appointment">
 			<span class="icone"> <img src="ing/Appointment-logo.png"></span><span class="title">Appointment</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Invoice" title="Invoice">
-			<span class="icone"> <img src="ing/payment-logo.png"></span><span class="title">Invoice</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Event" title="Event">
+			<span class="icone"> <img src="ing/payment-logo.png"></span><span class="title">Invoice</span></a></li><li>
+			<a href="<%=request.getContextPath()%>/Event?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Event" title="Event">
 			<span class="icone"> <img src="ing/notice-logo.png"></span><span class="title">Event</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Message" title="Message">
-			<span class="icone"> <img src="ing/message-logo.png"></span><span class="title">Message</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Ambulance" title="Ambulance">
+			<span class="icone"> <img src="ing/message-logo.png"></span><span class="title">Message</span></a></li>
+			<li><a href="<%=request.getContextPath()%>/Ambulance?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Ambulance" title="Ambulance">
 			<span class="icone"> <img src="ing/Ambulance-logo.png"></span><span class="title">Ambulance</span></a></li><li><a href="" class="left-tooltip" data-tooltip="instrument" title="instrument">
 			<span class="icone"> <img src="ing/Instrument-logo.png"></span><span class="title">Instrument</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Report" title="Report">
 			<span class="icone"> <img src="ing/Report-logo.png"></span><span class="title">Report</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Account" title="Account">
-			<span class="icone"> <img src="ing/account-logo.png"></span><span class="title">Account</span></a></li>	
+			<span class="icone"> <img src="ing/account-logo.png"></span><span class="title">Account</span></a></li>
 		</ul>
 	</c:forEach>
 	
-	<div style="margin-top: 83px;"></div>
-	<div id="message2" style="margin-top: 149px;"hidden="" ></div>
-	<div style="margin-left: 236px; padding: 0px 16px; margin-top: -77%; background-color: white;">
+	<div id="message2" style="margin-top: 67px;"hidden="" ></div>
+	<div style="margin-left: 236px; padding: 0px 16px; margin-top: -73%; background-color: white;">
 		<div style="color: green; margin-top: 3px;" id="specializationadd"></div>
 		<div style="padding-top: 15px;"></div>
 		<div class="container" style="margin-right: 90px;">
-			<ul class="nav nav-tabs tabcalss" style="font-size: 14px;">
+			<ul class="nav nav-tabs tabcalss" style="font-size: 13px;font-weight: bold;">
 				<li class="active" id="BloodManagetab">
 					<a href="#home"	data-toggle="tab"><i class="fa fa-bars"aria-hidden="true"id="icone"></i>Blood Stock</a>
 				</li>
@@ -622,9 +610,13 @@ border-radius: 0px;
 						    		</div>
 						    		<label class="col-sm-2 col-form-label text" >Date of birth<span style="color: red;">*</span></label>
 						    		<div class="col-sm-4">
-						      			<input type="date" id="datechange1" name="dob"class="form-control dateformat" data-date="" data-date-format="DD/MM/YYYY" required="required">
-						    		</div>
-						    		
+							    		<div class="input-group date" data-date-format="dd/mm/yyyy">
+							            	<input  type="text" id="datechange1" name="dob" class="form-control" placeholder="dd/mm/yyyy" style="width: 361px;"  required readonly>
+								            <div class="input-group-addon" >
+								              <span class=""></span>
+								            </div>
+							          	</div>
+						          	</div>
 					  			</div>
 					  			<div class="form-group row">
 						    		<label  class="col-sm-2 col-form-label text" >Gender<span style="color: red;">*</span></label>
@@ -707,7 +699,12 @@ border-radius: 0px;
 						    		</div>
 						    		<label class="col-sm-2 col-form-label text" >Date of birth<span style="color: red;">*</span></label>
 						    		<div class="col-sm-4">
-						      			<input type="date"id="donordob" name="dateofbirth"id="datechange1"class="form-control " data-date="" data-date-format="DD/MM/YYYY" required="required">
+						      			<div class="input-group date" data-date-format="dd/mm/yyyy">
+							            	<input  type="text" id="donordob" name="dateofbirth" class="form-control" placeholder="dd/mm/yyyy" style="width: 361px;"  required readonly>
+								            <div class="input-group-addon" >
+								              <span class=""></span>
+								            </div>
+							          	</div>
 						    		</div>
 						    		
 					  			</div>
@@ -876,7 +873,12 @@ border-radius: 0px;
 							</div>
 							<label class="col-sm-2 text" for="last_donet_date">Last Donation Date<span style="color: red;">*</span></label>
 							<div class="col-sm-4">
-								<input type="date" name="lastdate" id="datechange"class="form-control dateformat" data-date="" data-date-format="DD/MM/YYYY" required="required">
+								<div class="input-group date" data-date-format="dd/mm/yyyy">
+					            	<input  type="text" name="lastdate" id="datechange" class="form-control" placeholder="dd/mm/yyyy" style="width: 361px;"  required readonly>
+						            <div class="input-group-addon" >
+						              <span class=""></span>
+						            </div>
+					          	</div>
 							</div>
 						</div>
 					</div>
@@ -967,7 +969,12 @@ border-radius: 0px;
 							</div>
 							<label class="col-sm-2 text" for="last_donet_date">Last Donation Date<span style="color: red;">*</span></label>
 							<div class="col-sm-4">
-								<input type="date" name="lastdate" id="donorinwordlastdate"class="form-control" required="required">
+								<div class="input-group date" data-date-format="dd/mm/yyyy">
+					            	<input  type="text" name="lastdate" id="donorinwordlastdate" class="form-control" placeholder="dd/mm/yyyy" style="width: 361px;"  required readonly>
+						            <div class="input-group-addon" >
+						              <span class=""></span>
+						            </div>
+					          	</div>
 							</div>
 						</div>
 					</div>
@@ -1052,9 +1059,9 @@ border-radius: 0px;
 					    		<label class="col-sm-2 col-form-label text" >Patient Id<span style="color: red;">*</span></label>
 								<div class="col-sm-4">
 									<select id="insertpatientid" class="form-control " name="patientId">
-										<option value="" disabled selected hidden="">Select Patient</option>
-										<c:forEach items="${sessionScope.patientRagistrationList }" var="q">
-											<option value="${q.id }">${q.patientid }</option>
+										<option value="" disabled selected hidden="">Select Patient </option>	
+										<c:forEach items="${sessionScope.patientList }" var="q">
+											<option value="${q.id }">${q.patientregistrationid.patientid } - ${q.patientregistrationid.firstname }</option>
 										</c:forEach>
 								   </select>
 								   <span id="error_patient_id" class="text-danger"></span>
@@ -1081,8 +1088,12 @@ border-radius: 0px;
 				  			<div class="form-group row">
 				  				<label class="col-sm-2 col-form-label text" >Date of birth<span style="color: red;">*</span></label>
 					    		<div class="col-sm-4">
-					      			<input type="date" id="insertdob" class="form-control" name="dob" placeholder="Date of birth" readonly="readonly">
-					      			<span id="error_date_of_birth" class="text-danger"></span>
+									<div class="input-group date" data-date-format="dd/mm/yyyy">
+						            	<input  type="text" name="dob" id="insertdob" class="form-control" placeholder="dd/mm/yyyy" style="width: 361px;"  required readonly>
+							            <div class="input-group-addon" >
+							              <span class=""></span>
+							            </div>
+						          	</div>
 					    		</div>
 					    		<label class="col-sm-2 col-form-label text" >Blood Group<span style="color: red;">*</span></label>
 					    		<div class="col-sm-4">
@@ -1114,11 +1125,11 @@ border-radius: 0px;
 							<div class="form-group row">
 								<label class="col-sm-2 col-form-label text">Date<span style="color: red;">*</span></label>
 								<div class="col-sm-4 ">
-									<div class="input-group date" data-date-format="dd/mm/yyyy">
-						            <input  type="text" name="date" class="form-control" placeholder="dd/mm/yyyy">
-						            <div class="input-group-addon" >
-						              <span class="glyphicon glyphicon-th"></span>
-						            </div>
+						          	<div class="input-group date" data-date-format="dd/mm/yyyy">
+						            	<input  type="text" name="date" class="form-control" placeholder="dd/mm/yyyy" style="width: 361px;"  required readonly>
+							            <div class="input-group-addon" >
+							              <span class=""></span>
+							            </div>
 						          	</div>
 								</div>
 								<label class="col-sm-2 col-form-label text">Total<span style="color: red;">*</span></label>
@@ -1168,7 +1179,12 @@ border-radius: 0px;
 				  			<div class="form-group row">
 				  				<label class="col-sm-2 col-form-label text" >Date of birth<span style="color: red;">*</span></label>
 					    		<div class="col-sm-4">
-					      			<input type="date" id="editoutwordbod" class="form-control" name="dob" placeholder="Date of birth" readonly="readonly">
+					      			<div class="input-group date" data-date-format="dd/mm/yyyy">
+						            	<input  type="text" name="dob" id="editoutwordbod" class="form-control" placeholder="dd/mm/yyyy" style="width: 361px;"  required readonly>
+							            <div class="input-group-addon" >
+							              <span class=""></span>
+							            </div>
+						          	</div>
 					    		</div>
 					    		<label class="col-sm-2 col-form-label text" >Blood Group<span style="color: red;">*</span></label>
 					    		<div class="col-sm-4">
@@ -1199,7 +1215,12 @@ border-radius: 0px;
 							<div class="form-group row">
 								<label class="col-sm-2 col-form-label text">Date<span style="color: red;">*</span></label>
 								<div class="col-sm-4 ">
-									<input type="Date" id="editoutworddate" class="form-control" name="date" min="0" required>
+									<div class="input-group date" data-date-format="dd/mm/yyyy">
+						            	<input  type="text" name="date" id="editoutworddate" class="form-control" placeholder="dd/mm/yyyy" style="width: 361px;"  required readonly>
+							            <div class="input-group-addon" >
+							              <span class=""></span>
+							            </div>
+						          	</div>
 								</div>
 								<label class="col-sm-2 col-form-label text">Total<span style="color: red;">*</span></label>
 								<div class="col-sm-4 ">

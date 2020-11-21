@@ -32,7 +32,7 @@ public class NurseVo {
 	private String lastname;
 	
 	@Column(name = "DateOfBirth")
-	private java.sql.Date birthdate;
+	private String birthdate;
 	
 	@Column(name = "Gender")
 	private String gender;
@@ -71,7 +71,7 @@ public class NurseVo {
 	private String password;
 	
 	@Column(name = "Charge")
-	private String charge;
+	private float charge;
 
 	@Column(name = "ProfileImage")
 	private String profileimage;
@@ -83,12 +83,12 @@ public class NurseVo {
 	@JoinColumn(name="Adminid")
 	private AdminVo adminid;
 	
-	@OneToMany( mappedBy = "nurseloginid", cascade = CascadeType.REMOVE)
-	private List<LoginVO> loginid;
-	
 	@ManyToOne
 	@JoinColumn(name="Departmentid")
 	private DepartmentVo departmentid;
+	
+	@OneToMany( mappedBy = "nurseloginid", cascade = CascadeType.REMOVE)
+	private List<LoginVO> loginid;
 
 	public int getId() {
 		return id;
@@ -121,12 +121,12 @@ public class NurseVo {
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
-
-	public java.sql.Date getBirthdate() {
+	
+	public String getBirthdate() {
 		return birthdate;
 	}
 
-	public void setBirthdate(java.sql.Date birthdate) {
+	public void setBirthdate(String birthdate) {
 		this.birthdate = birthdate;
 	}
 
@@ -226,11 +226,11 @@ public class NurseVo {
 		this.password = password;
 	}
 
-	public String getCharge() {
+	public float getCharge() {
 		return charge;
 	}
 
-	public void setCharge(String charge) {
+	public void setCharge(float charge) {
 		this.charge = charge;
 	}
 

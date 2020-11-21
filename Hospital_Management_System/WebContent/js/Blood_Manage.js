@@ -1,10 +1,26 @@
 $(document).ready(function() {
+	$('.input-group.date').datepicker({format: "dd/mm/yyyy"}); 
+ 	
+ 	$(".nav-tabs a").click(function(){
+   		$("#Bloodtab3").hide();
+   		$("#Bloodtab10").hide();
+   		$("#Bloodtab6").hide();
+   		$("#Bloodta9").hide();
+   		$('#message1').hide();						
+		$('#message2').hide();
+		$('#message3').hide();
+		$("#Bloodtab2").show();
+		$("#Bloodtab5").show();
+		$("#Bloodtab8").show();
+   	    $(this).tab('show');
+   	    
+   	});
 	var username = "bloodstock";
 	var count = 0;
 	$.post('BloodManage', { flag: username }, function(response) {
 		var obj = JSON.parse(response);
 		console.log(response);
-		$.each(obj, function(index, value) {
+		$.each(obj, function(index) {
 			if (obj[index].numberofbags <= 5) {
 				$("#stockchak" + count + "").addClass("info-box1");
 			} else if (obj[index].numberofbags > 5 && obj[index].numberofbags <= 10) {
@@ -28,7 +44,7 @@ $(document).ready(function() {
 	var username = "donorList";
 	$.get('BloodManage', { flag: username }, function(response) {
 		var obj = JSON.parse(response);
-		$.each(obj, function(index, value) {
+		$.each(obj, function(index) {
 			blooddoner++;
 			var html = '';
 			html += '<tr id=' + blooddoner + '>';
@@ -301,9 +317,9 @@ $(document).ready(function() {
 			contentType: false,
 			cache: false,
 			timeout: 600000,
-			success: function(response, textStatus, jqXHR) {
+			success: function(response) {
 				var obj = JSON.parse(response);
-
+				console.log(response);
 				table = $('#tableBloodDoner').DataTable();
 				table.destroy();
 				$('.bloodDonorList').children('tr').remove();
@@ -533,6 +549,7 @@ $(document).ready(function() {
 		var username = "editBloodInword";
 		$.get('BloodManage', { flag: username, bloodInwordId: bloodInword }, function(response) {
 			$("#Bloodtab5").hide();
+			$("#Bloodtab3").hide();
 			$("#Bloodtab10").hide();
 			var obj = JSON.parse(response);
 			$("#Bloodtab6").show();

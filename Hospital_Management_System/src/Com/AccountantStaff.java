@@ -20,14 +20,13 @@ import javax.servlet.http.Part;
 import com.google.gson.Gson;
 
 import DAO.AccountantStaffDao;
+import DAO.AllDataCountDao;
 import DAO.LoginDAO;
-import DAO.PharmacistDao;
 import VO.AccountantList;
 import VO.AccountantStaffVo;
 import VO.AdminVo;
+import VO.AllDataCountVo;
 import VO.LoginVO;
-import VO.PharmacistList;
-import VO.PharmacistVo;
 
 /**
  * Servlet implementation class AccountantStaff
@@ -153,9 +152,14 @@ public class AccountantStaff extends HttpServlet {
    	
    	private void accountantStaffList(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-   		HttpSession session = request.getSession();
+   		HttpSession session = request.getSession(false);
+   		System.out.println(session);
+   		if(session == null) {
+   			System.out.println("-9--9-9--9-9-9-99--9999999999999999999999999");
+   			response.sendRedirect("Com_Login.jsp");
+   		}
    		int adminid = (int) session.getAttribute("accountantStaffAdminid");
-
+   		System.out.println(adminid);
    		AdminVo adminVo = new AdminVo();
    		adminVo.setId(adminid);
 
@@ -195,7 +199,10 @@ public class AccountantStaff extends HttpServlet {
    	private void accountantStaffInsert(HttpServletRequest request, HttpServletResponse response) {
    		try {
    			System.out.println("----------------------");
-   			HttpSession session = request.getSession();
+   			HttpSession session = request.getSession(false);
+   	   		if(session == null) {
+   	   			response.sendRedirect("Com_Login.jsp");
+   	   		}
    			String email = request.getParameter("email");
    			if (EmailValidation.isValid(email)) {
    				int adminid = (int) session.getAttribute("accountantStaffAdminid");
@@ -203,7 +210,6 @@ public class AccountantStaff extends HttpServlet {
    				String middleName = request.getParameter("middlename");
    				String lastName = request.getParameter("lastname");
    				String dateofbirth = request.getParameter("dob");
-   				java.sql.Date dateOfBirth = java.sql.Date.valueOf(dateofbirth);
    				String gender = request.getParameter("gender");
    				String homeAddress = request.getParameter("hometownaddress");
    				String homeCity = request.getParameter("homecity");
@@ -242,7 +248,7 @@ public class AccountantStaff extends HttpServlet {
    				accountantStaffVo.setFirstname(firstName);
    				accountantStaffVo.setMidalname(middleName);
    				accountantStaffVo.setLastname(lastName);
-   				accountantStaffVo.setBirthdate(dateOfBirth);
+   				accountantStaffVo.setBirthdate(dateofbirth);
    				accountantStaffVo.setGender(gender);
    				accountantStaffVo.setHomeeaddrss(homeAddress);
    				accountantStaffVo.setHomecity(homeCity);
@@ -285,6 +291,10 @@ public class AccountantStaff extends HttpServlet {
    								imageDir.mkdirs();
    							}
    							accountantStaffImage(s, profileImagepath, profileImage);
+   							AllDataCountVo allDataCountVo = new AllDataCountVo();
+							allDataCountVo.setAdminid(adminVo);
+							AllDataCountDao allDataCountDao = new AllDataCountDao();
+							allDataCountDao.increaseData(allDataCountVo, "account");
    							accountantstaffupdate = "true";
    						} else {
    							accountantstaffupdate = "false";
@@ -324,8 +334,7 @@ public class AccountantStaff extends HttpServlet {
    			String firstName = accountant.getFirstname();
    			String middleName = accountant.getMidalname();
    			String lastName = accountant.getLastname();
-   			java.sql.Date dateofbirth = accountant.getBirthdate();
-   			String date = dateofbirth.toString();
+   			String date = accountant.getBirthdate();
    			String gender = accountant.getGender();
    			String homeAddress = accountant.getHomeeaddrss();
    			String homeCity = accountant.getHomecity();
@@ -392,7 +401,6 @@ public class AccountantStaff extends HttpServlet {
    				String middleName = request.getParameter("middlename");
    				String lastName = request.getParameter("lastname");
    				String dateofbirth = request.getParameter("dob");
-   				java.sql.Date dateOfBirth = java.sql.Date.valueOf(dateofbirth);
    				String gender = request.getParameter("gender");
    				String homeAddress = request.getParameter("hometownaddress");
    				String homeCity = request.getParameter("homecity");
@@ -436,7 +444,7 @@ public class AccountantStaff extends HttpServlet {
    				accountantStaffVo.setFirstname(firstName);
    				accountantStaffVo.setMidalname(middleName);
    				accountantStaffVo.setLastname(lastName);
-   				accountantStaffVo.setBirthdate(dateOfBirth);
+   				accountantStaffVo.setBirthdate(dateofbirth);
    				accountantStaffVo.setGender(gender);
    				accountantStaffVo.setHomeeaddrss(homeAddress);
    				accountantStaffVo.setHomecity(homeCity);

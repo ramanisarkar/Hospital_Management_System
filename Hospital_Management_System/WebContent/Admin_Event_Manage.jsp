@@ -350,22 +350,30 @@ display:none !important;
 .btn {
 border-radius: 0px;
 }
+.icone {
+  float: left;
+  height: 20px !important;
+  margin-right: 5px;
+  overflow: hidden;
+  width: 25px !important;
+  text-align: center;
+}
 </style>
 </head>
-<body style="background-color: #f1f4f9; font-family: 'Open Sans',sans-serif;">
-	<c:forEach items="${sessionScope.hospitaldata }" var="q" end="0">
-		 <div class="navbar" style="padding-right: 14px;  background-color: white;     height: 69px;" >
+<body style="background-color: #f1f4f9; font-family: 'Open Sans',sans-serif;font-size: 13px;">
+	<c:forEach items="${sessionScope.hospitaldata }" var="q" end="0"> 
+		 <div class="navbar" style="padding-right: 14px;  background-color: white;height: 69px;" >
 		<div class="col-md-3 col-sm-2 col-xs-4">
 			<h3>
 				<img src="ing/hospitalmanagemantlogo.png"
-					class="img-circle head_logo" width="40" height="40" style="    margin-top: -8px;"> <span style="font-size:22px ">Hospital
+					class="img-circle head_logo" width="40" height="40" style="margin-top: -8px;"> <span style="font-size:21px ">Hospital
 					Management System</span>
 			</h3>
 		</div>
 		<ul class="nav navbar-right col-md-9 col-sm-10 col-xs-8">
 			<li class="dropdown"style="margin-left: 80%;">
 				<a style="background-color: white; margin-top: 17px; height: 49px;" data-toggle="dropdown" class="dropdown-toggle " href="javascript:;">
-						<img src="images/<%=session.getAttribute("hospitalimage")%>" height="40px" width="40px" class="img-circle" style="margin-top: -15px;" >								
+						<img src="Admin_Images/<%=session.getAttribute("hospitalimage")%>" height="40px" width="40px" class="img-circle" style="margin-top: -15px;" >								
 						<span>${q.hospitalname }</span> <b class="caret"></b>
 				</a>
 				<ul class="dropdown-menu extended logout">
@@ -376,11 +384,11 @@ border-radius: 0px;
 			</li>
 		</ul>
 	</div>
-	
 	<div hidden="" id="message1" class="updated below-h2"style="width: 81%;margin-left: 253px;margin-top: 27px;"><p id="messagepass"></p></div>
 		<div id="message3"style="margin-top:-76px;" hidden=""></div>
 		<ul class="nav nav-pills nav-stacked ullist"style="margin-top: -20px; height: 1170;">
 			<li><a href="Admin_Login.jsp"><span class="icone"><img src="ing/dashboard.png"></span><span class="title">Dashboard</span></a></li>
+			<li><a href="<%=request.getContextPath()%>/PatientRegistration?flag=insert&id=${q.id }"><span class="icone"><i class="fas fa fa-wheelchair" style="color: gray;"></i></span><span class="title">Patient Registration</span></a></li>
 			<li><a href="<%=request.getContextPath()%>/Department?flag=insert&id=${q.id }"><span class="icone"><i class="fas fa-briefcase" style="color: gray;"></i></span><span class="title">Department</span></a></li>
 			<li><a href="<%=request.getContextPath()%>/Specialization?flag=insert&id=${q.id }"><span class="icone"><i class="fa fa-lightbulb" style="color: gray;"></i></span><span class="title">Specialization</span></a></li>
 			<li><a href="<%=request.getContextPath()%>/Doctor?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Doctor" title="Doctor">
@@ -391,7 +399,7 @@ border-radius: 0px;
 			<span class="icone"> <img src="ing/outpatient-logo.png"></span>
 			<span class="title">Outpatient</span></a></li>
 			
-			<li><a href="" class="left-tooltip" data-tooltip="Inpatient" title="Inpatient">
+			<li><a href="<%=request.getContextPath()%>/Patient?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Inpatient" title="Inpatient">
 			<span class="icone"> <img src="ing/Patient-logo.png"></span>
 			<span class="title">Inpatient</span></a></li>
 			
@@ -416,212 +424,235 @@ border-radius: 0px;
 			<span class="icone"> <img src="ing/Medicine-logo.png"></span><span class="title">Medicine</span></a></li>
 			<li><a href="<%=request.getContextPath()%>/TreatmentUpdate?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Treatment" title="Treatment">
 			<span class="icone"> <img src="ing/Treatment-logo.png"></span><span class="title">Treatment</span></a></li>
-			<li><a href="" class="left-tooltip" data-tooltip="Prescription" title="Prescription">
-			<span class="icone"> <img src="ing/Prescription-logo.png"></span><span class="title">Prescription</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Assign Bed-Nurse" title="Assign Bed-Nurse">
+			<li><a href="<%=request.getContextPath()%>/Prescription?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Prescription" title="Prescription">
+			<span class="icone"> <img src="ing/Prescription-logo.png"></span><span class="title">Prescription</span></a></li>
+			<li><a href="<%=request.getContextPath()%>/Patient?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Inpatient" title="Inpatient">
+			<span class="icone"><i class="fa fa-bed" aria-hidden="true" style="color: gray;"></i></span>
+			<span class="title">Add Bad</span></a></li>
+			<li><a href="" class="left-tooltip" data-tooltip="Assign Bed-Nurse" title="Assign Bed-Nurse">
 			<span class="icone"> <img src="ing/Assign-Bed-logo.png"></span><span class="title">Assign Bed-Nurse</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Operation List" title="Operation List">
 			<span class="icone"> <img src="ing/Operation-List-logo.png"></span><span class="title">Operation List</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Diagnosis" title="Diagnosis">
 			<span class="icone"> <img src="ing/Diagnosis-Report-logo.png"></span><span class="title">Diagnosis</span></a></li>
 			<li><a href="<%=request.getContextPath()%>/BloodManage?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Blood Bank" title="Blood Bank">
 			<span class="icone"> <img src="ing/Blood-Bank-logo.png"></span><span class="title">Blood Bank</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Appointment" title="Appointment">
 			<span class="icone"> <img src="ing/Appointment-logo.png"></span><span class="title">Appointment</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Invoice" title="Invoice">
-			<span class="icone"> <img src="ing/payment-logo.png"></span><span class="title">Invoice</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Event" title="Event">
+			<span class="icone"> <img src="ing/payment-logo.png"></span><span class="title">Invoice</span></a></li><li>
+			<a href="<%=request.getContextPath()%>/Event?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Event" title="Event">
 			<span class="icone"> <img src="ing/notice-logo.png"></span><span class="title">Event</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Message" title="Message">
-			<span class="icone"> <img src="ing/message-logo.png"></span><span class="title">Message</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Ambulance" title="Ambulance">
+			<span class="icone"> <img src="ing/message-logo.png"></span><span class="title">Message</span></a></li>
+			<li><a href="<%=request.getContextPath()%>/Ambulance?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Ambulance" title="Ambulance">
 			<span class="icone"> <img src="ing/Ambulance-logo.png"></span><span class="title">Ambulance</span></a></li><li><a href="" class="left-tooltip" data-tooltip="instrument" title="instrument">
 			<span class="icone"> <img src="ing/Instrument-logo.png"></span><span class="title">Instrument</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Report" title="Report">
 			<span class="icone"> <img src="ing/Report-logo.png"></span><span class="title">Report</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Account" title="Account">
-			<span class="icone"> <img src="ing/account-logo.png"></span><span class="title">Account</span></a></li>	
+			<span class="icone"> <img src="ing/account-logo.png"></span><span class="title">Account</span></a></li>
 		</ul>
 	</c:forEach>
 	
-	<div style="margin-top: 83px;"></div>
-	<div id="message2" style="margin-top: 149px;"hidden="" ></div>
-	<div style="margin-left: 236px; padding: 0px 16px; margin-top: -77%; background-color: white;">
-		<div style="color: green; margin-top: 3px;" id="specializationadd"></div>
-		<div style="padding-top: 15px;"></div>
-		<div class="container" style="margin-right: 90px;">
-			<ul class="nav nav-tabs tabcalss">
-				<li style="background-color: f1f4f9;">
-					<a href="#home" id="Bloodtab4" data-toggle="tab">
-						<i class="fa fa-bars"aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Even List
-					</a>
-				</li>
-				<li style="margin-left: 15px; background-color: f1f4f9;">
-					<a href="#menu1" id="eventtab1" data-toggle="tab">
-						<i class="fa fa-plus-circle"aria-hidden="true"style="border-radius: 50%; padding: 8px;"></i>Add Event
-					</a>
-				</li>
-				<li style="margin-left: 15px; background-color: f1f4f9;">
-					<a href="#menu2" id="eventtab2" style="display: none;" data-toggle="tab">
-						<i class="fa fa-plus-circle"aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Edit Event
-					</a>
-				</li>
-			</ul>
-			<div class="tab-content">
-			<div id="home" class="tab-pane fade in active" style="margin-top: 10px;">
-					<table id="example" class="display table table-striped table-hover" style="width:100%">
-				        <thead>
-				            <tr>
-				            	 <th width="124px;">Title</th>
-								 <th width="133.6px;">Comment</th>
-								 <th width="114.2px;">Start Date</th>
-								 <th width="96.2px;">End Date</th>
-								 <th width="173px;">For</th>
-								 <th width="140px;">Action</th>
-							</tr>
-				        </thead>
-				        <tbody class="eventlist" >
-						</tbody>
-						<tfoot>
-				            <tr>
-				            	 <th width="124px;">Title</th>
-								 <th width="133.6px;">Comment</th>
-								 <th width="114.2px;">Start Date</th>
-								 <th width="96.2px;">End Date</th>
-								 <th width="173px;">For</th>
-								 <th width="140px;">Action</th>
-							</tr>
-				        </tfoot>
-				   	</table>
-			    	<div style="margin-top: 26px;"></div>
-   			 </div>
-			<div id="menu1" class="tab-pane" style="margin-top: 20px;">
-				<form id="insert_Event_Form">
-					<div class="form-group row">
-						<label class="col-sm-2 control-label text">Event/Notice<span style="color: red;">*</span></label>
-						<div class="col-sm-8 margin_bottom_5px">
-							<select class="form-control" name="event" >
-								<option value="" disabled selected hidden="">Select Event And Notice</option>
-								<option value="event">Event</option>
-								<option value="notice">Notice</option>
-							</select>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-2 control-label text">Event Title<span style="color: red;">*</span></label>
-						<div class="col-sm-8 margin_bottom_5px">
-							<input type="text" class="form-control" name="eventtitle"required>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-2 control-label text">Event Comment</label>
-						<div class="col-sm-8 margin_bottom_5px">
-							<textarea name="eventcommnet" class="form-control"></textarea>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-2 col-form-label text">Start Date<span style="color: red;">*</span></label>
-						<div class="col-sm-8 ">
-							<div class="input-group date" data-date-format="dd/mm/yyyy">
-				            	<input  type="text" name="startdate"  class="form-control" placeholder="dd/mm/yyyy">
-					            <div class="input-group-addon" >
-					              <span class="glyphicon glyphicon-th"></span>
-					            </div>
-				          	</div>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-2 col-form-label text">End Date<span style="color: red;">*</span></label>
-						<div class="col-sm-8 ">
-							<div class="input-group date" data-date-format="dd/mm/yyyy">
-				            	<input  type="text" name="eventenddate"  class="form-control" placeholder="dd/mm/yyyy">
-					            <div class="input-group-addon" >
-					              <span class="glyphicon glyphicon-th"></span>
-					            </div>
-				          	</div>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-2 col-form-label text">Event For<span style="color: red;">*</span></label>
-						<div class="col-sm-8 ">
-							<select id="multiselect" name="eventfor[]" multiple class="col-sm-8 form-control" required="required">
-							  <option value="Patient">Patient</option>
-							  <option value="Doctor">Doctor</option>
-							  <option value="Nurse">Nurse</option>
-							  <option value="SupportStaff">Support Staff</option>
-							  <option value="Pharmacist">Pharmacist</option>
-							  <option value="LaboratoryStaff">Laboratory Staff</option>
-							  <option value="Accountant">Accountant</option>
-							</select>
-						</div>
-					</div>
-					<div class="col-sm-offset-2" style="margin-left: 194px;">
-						<input type="hidden" name="flag" value="insertevent">
-						<input type="submit" value="Save" id="insertevent" class="btn btn-success"style="margin-bottom: 15px; margin-right: 15px;">
-					</div>	
-				</form>
-			</div>
-			<div id="menu2" class="tab-pane" style="margin-top: 15px;">
-				<form id="update_Event_Form">
-					<div class="form-group row">
-						<label class="col-sm-2 control-label text">Event/Notice<span style="color: red;">*</span></label>
-						<div class="col-sm-8 margin_bottom_5px">
-							<select class="form-control" id="eventname" name="event" >
-								<option value="" disabled selected hidden="">Select Event And Notice</option>
-								<option value="event">Event</option>
-								<option value="notice">Notice</option>
-							</select>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-2 control-label text">Event Title<span style="color: red;">*</span></label>
-						<div class="col-sm-8 margin_bottom_5px">
-							<input type="text" id="eventtitle" class="form-control" name="eventtitle" required>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-2 control-label text">Event Comment</label>
-						<div class="col-sm-8 margin_bottom_5px">
-							<textarea name="eventcommnet" id="comment" class="form-control" ></textarea>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-2 col-form-label text">Start Date<span style="color: red;">*</span></label>
-						<div class="col-sm-8 ">
-							<div class="input-group date" data-date-format="dd/mm/yyyy">
-				            	<input  type="text" id="startdate" name="startdate"  class="form-control" placeholder="dd/mm/yyyy" required>
-					            <div class="input-group-addon" >
-					              <span class="glyphicon glyphicon-th"></span>
-					            </div>
-				          	</div>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-2 col-form-label text">End Date<span style="color: red;">*</span></label>
-						<div class="col-sm-8 ">
-							<div class="input-group date" data-date-format="dd/mm/yyyy">
-				            	<input  type="text" id="enddate"name="eventenddate"  class="form-control" placeholder="dd/mm/yyyy" required>
-					            <div class="input-group-addon" >
-					              <span class="glyphicon glyphicon-th"></span>
-					            </div>
-				          	</div>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-2 col-form-label text">Event For<span style="color: red;">*</span></label>
-						<div class="col-sm-8 ">
-							<select id="editevent"name="eventfor[]" multiple class="col-sm-8 form-control">
-							  <option value="Patient">Patient</option>
-							  <option value="Doctor">Doctor</option>
-							  <option value="Nurse">Nurse</option>
-							  <option value="SupportStaff">Support Staff</option>
-							  <option value="Pharmacist">Pharmacist</option>
-							  <option value="LaboratoryStaff">Laboratory Staff</option>
-							  <option value="Accountant">Accountant</option>
-							</select>
-						</div>
-					</div>
-					<div class="col-sm-offset-2" style="margin-left: 194px;">
-						<input type="hidden" name="flag" value="updateevent">
-						<input type="hidden" name="eventId" id="eventId">
-						<input type="hidden" name="adminid" id="adminId">
-						<input type="hidden" name="joinig" id="joinig">
-						<input type="submit" value="Update" id="updateevent" class="btn btn-success"style="margin-bottom: 15px; margin-right: 15px;">
-					</div>	
-				</form>
-			</div>
-		</div>
+	<div id="message2" style="margin-top: 67px;" hidden=""></div>
+	<div style="margin-left: 236px; padding: 0px 16px; margin-top: -73%; background-color: white;">
+	    <div style="color: green; margin-top: 3px;" id="specializationadd"></div>
+	    <div style="padding-top: 15px;"></div>
+	    <div class="container" style="margin-right: 90px;">
+	        <ul class="nav nav-tabs tabcalss">
+	            <li style="background-color: f1f4f9;">
+	                <a href="#home" id="Bloodtab4" data-toggle="tab">
+	                    <i class="fa fa-bars" aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Even List
+	                </a>
+	            </li>
+	            <li style="margin-left: 15px; background-color: f1f4f9;">
+	                <a href="#menu1" id="eventtab1" data-toggle="tab">
+	                    <i class="fa fa-plus-circle" aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Add
+	                    Event
+	                </a>
+	            </li>
+	            <li style="margin-left: 15px; background-color: f1f4f9;">
+	                <a href="#menu2" id="eventtab2" style="display: none;" data-toggle="tab">
+	                    <i class="fa fa-plus-circle" aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Edit
+	                    Event
+	                </a>
+	            </li>
+	        </ul>
+	        <div class="tab-content">
+	            <div id="home" class="tab-pane fade in active" style="margin-top: 10px;">
+	                <table id="example" class="display table table-striped table-hover" style="width:100%">
+	                    <thead>
+	                        <tr>
+	                            <th width="124px;">Title</th>
+	                            <th width="133.6px;">Comment</th>
+	                            <th width="114.2px;">Start Date</th>
+	                            <th width="96.2px;">End Date</th>
+	                            <th width="173px;">For</th>
+	                            <th width="140px;">Action</th>
+	                        </tr>
+	                    </thead>
+	                    <tbody class="eventlist">
+	                    </tbody>
+	                    <tfoot>
+	                        <tr>
+	                            <th width="124px;">Title</th>
+	                            <th width="133.6px;">Comment</th>
+	                            <th width="114.2px;">Start Date</th>
+	                            <th width="96.2px;">End Date</th>
+	                            <th width="173px;">For</th>
+	                            <th width="140px;">Action</th>
+	                        </tr>
+	                    </tfoot>
+	                </table>
+	                <div style="margin-top: 26px;"></div>
+	            </div>
+	            <div id="menu1" class="tab-pane" style="margin-top: 20px;">
+	                <form id="insert_Event_Form">
+	                    <div class="form-group row">
+	                        <label class="col-sm-2 control-label text">Event/Notice<span
+	                                style="color: red;">*</span></label>
+	                        <div class="col-sm-8 margin_bottom_5px">
+	                            <select class="form-control" name="event">
+	                                <option value="" disabled selected hidden="">Select Event And Notice</option>
+	                                <option value="event">Event</option>
+	                                <option value="notice">Notice</option>
+	                            </select>
+	                        </div>
+	                    </div>
+	                    <div class="form-group row">
+	                        <label class="col-sm-2 control-label text">Event Title<span style="color: red;">*</span></label>
+	                        <div class="col-sm-8 margin_bottom_5px">
+	                            <input type="text" class="form-control" name="eventtitle" required>
+	                        </div>
+	                    </div>
+	                    <div class="form-group row">
+	                        <label class="col-sm-2 control-label text">Event Comment</label>
+	                        <div class="col-sm-8 margin_bottom_5px">
+	                            <textarea name="eventcommnet" class="form-control"></textarea>
+	                        </div>
+	                    </div>
+	                    <div class="form-group row">
+	                        <label class="col-sm-2 col-form-label text">Start Date<span style="color: red;">*</span></label>
+	                        <div class="col-sm-8 ">
+	                            <div class="input-group date" data-date-format="dd/mm/yyyy">
+	                                <input type="text" name="startdate" class="form-control" placeholder="dd/mm/yyyy"
+	                                    style="width: 750px;" required readonly>
+	                                <div class="input-group-addon">
+	                                    <span class=""></span>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                    <div class="form-group row">
+	                        <label class="col-sm-2 col-form-label text">End Date<span style="color: red;">*</span></label>
+	                        <div class="col-sm-8 ">
+	                            <div class="input-group date" data-date-format="dd/mm/yyyy">
+	                                <input type="text" name="eventenddate" class="form-control" placeholder="dd/mm/yyyy"
+	                                    style="width: 750px;" required readonly>
+	                                <div class="input-group-addon">
+	                                    <span class=""></span>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                    <div class="form-group row">
+	                        <label class="col-sm-2 col-form-label text">Event For<span style="color: red;">*</span></label>
+	                        <div class="col-sm-8 ">
+	                            <select id="multiselect" name="eventfor[]" multiple class="col-sm-8 form-control"
+	                                required="required">
+	                                <option value="Patient">Patient</option>
+	                                <option value="Doctor">Doctor</option>
+	                                <option value="Nurse">Nurse</option>
+	                                <option value="SupportStaff">Support Staff</option>
+	                                <option value="Pharmacist">Pharmacist</option>
+	                                <option value="LaboratoryStaff">Laboratory Staff</option>
+	                                <option value="Accountant">Accountant</option>
+	                            </select>
+	                        </div>
+	                    </div>
+	                    <div class="col-sm-offset-2" style="margin-left: 194px;">
+	                        <input type="hidden" name="flag" value="insertevent">
+	                        <input type="submit" value="Save" id="insertevent" class="btn btn-success"
+	                            style="margin-bottom: 15px; margin-right: 15px;">
+	                    </div>
+	                </form>
+	            </div>
+	            <div id="menu2" class="tab-pane" style="margin-top: 15px;">
+	                <form id="update_Event_Form">
+	                    <div class="form-group row">
+	                        <label class="col-sm-2 control-label text">Event/Notice<span
+	                                style="color: red;">*</span></label>
+	                        <div class="col-sm-8 margin_bottom_5px">
+	                            <select class="form-control" id="eventname" name="event">
+	                                <option value="" disabled selected hidden="">Select Event And Notice</option>
+	                                <option value="event">Event</option>
+	                                <option value="notice">Notice</option>
+	                            </select>
+	                        </div>
+	                    </div>
+	                    <div class="form-group row">
+	                        <label class="col-sm-2 control-label text">Event Title<span style="color: red;">*</span></label>
+	                        <div class="col-sm-8 margin_bottom_5px">
+	                            <input type="text" id="eventtitle" class="form-control" name="eventtitle" required>
+	                        </div>
+	                    </div>
+	                    <div class="form-group row">
+	                        <label class="col-sm-2 control-label text">Event Comment</label>
+	                        <div class="col-sm-8 margin_bottom_5px">
+	                            <textarea name="eventcommnet" id="comment" class="form-control"></textarea>
+	                        </div>
+	                    </div>
+	                    <div class="form-group row">
+	                        <label class="col-sm-2 col-form-label text">Start Date<span style="color: red;">*</span></label>
+	                        <div class="col-sm-8 ">
+	                            <div class="input-group date" data-date-format="dd/mm/yyyy">
+	                                <input type="text" id="startdate" name="startdate" class="form-control"
+	                                    placeholder="dd/mm/yyyy" required>
+	                                <div class="input-group-addon">
+	                                    <span class="glyphicon glyphicon-th"></span>
+	                                </div>
+	                            </div>
+	                            <div class="input-group date" data-date-format="dd/mm/yyyy">
+	                                <input type="text" id="startdate" name="startdate" class="form-control"
+	                                    placeholder="dd/mm/yyyy" style="width: 750px;" required readonly>
+	                                <div class="input-group-addon">
+	                                    <span class=""></span>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                    <div class="form-group row">
+	                        <label class="col-sm-2 col-form-label text">End Date<span style="color: red;">*</span></label>
+	                        <div class="col-sm-8 ">
+	                            <div class="input-group date" data-date-format="dd/mm/yyyy">
+	                                <input type="text" id="enddate" name="eventenddate" class="form-control"
+	                                    placeholder="dd/mm/yyyy" style="width: 750px;" required readonly>
+	                                <div class="input-group-addon">
+	                                    <span class=""></span>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                    <div class="form-group row">
+	                        <label class="col-sm-2 col-form-label text">Event For<span style="color: red;">*</span></label>
+	                        <div class="col-sm-8 ">
+	                            <select id="editevent" name="eventfor[]" multiple class="col-sm-8 form-control">
+	                                <option value="Patient">Patient</option>
+	                                <option value="Doctor">Doctor</option>
+	                                <option value="Nurse">Nurse</option>
+	                                <option value="SupportStaff">Support Staff</option>
+	                                <option value="Pharmacist">Pharmacist</option>
+	                                <option value="LaboratoryStaff">Laboratory Staff</option>
+	                                <option value="Accountant">Accountant</option>
+	                            </select>
+	                        </div>
+	                    </div>
+	                    <div class="col-sm-offset-2" style="margin-left: 194px;">
+	                        <input type="hidden" name="flag" value="updateevent">
+	                        <input type="hidden" name="eventId" id="eventId">
+	                        <input type="hidden" name="adminid" id="adminId">
+	                        <input type="hidden" name="joinig" id="joinig">
+	                        <input type="submit" value="Update" id="updateevent" class="btn btn-success"
+	                            style="margin-bottom: 15px; margin-right: 15px;">
+	                    </div>
+	                </form>
+	            </div>
+	        </div>
+	    </div>
 	</div>
-</div>
 </body>
 </html>

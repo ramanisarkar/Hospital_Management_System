@@ -12,108 +12,116 @@ import org.hibernate.cfg.AnnotationConfiguration;
 import VO.AmbulanceVo;
 import VO.BloodDonorVo;
 import VO.BloodManageVo;
-import VO.PatientVo;
 import VO.TreatmentVo;
 
-public class AmbulanceDao {
-
+public class AmbulanceDao{
+	
 	public ArrayList<AmbulanceVo> ambulanceList(AmbulanceVo ambulanceVo) {
-		System.out.println(ambulanceVo.getAdminid());
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
 		List<AmbulanceVo> ambulanceList = new ArrayList<AmbulanceVo>();
-		System.out.println(ambulanceVo.getAdminid());
 		try {
-			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
-			Session session = sessionfactory.openSession();
-			Transaction transaction = session.beginTransaction();
 			Query q = session.createQuery("from AmbulanceVo AS d where d.adminid =:id");
 			q.setParameter("id", ambulanceVo.getAdminid());
 			ambulanceList = q.list();
-			transaction.commit();
-			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		finally {
+			transaction.commit();
+			session.close();
 		}
 		return (ArrayList<AmbulanceVo>) ambulanceList;
 	}
 
 	public String ambulanceInsert(AmbulanceVo ambulanceVo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
 		String message;
 		try {
-			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
-			Session session = sessionfactory.openSession();
-			Transaction transaction = session.beginTransaction();
 			session.save(ambulanceVo);
-			transaction.commit();
-			session.close();
 		} catch (Exception e) {
 			return message = "error";
+		}
+		finally {
+			transaction.commit();
+			session.close();
 		}
 		return message = "true";
 	}
 
 	public  ArrayList<AmbulanceVo> ambulanceEdit(AmbulanceVo ambulanceVo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
 		List<AmbulanceVo> ambulanceList = new ArrayList<AmbulanceVo>();
 		try {
-			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
-			Session session = sessionfactory.openSession();
-			Transaction transaction = session.beginTransaction();
 			Query q = session.createQuery("from AmbulanceVo AS n where n.id =:id");
 			q.setParameter("id", ambulanceVo.getId());
 			ambulanceList = q.list();
-			transaction.commit();
-			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		finally {
+			transaction.commit();
+			session.close();
 		}
 		return (ArrayList<AmbulanceVo>) ambulanceList;
 	}
 
 	public String ambulanceUpdate(AmbulanceVo ambulanceVo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
 		String chack;
 		try {
-			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
-			Session session = sessionfactory.openSession();
-			Transaction transaction = session.beginTransaction();
 			session.update(ambulanceVo);
-			transaction.commit();
-			session.close();
 			}
 		catch (Exception e) {
 			return chack="error";
+		}
+		finally {
+			transaction.commit();
+			session.close();
 		}
 		return chack="true";
 	}
 
 	public String deleteAmbulance(AmbulanceVo ambulanceVo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
 		String message = null;
 		try {
-			System.out.println(ambulanceVo.getId());
-			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
-			Session session = sessionfactory.openSession();
-			Transaction transaction = session.beginTransaction();
 			Query q = session.createQuery("delete from AmbulanceVo AS n where n.id =:id");
 			q.setParameter("id", ambulanceVo.getId());
 			q.executeUpdate();
-			transaction.commit();
-			session.close();
 		} catch (Exception e) {
 			return message = "error";
+		}
+		finally {
+			transaction.commit();
+			session.close();
 		}
 		return message = "true";
 	}
 
 	public ArrayList<AmbulanceVo> getlastrecord() {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
 		List<AmbulanceVo> ambulanceList = new ArrayList<AmbulanceVo>();
 		try {
-			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
-			Session session = sessionfactory.openSession();
-			Transaction transaction = session.beginTransaction();
 			Query q = session.createQuery("from AmbulanceVo ORDER BY id DESC LIMIT 1;");
 			ambulanceList = q.list();
-			transaction.commit();
-			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		finally {
+			transaction.commit();
+			session.close();
 		}
 		return (ArrayList<AmbulanceVo>) ambulanceList;
 	}

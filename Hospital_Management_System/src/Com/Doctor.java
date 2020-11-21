@@ -17,11 +17,13 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import com.google.gson.Gson;
 
+import DAO.AllDataCountDao;
 import DAO.DepartmentDao;
 import DAO.DoctorDao;
 import DAO.LoginDAO;
 import DAO.SpecializationDao;
 import VO.AdminVo;
+import VO.AllDataCountVo;
 import VO.DepartmentVo;
 import VO.DoctorList;
 import VO.DoctorVo;
@@ -108,6 +110,7 @@ public class Doctor extends HttpServlet {
 		if (flag.equalsIgnoreCase("insert")) {
 			int adminid = Integer.parseInt(request.getParameter("id"));
 			session.setAttribute("doctoradminid", adminid);
+			System.out.println("dsahdjgsadhlsagicasdouffabsdpf"+adminid);
 			departmentListForDoctor(request, response);
 			response.sendRedirect("Admin_Doctor_Reg.jsp");
 		}
@@ -272,8 +275,8 @@ public class Doctor extends HttpServlet {
 		out.close();
 	}
 
-	private void doctorInsert(HttpServletRequest request, HttpServletResponse response) {
-		try {
+	private void doctorInsert(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+//		try {
 			HttpSession session = request.getSession();
 			String email = request.getParameter("email");
 			if (EmailValidation.isValid(email)) {
@@ -284,7 +287,6 @@ public class Doctor extends HttpServlet {
 				String middleName = request.getParameter("middlename");
 				String lastName = request.getParameter("lastname");
 				String dateofbirth = request.getParameter("dob");
-				java.sql.Date dateOfBirth = java.sql.Date.valueOf(dateofbirth);
 				String gender = request.getParameter("gender");
 				String officeAddress = request.getParameter("officeaddress");
 				String officeCity = request.getParameter("officecity");
@@ -302,8 +304,8 @@ public class Doctor extends HttpServlet {
 				String phoneNumber = request.getParameter("phonenumber");
 				String userName = request.getParameter("username");
 				String password = request.getParameter("password");
-				String visitingcharge = request.getParameter("visitingcharge");
-				String consultingcharge = request.getParameter("consultingcharge");
+				float visitingcharge = Float.parseFloat(request.getParameter("visitingcharge"));
+				float consultingcharge = Float.parseFloat(request.getParameter("consultingcharge"));
 
 				Part profileImage = request.getPart("profileimage");
 				Part curriculumvitae = request.getPart("curriculumvitae");
@@ -374,7 +376,7 @@ public class Doctor extends HttpServlet {
 				doctorVo.setFirstname(firstName);
 				doctorVo.setMidalname(middleName);
 				doctorVo.setLastname(lastName);
-				doctorVo.setBirthdate(dateOfBirth);
+				doctorVo.setBirthdate(dateofbirth);
 				doctorVo.setGender(gender);
 				doctorVo.setOfficeaddrss(officeAddress);
 				doctorVo.setOfficecity(officeCity);
@@ -437,6 +439,10 @@ public class Doctor extends HttpServlet {
 							DoctorImageOrDocumentUpload(s, s2, s3, s4, profileImagepath, curriculumvitaepath,
 									educationCertificatepath, experienceCertificatepath, profileImage, curriculumvitae,
 									educationCertificate, experienceCertificate);
+							AllDataCountVo allDataCountVo = new AllDataCountVo();
+							allDataCountVo.setAdminid(adminVo);
+							AllDataCountDao allDataCountDao = new AllDataCountDao();
+							allDataCountDao.increaseData(allDataCountVo, "doctor");
 							doctorupdate = "true";
 						} else {
 							doctorupdate = "false";
@@ -454,13 +460,12 @@ public class Doctor extends HttpServlet {
 				doctoremailidinvalid = "false";
 			}
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	private void doctorEdit(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		HttpSession session = request.getSession();
 		int doctorid = Integer.parseInt(request.getParameter("doctorid"));
 		System.out.println(doctorid);
 
@@ -479,8 +484,7 @@ public class Doctor extends HttpServlet {
 			String firstName = doctor.getFirstname();
 			String middleName = doctor.getMidalname();
 			String lastName = doctor.getLastname();
-			java.sql.Date dateofbirth = doctor.getBirthdate();
-			String date = dateofbirth.toString();
+			String date= doctor.getBirthdate();
 			String gender = doctor.getGender();
 			String officeAddress = doctor.getOfficeaddrss();
 			String officeCity = doctor.getOfficecity();
@@ -499,8 +503,8 @@ public class Doctor extends HttpServlet {
 			String email = doctor.getEmail();
 			String password = doctor.getPassword();
 			String userName = doctor.getUsername();
-			String visitingcharge = doctor.getVisitingcharge();
-			String consultingcharge = doctor.getConsultingcharge();
+			float visitingcharge = doctor.getVisitingcharge();
+			float consultingcharge = doctor.getConsultingcharge();
 			String profileimage = doctor.getProfileimage();
 			String profileimagename = "";
 			String educationcertificatename = "";
@@ -596,7 +600,6 @@ public class Doctor extends HttpServlet {
 				String middleName = request.getParameter("middlename");
 				String lastName = request.getParameter("lastname");
 				String dateofbirth = request.getParameter("dob");
-				java.sql.Date dateOfBirth = java.sql.Date.valueOf(dateofbirth);
 				String gender = request.getParameter("gender");
 				String officeAddress = request.getParameter("officeaddress");
 				String officeCity = request.getParameter("officecity");
@@ -614,8 +617,8 @@ public class Doctor extends HttpServlet {
 				String phoneNumber = request.getParameter("phonenumber");
 				String userName = request.getParameter("username");
 				String password = request.getParameter("password");
-				String visitingcharge = request.getParameter("visitingcharge");
-				String consultingcharge = request.getParameter("consultingcharge");
+				float visitingcharge = Float.parseFloat(request.getParameter("visitingcharge"));
+				float consultingcharge = Float.parseFloat(request.getParameter("consultingcharge"));
 				String editprofileImage = request.getParameter("editprofileImage");
 				String editcurriculumvitae = request.getParameter("editcurriculumvitae");
 				String editeducationCertificate = request.getParameter("editeducationCertificate");
@@ -707,7 +710,7 @@ public class Doctor extends HttpServlet {
 				doctorVo.setFirstname(firstName);
 				doctorVo.setMidalname(middleName);
 				doctorVo.setLastname(lastName);
-				doctorVo.setBirthdate(dateOfBirth);
+				doctorVo.setBirthdate(dateofbirth);
 				doctorVo.setGender(gender);
 				doctorVo.setOfficeaddrss(officeAddress);
 				doctorVo.setOfficecity(officeCity);

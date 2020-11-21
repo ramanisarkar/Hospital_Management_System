@@ -11,143 +11,180 @@ import org.hibernate.cfg.AnnotationConfiguration;
 
 import VO.AccountantStaffVo;
 import VO.AmbulanceVo;
+import VO.DiagnosisReportAddVo;
+import VO.DiagnosisReportApplyVo;
 import VO.LoginVO;
 import VO.MedicineVo;
 import VO.PatientRegistretionVo;
 
-public class PatientRegistreationDao {
+public class PatientRegistreationDao  {
 	
 	public ArrayList<PatientRegistretionVo> getlastrecord() {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
 		List<PatientRegistretionVo> patientList = new ArrayList<PatientRegistretionVo>();
 		try {
-			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
-			Session session = sessionfactory.openSession();
-			Transaction transaction = session.beginTransaction();
 			Query q = session.createQuery("from PatientRegistretionVo ORDER BY id DESC LIMIT 1;");
 			patientList = q.list();
-			transaction.commit();
-			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+        finally {
+			transaction.commit();
+			session.close();
 		}
 		return (ArrayList<PatientRegistretionVo>) patientList;
 	}
 
-	public String insertPatient(PatientRegistretionVo patientRegistretionVo) {
+	public String insertPatient(PatientRegistretionVo patientRegistretionVo, LoginVO loginvo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
 		String message;
 		try {
-			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
-			Session session = sessionfactory.openSession();
-			Transaction transaction = session.beginTransaction();
 			session.save(patientRegistretionVo);
+			session.save(loginvo);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        finally {
 			transaction.commit();
 			session.close();
-		} catch (Exception e) {
-			return message = "error";
 		}
 		return message = "true";
 	}
 
 	public ArrayList<PatientRegistretionVo> editPatient(PatientRegistretionVo patientRegistretionVo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
 		List<PatientRegistretionVo> patientList = new ArrayList<PatientRegistretionVo>();
 		try {
-			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
-			Session session = sessionfactory.openSession();
-			Transaction transaction = session.beginTransaction();
 			Query q = session.createQuery("from PatientRegistretionVo AS n where n.id =:id");
 			q.setParameter("id", patientRegistretionVo.getId());
 			patientList = q.list();
-			transaction.commit();
-			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+        finally {
+			transaction.commit();
+			session.close();
 		}
 		return (ArrayList<PatientRegistretionVo>) patientList;
 	}
 
 	public String UpdatePatientProfile(PatientRegistretionVo patientRegistretionVo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
 		String chack;
 		try {
-			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
-			Session session = sessionfactory.openSession();
-			Transaction transaction = session.beginTransaction();
 			session.update(patientRegistretionVo);
-			transaction.commit();
-			session.close();
 			}
 		catch (Exception e) {
 			return chack="error";
+		}
+        finally {
+			transaction.commit();
+			session.close();
 		}
 		return chack="true";
 	}
 
 	public String deletePatient(PatientRegistretionVo patientRegistretionVo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
 		String message = null;
 		try {
-			System.out.println(patientRegistretionVo.getId());
-			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
-			Session session = sessionfactory.openSession();
-			Transaction transaction = session.beginTransaction();
 			Query q = session.createQuery("delete from PatientRegistretionVo AS n where n.id =:id");
 			q.setParameter("id", patientRegistretionVo.getId());
 			q.executeUpdate();
-			transaction.commit();
-			session.close();
 		} catch (Exception e) {
 			return message = "error";
+		}
+        finally {
+			transaction.commit();
+			session.close();
 		}
 		return message = "true";
 	}
 
 	public ArrayList<PatientRegistretionVo> userNameVerify(PatientRegistretionVo patientRegistretionVo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
 		List<PatientRegistretionVo> li1 = new ArrayList<PatientRegistretionVo>();
 		try {
-			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
-			Session session = sessionfactory.openSession();
-			Transaction transaction = session.beginTransaction();
 			Query q = session.createQuery("from PatientRegistretionVo where username  =:user");
 			q.setParameter("user", patientRegistretionVo.getUsername());
 			li1 = q.list();
-			transaction.commit();
-			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+        finally {
+			transaction.commit();
+			session.close();
 		}
 		return (ArrayList<PatientRegistretionVo>) li1;
 	}
 
 	public ArrayList<PatientRegistretionVo> patientRegistrationList(PatientRegistretionVo patientRegistretionVo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
+		System.out.println("------------------");
+		System.out.println(patientRegistretionVo.getAdminid().getId());
+		System.out.println("------------------");
 		List<PatientRegistretionVo> patientList = new ArrayList<PatientRegistretionVo>();
 		try {
-			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
-			Session session = sessionfactory.openSession();
-			Transaction transaction = session.beginTransaction();
-			Query q = session.createQuery("from PatientRegistretionVo AS d where d.adminid =:id");
+			Query q = session.createQuery("from PatientRegistretionVo AS n where n.adminid =:id");
 			q.setParameter("id", patientRegistretionVo.getAdminid());
 			patientList = q.list();
-			transaction.commit();
-			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+        finally {
+			transaction.commit();
+			session.close();
 		}
 		return (ArrayList<PatientRegistretionVo>) patientList;
 	}
 
 	public ArrayList<PatientRegistretionVo> getPatient(PatientRegistretionVo patientRegistretionVo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
 		List<PatientRegistretionVo> patientList = new ArrayList<PatientRegistretionVo>();
 		try {
-			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
-			Session session = sessionfactory.openSession();
-			Transaction transaction = session.beginTransaction();
 			Query q = session.createQuery("from PatientRegistretionVo AS n where n.id =:id");
 			q.setParameter("id", patientRegistretionVo.getId());
 			patientList = q.list();
 			System.out.println(patientList);
-			transaction.commit();
-			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+        finally {
+			transaction.commit();
+			session.close();
+		}
 		return (ArrayList<PatientRegistretionVo>) patientList;
+	}
+
+	public void diagnosisReportInsert(DiagnosisReportAddVo diagnosisReportAddVo, DiagnosisReportApplyVo diagnosisReportApplyVo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+			session.save(diagnosisReportAddVo);
+			session.save(diagnosisReportApplyVo);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        finally {
+			transaction.commit();
+			session.close();
+		}
 	}
 }

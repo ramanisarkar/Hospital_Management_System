@@ -39,7 +39,7 @@ public class BloodOutwordVo {
 
 	@ManyToOne
 	@JoinColumn(name="PatientId")
-	private PatientVo patientid;
+	private PatientRegistretionVo patientid;
 
 	public int getId() {
 		return id;
@@ -97,11 +97,11 @@ public class BloodOutwordVo {
 		this.adminid = adminid;
 	}
 
-	public PatientVo getPatientid() {
+	public PatientRegistretionVo getPatientid() {
 		return patientid;
 	}
 
-	public void setPatientid(PatientVo patientid) {
+	public void setPatientid(PatientRegistretionVo patientid) {
 		this.patientid = patientid;
 	}
 

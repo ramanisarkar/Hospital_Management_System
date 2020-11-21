@@ -1,13 +1,13 @@
-package VO;
+	package VO;
 
 public class DoctorList {
 	private int id,adminid,departmentid,specializationid;
 	private String firstname,midalname,lastname,date,gender,officeaddrss,officecity,
 	officestate,officecountry,officezipcode,homeeaddrss,homecity,homestate,homecountry,
-	homezipcode,degree,mobilecountrycode,mobileno,phoneno,email,username,password,visitingcharge,
-	consultingcharge,profileimage,profileimagename,curriculumvitae,curriculumvitaename,educationcertificate,educationcertificatename,experiencecertificate,experiencecertificatename,joiningdate
+	homezipcode,degree,mobilecountrycode,mobileno,phoneno,email,username,password,profileimage,profileimagename,curriculumvitae,curriculumvitaename,educationcertificate,educationcertificatename,experiencecertificate,experiencecertificatename,joiningdate
 	,departmentname,specailizationname,doctorupdate,doctoremail,doctoruser,doctoremailinvalid,chackusername;
 	
+	float visitingcharge,consultingcharge;
 	public int getId() {
 		return id;
 	}
@@ -164,16 +164,16 @@ public class DoctorList {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getVisitingcharge() {
+	public float getVisitingcharge() {
 		return visitingcharge;
 	}
-	public void setVisitingcharge(String visitingcharge) {
+	public void setVisitingcharge(float visitingcharge) {
 		this.visitingcharge = visitingcharge;
 	}
-	public String getConsultingcharge() {
+	public float getConsultingcharge() {
 		return consultingcharge;
 	}
-	public void setConsultingcharge(String consultingcharge) {
+	public void setConsultingcharge(float consultingcharge) {
 		this.consultingcharge = consultingcharge;
 	}
 	public String getProfileimage() {

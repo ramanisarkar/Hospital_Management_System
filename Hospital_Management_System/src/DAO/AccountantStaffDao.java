@@ -15,104 +15,114 @@ import VO.LoginVO;
 public class AccountantStaffDao {
 
 	public ArrayList<AccountantStaffVo> accountantStaffList(AccountantStaffVo accountantStaffVo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
 		List<AccountantStaffVo> nurseList = new ArrayList<AccountantStaffVo>();
 		try {
-			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
-			Session session = sessionfactory.openSession();
-			Transaction transaction = session.beginTransaction();
 			Query q = session.createQuery("from AccountantStaffVo AS d where d.adminid =:id");
 			q.setParameter("id", accountantStaffVo.getAdminid());
 			nurseList = q.list();
-			transaction.commit();
-			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		finally {
+			transaction.commit();
+			session.close();
 		}
 		return (ArrayList<AccountantStaffVo>) nurseList;
 	}
 
 	public String accountantStaffStaffInsert(AccountantStaffVo accountantStaffVo, LoginVO loginvo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
 		String message;
 		try {
-			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
-			Session session = sessionfactory.openSession();
-			Transaction transaction = session.beginTransaction();
 			session.save(accountantStaffVo);
 			session.save(loginvo);
-			transaction.commit();
-			session.close();
 		} catch (Exception e) {
 			return message = "error";
+		}
+		finally {
+			transaction.commit();
+			session.close();
 		}
 		return message = "true";
 	}
 
 	public ArrayList<AccountantStaffVo> accountantStaffStaffEdit(AccountantStaffVo accountantStaffVo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
 		List<AccountantStaffVo> pharmanicistList = new ArrayList<AccountantStaffVo>();
 		try {
-			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
-			Session session = sessionfactory.openSession();
-			Transaction transaction = session.beginTransaction();
 			Query q = session.createQuery("from AccountantStaffVo AS n where n.id =:id");
 			q.setParameter("id", accountantStaffVo.getId());
 			pharmanicistList = q.list();
-			transaction.commit();
-			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		finally {
+			transaction.commit();
+			session.close();
 		}
 		return (ArrayList<AccountantStaffVo>) pharmanicistList;
 	}
 
 	public String deleteLogin(LoginVO loginVO) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
 		String message = null;
 		try {
-			System.out.println(loginVO.getId());
-			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
-			Session session = sessionfactory.openSession();
-			Transaction transaction = session.beginTransaction();
 			Query q = session.createQuery("delete from LoginVO AS n where n.accountantloginid =:id");
 			q.setParameter("id", loginVO.getAccountantloginid());
 			q.executeUpdate();
-			transaction.commit();
-			session.close();
 		} catch (Exception e) {
 			return message = "error";
+		}
+		finally {
+			transaction.commit();
+			session.close();
 		}
 		return message = "true";
 	}
 
 	public String deleteAccountantStaff(AccountantStaffVo accountantStaffVo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
 		String message = null;
 		try {
-			System.out.println(accountantStaffVo.getId());
-			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
-			Session session = sessionfactory.openSession();
-			Transaction transaction = session.beginTransaction();
 			Query q = session.createQuery("delete from AccountantStaffVo AS n where n.id =:id");
 			q.setParameter("id", accountantStaffVo.getId());
 			q.executeUpdate();
-			transaction.commit();
-			session.close();
 		} catch (Exception e) {
 			return message = "error";
+		}
+		finally {
+			transaction.commit();
+			session.close();
 		}
 		return message = "true";
 	}
 
 	public String accountantStaffUpdateProfile(AccountantStaffVo accountantStaffVo) {
-		System.out.println(accountantStaffVo.getEmail()+"  "+accountantStaffVo.getPassword());
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
 		String chack;
 		try {
-			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
-			Session session = sessionfactory.openSession();
-			Transaction transaction = session.beginTransaction();
 			session.update(accountantStaffVo);
-			transaction.commit();
-			session.close();
 			}
+		
 		catch (Exception e) {
 			return chack="error";
+		}
+		finally {
+			transaction.commit();
+			session.close();
 		}
 		return chack="Add";
 	}

@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
@@ -44,41 +45,49 @@ public class Report extends HttpServlet {
 		System.out.println("---------------------------------");
 		String flag = request.getParameter("flag");
 		System.out.println(flag);
+		HttpSession session = request.getSession();
 		if (flag.equalsIgnoreCase("reportList")) {
+			int adminid = Integer.parseInt(request.getParameter("adminId"));
+			session.setAttribute("adminid", adminid);
 			reportList(request, response);
 		}
 		if (flag.equalsIgnoreCase("reportEdit")) {
 			reportEdit(request, response);
 		}
-		if (flag.equalsIgnoreCase("reportDelete")) {
+		if (flag.equalsIgnoreCase("reportdelete")) {
+			int adminid = Integer.parseInt(request.getParameter("adminId"));
+			session.setAttribute("adminid", adminid);
 			reportDelete(request, response);
+			reportList(request, response);
 		}
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("-----------------------------------------------------------");
 		String flag = request.getParameter("flag");
 		System.out.println(flag);
-		if (flag.equalsIgnoreCase("reposrtInsert")) {
+		HttpSession session = request.getSession();
+		if (flag.equalsIgnoreCase("priscriptionReportInsert")) {
+			int adminid = Integer.parseInt(request.getParameter("adminid"));
+			session.setAttribute("adminid", adminid);
 			reportInsert(request, response);
 			reportList(request, response);
 		}
-		if (flag.equalsIgnoreCase("reposrtUpdate")) {
+		if (flag.equalsIgnoreCase("priscriptionReportUpdate")) {
+			int adminid = Integer.parseInt(request.getParameter("adminid"));
+			session.setAttribute("adminid", adminid);
 			reportUpdate(request, response);
 			reportList(request, response);
 		}
-		
 	}
 	
 	private void reportInsert(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			int adminid = Integer.parseInt(request.getParameter("adminId"));
-			String name = request.getParameter("event");
-			String discription = request.getParameter("eventtitle");
-			float amount = Float.parseFloat(request.getParameter("amount"));
+			HttpSession session = request.getSession();
+			int adminid = (int)session.getAttribute("adminid");
+			String name = request.getParameter("reportname");
+			String discription = request.getParameter("diagno_description");
+			float amount = Float.parseFloat(request.getParameter("report_cost"));
 
 			Timestamp t1 = new Timestamp(System.currentTimeMillis());
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy  hh:mm:ss aa");
@@ -104,12 +113,12 @@ public class Report extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 	}
 
 	private void reportList(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		int adminid = Integer.parseInt(request.getParameter("adminId"));
-
+		HttpSession session = request.getSession();
+		int adminid = (int)session.getAttribute("adminid");
+		System.out.println(adminid);
 		AdminVo adminVo = new AdminVo();
 		adminVo.setId(adminid);
 
@@ -143,7 +152,7 @@ public class Report extends HttpServlet {
 	
 	private void reportEdit(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		int reportId = Integer.parseInt(request.getParameter("reportId"));
-
+		
 		ReportVo reportVo = new ReportVo();
 		reportVo.setId(reportId);
 
@@ -177,11 +186,12 @@ public class Report extends HttpServlet {
 	
 	private void reportUpdate(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			int adminid = Integer.parseInt(request.getParameter("adminId"));
+			HttpSession session = request.getSession();
+			int adminid = (int)session.getAttribute("adminid");
 			int id = Integer.parseInt(request.getParameter("id"));
-			String name = request.getParameter("event");
-			String discription = request.getParameter("eventtitle");
-			float amount = Float.parseFloat(request.getParameter("amount"));
+			String name = request.getParameter("reportname");
+			String discription = request.getParameter("diagno_description");
+			float amount = Float.parseFloat(request.getParameter("report_cost"));
 			String joiningdate = request.getParameter("joining");
 
 			AdminVo adminVo = new AdminVo();
@@ -213,7 +223,8 @@ public class Report extends HttpServlet {
 		ReportVo reportVo = new ReportVo();
 		reportVo.setId(id);
 
-		ReportDao reportDao = new ReportDao();		
+		ReportDao reportDao = new ReportDao();
+		reportDao.deleteReport(reportVo);
 		
 	}
 }

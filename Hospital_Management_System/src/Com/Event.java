@@ -17,9 +17,11 @@ import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
+import DAO.AllDataCountDao;
 import DAO.CategoryDao;
 import DAO.EventDao;
 import VO.AdminVo;
+import VO.AllDataCountVo;
 import VO.CategoryVo;
 import VO.EventForVo;
 import VO.EventVo;
@@ -98,7 +100,10 @@ public class Event extends HttpServlet {
 			String startdate = request.getParameter("startdate");
 			String[] eventfor = request.getParameterValues("eventfor[]");
 			String enddate = request.getParameter("eventenddate");
-
+			String eventf = "";
+			for (int i = 0; i < eventfor.length; i++) {
+				eventf = eventf.concat(eventfor[i]).concat("/");
+			}
 			Timestamp t1 = new Timestamp(System.currentTimeMillis());
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy  hh:mm:ss aa");
 			String joiningdate = sdf.format(t1);
@@ -110,6 +115,7 @@ public class Event extends HttpServlet {
 			eventVo.setAdminid(adminVo);
 			eventVo.setEventname(event);
 			eventVo.setTitle(title);
+			eventVo.setEventfor(eventf);
 			eventVo.setComment(commnet);
 			eventVo.setEnddate(enddate);
 			eventVo.setStartdate(startdate);
@@ -119,22 +125,11 @@ public class Event extends HttpServlet {
 
 			String check = eventDao.insertEvent(eventVo);
 			if (check == "true") {
-				for (int i = 0; i < eventfor.length; i++) {
-					String eventf = eventfor[i];
-
-					EventForVo eventForVo = new EventForVo();
-					eventForVo.setEventfor(eventf);
-					eventForVo.setAdminid(adminVo);
-					eventForVo.setEventid(eventVo);
-
-					String message = eventDao.insertEventFor(eventForVo);
-
-					if (message == "true") {
-						eventUpdate = "true";
-					} else {
-						eventUpdate = "false";
-					}
-				}
+				eventUpdate="true";
+				AllDataCountVo allDataCountVo = new AllDataCountVo();
+				allDataCountVo.setAdminid(adminVo);
+				AllDataCountDao allDataCountDao = new AllDataCountDao();
+				allDataCountDao.increaseData(allDataCountVo, "event");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -162,17 +157,7 @@ public class Event extends HttpServlet {
 				String comment = event.getComment();
 				String stdate = event.getStartdate();
 				String enddate = event.getEnddate();
-				String a = "";
-				eventVo.setId(id);
-				EventForVo eventForVo = new EventForVo();
-				eventForVo.setEventid(eventVo);
-				ArrayList<EventForVo> eventForlist = eventDao.listEventFor(eventForVo);
-				for (EventForVo eventFor : eventForlist) {
-					String eventfor = eventFor.getEventfor();
-					System.out.println(eventfor);
-					a = a.concat(eventfor).concat(",");
-					System.out.println(a);
-				}
+				String eventfor = event.getEventfor();
 				EventVo common = new EventVo();
 				common.setId(id);
 				common.setEventname(name);
@@ -180,7 +165,7 @@ public class Event extends HttpServlet {
 				common.setComment(comment);
 				common.setStartdate(stdate);
 				common.setEnddate(enddate);
-				common.setEventfor(a);
+				common.setEventfor(eventfor);
 				common.setUpdateevent(eventUpdate);
 				list.add(common);
 			}
@@ -196,49 +181,49 @@ public class Event extends HttpServlet {
 	}
 
 	private void eventEdit(HttpServletRequest request, HttpServletResponse response) {
-		try {
-			int eventId = Integer.parseInt(request.getParameter("eventId"));
-			System.out.println(eventId);
-
-			EventVo eventVo = new EventVo();
-			eventVo.setId(eventId);
-
-			EventForVo eventForVo = new EventForVo();
-			eventForVo.setEventid(eventVo);
-
-			EventDao eventDao = new EventDao();
-			ArrayList<EventForVo> eventList = eventDao.editEventFor(eventForVo);
-			List<EventVo> list = new ArrayList<EventVo>();
-			for (EventForVo event : eventList) {
-				int adminid = event.getAdminid().getId();
-				String name = event.getEventid().getEventname();
-				String title = event.getEventid().getTitle();
-				String comment = event.getEventid().getComment();
-				String stdate = event.getEventid().getStartdate();
-				String enddate = event.getEventid().getEnddate();
-				String joiningdate = event.getEventid().getJoiningdate();
-				String eventfor = event.getEventfor();
-				EventVo common = new EventVo();
-				common.setId(eventId);
-				common.setAid(adminid);
-				common.setEventname(name);
-				common.setTitle(title);
-				common.setComment(comment);
-				common.setStartdate(stdate);
-				common.setEnddate(enddate);
-				common.setEventfor(eventfor);
-				common.setJoiningdate(joiningdate);
-				list.add(common);
-			}
-			Gson gson = new Gson();
-			System.out.println(gson.toJson(list));
-			PrintWriter out = response.getWriter();
-			out.print(gson.toJson(list));
-			out.flush();
-			out.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+//			int eventId = Integer.parseInt(request.getParameter("eventId"));
+//			System.out.println(eventId);
+//
+//			EventVo eventVo = new EventVo();
+//			eventVo.setId(eventId);
+//
+//			EventForVo eventForVo = new EventForVo();
+//			eventForVo.setEventid(eventVo);
+//
+//			EventDao eventDao = new EventDao();
+//			ArrayList<EventForVo> eventList = eventDao.editEventFor(eventForVo);
+//			List<EventVo> list = new ArrayList<EventVo>();
+//			for (EventForVo event : eventList) {
+//				int adminid = event.getAdminid().getId();
+//				String name = event.getEventid().getEventname();
+//				String title = event.getEventid().getTitle();
+//				String comment = event.getEventid().getComment();
+//				String stdate = event.getEventid().getStartdate();
+//				String enddate = event.getEventid().getEnddate();
+//				String joiningdate = event.getEventid().getJoiningdate();
+//				String eventfor = event.getEventfor();
+//				EventVo common = new EventVo();
+//				common.setId(eventId);
+//				common.setAid(adminid);
+//				common.setEventname(name);
+//				common.setTitle(title);
+//				common.setComment(comment);
+//				common.setStartdate(stdate);
+//				common.setEnddate(enddate);
+//				common.setEventfor(eventfor);
+//				common.setJoiningdate(joiningdate);
+//				list.add(common);
+//			}
+//			Gson gson = new Gson();
+//			System.out.println(gson.toJson(list));
+//			PrintWriter out = response.getWriter();
+//			out.print(gson.toJson(list));
+//			out.flush();
+//			out.close();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	private void eventUpdate(HttpServletRequest request, HttpServletResponse response) {
@@ -253,7 +238,10 @@ public class Event extends HttpServlet {
 			String[] eventfor = request.getParameterValues("eventfor[]");
 			System.out.println(eventfor.length);
 			String enddate = request.getParameter("eventenddate");
-
+			String eventf = "";
+			for (int i = 0; i < eventfor.length; i++) {
+				eventf = eventf.concat(eventfor[i]).concat("/");
+			}
 			AdminVo adminVo = new AdminVo();
 			adminVo.setId(adminid);
 
@@ -269,25 +257,14 @@ public class Event extends HttpServlet {
 
 			EventDao eventDao = new EventDao();
 			String check = eventDao.updateEvent(eventVo);
-			EventForVo eventForVo = new EventForVo();
-			eventForVo.setAdminid(adminVo);
-			eventForVo.setEventid(eventVo);
-
-			eventDao.deleteEventFor(eventForVo);
 
 			if (check == "true") {
-				for (int i = 0; i < eventfor.length; i++) {
-					String eventf = eventfor[i];
-					System.out.println(eventf);
-					eventForVo.setEventfor(eventf);
-					String message = eventDao.insertEventFor(eventForVo);
-					if (message == "true") {
-						eventUpdate = "true";
-					} else {
-						eventUpdate = "false";
-					}
-				}
+
+				eventUpdate = "true";
+			} else {
+				eventUpdate = "false";
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -301,18 +278,10 @@ public class Event extends HttpServlet {
 			EventVo eventVo = new EventVo();
 			eventVo.setId(eventId);
 
-			EventForVo eventForVo = new EventForVo();
-			eventForVo.setEventid(eventVo);
-
 			EventDao eventDao = new EventDao();
-			String message = eventDao.deleteEventFor(eventForVo);
-			if (message == "true") {
-				String mess = eventDao.deleteEvent(eventVo);
-				if (mess == "true") {
-					eventUpdate = "true";
-				} else {
-					eventUpdate = "false";
-				}
+			String mess = eventDao.deleteEvent(eventVo);
+			if (mess == "true") {
+				eventUpdate = "true";
 			} else {
 				eventUpdate = "false";
 			}

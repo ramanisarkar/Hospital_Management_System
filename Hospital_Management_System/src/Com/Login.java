@@ -1,6 +1,7 @@
 package Com;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,9 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
+
 import DAO.LoginDAO;
 import VO.AdminVo;
 import VO.LoginVO;
+import VO.PatientRegistretionVo;
 
 /**
  * Servlet implementation class Login
@@ -34,6 +39,7 @@ public class Login extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
+	static Logger logger = Logger.getLogger(Login.class);
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -45,6 +51,7 @@ public class Login extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
 		String flag = request.getParameter("flag");
 		if (flag.equals("verify")) {
 			HttpSession session = request.getSession();
@@ -65,7 +72,7 @@ public class Login extends HttpServlet {
 	}
 
 	private void verifyEmailAndPassword(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//		try {
+		try {
 			System.out.println("-----------------------");
 			HttpSession session = request.getSession(false);
 			String email = (String) session.getAttribute("email");
@@ -96,13 +103,16 @@ public class Login extends HttpServlet {
 					
 					adminVo.setEmail(email);
 					adminVo.setPassword(pass);
-					
 					ArrayList<AdminVo> admin = logindao.adminVerify(adminVo);
-					
+					logger.trace("admin" + admin.toString());
+					int id = admin.get(0).getId();
 					session.setAttribute("hospitalname", admin.get(0).getHospitalname());
 					session.setAttribute("hospitaldata", admin);
 					session.setAttribute("hospitalimage", admin.get(0).getHospitallogo());
+					session.setAttribute("loginadminid", id);
 					
+					CommonDataCount commonDataCount = new CommonDataCount();
+					commonDataCount.doGet(request, response);
 					
 					loginvo.setLastlogin(lastlogin);
 					loginvo.setId(loginid);
@@ -176,16 +186,20 @@ public class Login extends HttpServlet {
 //					response.sendRedirect("Student_Login.jsp");
 //				}
 			} else {
+				
 				session.setAttribute("wrong", "true");
 				response.sendRedirect("Com_Login.jsp");
 			}
 
-//		} catch (Exception e) {
-//			HttpSession session = request.getSession();
-//			session.setAttribute("loginResult", "true");
-//			response.sendRedirect("Com_Login.jsp");
-//			e.printStackTrace();
-//		}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(e);
+			logger.error("Login verify error:line no"+ e+e.getStackTrace()[2].getLineNumber());
+			HttpSession session = request.getSession();
+			session.setAttribute("loginResult", "true");
+			response.sendRedirect("Com_Login.jsp");
+			
+		}
 	}
 	
 //	private void updatepassword(HttpServletRequest request, HttpServletResponse response) throws IOException {

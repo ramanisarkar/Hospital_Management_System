@@ -4,10 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,25 +20,21 @@ import javax.servlet.http.Part;
 
 import com.google.gson.Gson;
 
-import DAO.DepartmentDao;
 import DAO.DoctorDao;
 import DAO.LoginDAO;
 import DAO.PatientDao;
-import DAO.PatientDoctorDao;
 import DAO.PatientRegistreationDao;
-import DAO.PharmacistDao;
-import VO.AccountantList;
 import VO.AdminVo;
-import VO.DepartmentVo;
-import VO.DoctorList;
+import VO.CommonDataVo;
 import VO.DoctorVo;
 import VO.LoginVO;
-import VO.PatentRegistreationList;
+import VO.PatientChargesHistoryVo;
 import VO.PatientDoctorVo;
+import VO.PatientGuardianInfo;
 import VO.PatientList;
+import VO.PatientOtherInfo;
 import VO.PatientRegistretionVo;
-import VO.PatientVo;
-import VO.SpecializationVo;
+import VO.SymptomsVo;
 
 /**
  * Servlet implementation class Patient
@@ -62,7 +56,6 @@ public class Patient extends HttpServlet {
 	private String patientemail = null;
 	private String patientuser = null;
 
-	private static final String SAVE_DIR_Images = "Patient_Image";
 	private static final String SAVE_DIR_Guardian_Images = "Patient_Gurdian_Image";
 
 	private static String getSubmittedFileName(Part part) {
@@ -76,19 +69,14 @@ public class Patient extends HttpServlet {
 		return filename;
 	}
 
-	private void PatientImage(boolean s, boolean s2, String profileImagepath, String guarsianpath, Part profileImage,
-			Part guardian) {
+	private void PatientImage(boolean s, String profileImagepath, Part profileImage) {
 		try {
 			if (s == true) {
 				String Path = getServletContext()
-						.getRealPath(File.separator + SAVE_DIR_Images + File.separator + profileImagepath);
+						.getRealPath(File.separator + SAVE_DIR_Guardian_Images + File.separator + profileImagepath);
 				profileImage.write(Path);
 			}
-			if (s2 == true) {
-				String Path2 = getServletContext()
-						.getRealPath(File.separator + SAVE_DIR_Guardian_Images + File.separator + guarsianpath);
-				guardian.write(Path2);
-			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -112,7 +100,7 @@ public class Patient extends HttpServlet {
 			response.sendRedirect("Admin_Patient_Reg.jsp");
 		}
 		if (flag.equalsIgnoreCase("insertPatientId")) {
-			patientRagistrationList(request, response);
+			patientRagistrationInfo(request, response);
 		}
 		if (flag.equalsIgnoreCase("patientList")) {
 			patientList(request, response);
@@ -170,18 +158,20 @@ public class Patient extends HttpServlet {
 
 		AdminVo adminVo = new AdminVo();
 		adminVo.setId(adminid);
-
+		
 		PatientRegistretionVo patientRegistretionVo = new PatientRegistretionVo();
 		patientRegistretionVo.setAdminid(adminVo);
-
+		
+		System.out.println(patientRegistretionVo.getAdminid());
 		PatientRegistreationDao patientRegistreationDao = new PatientRegistreationDao();
 		ArrayList<PatientRegistretionVo> patientRegistration = patientRegistreationDao
 				.patientRegistrationList(patientRegistretionVo);
+		System.out.println(patientRegistration);
 		System.out.println(patientRegistration.size());
 		session.setAttribute("patientRagistrationList", patientRegistration);
 	}
 
-	private void patientRagistrationList(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	private void patientRagistrationInfo(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		int patientId = Integer.parseInt(request.getParameter("patientId"));
 		System.out.println(patientId);
 
@@ -199,8 +189,7 @@ public class Patient extends HttpServlet {
 			String firstName = patient.getFirstname();
 			String middleName = patient.getMidalname();
 			String lastName = patient.getLastname();
-			java.sql.Date dateofbirth = patient.getBirthdate();
-			String date = dateofbirth.toString();
+			String date = patient.getBirthdate();
 			String gender = patient.getGender();
 			String homeAddress = patient.getHomeeaddrss();
 			String homeCity = patient.getHomecity();
@@ -256,24 +245,30 @@ public class Patient extends HttpServlet {
 		AdminVo adminVo = new AdminVo();
 		adminVo.setId(adminid);
 
-		PatientVo patientVo = new PatientVo();
+		PatientOtherInfo patientVo = new PatientOtherInfo();
 		patientVo.setAdminid(adminVo);
+		patientVo.setPatienttype("IN");
 
 		PatientDao patientDao = new PatientDao();
-		ArrayList<PatientVo> patientlist = patientDao.patientList(patientVo);
+		ArrayList<PatientOtherInfo> patientlist = patientDao.patientList(patientVo);
 		List<PatientList> list = new ArrayList<PatientList>();
-		for (PatientVo patient : patientlist) {
+		DoctorVo doctorVo = new DoctorVo();
+		DoctorDao doctorDao = new DoctorDao();
+		for (PatientOtherInfo patient : patientlist) {
 			int id = patient.getId();
-			String photo = patient.getProfileimage();
-			String name = patient.getFirstname();
-			String psientid = patient.getPatientregistreationid().getPatientid();
+			String photo = patient.getPatientregistrationid().getProfileimage();
+			String name = patient.getPatientregistrationid().getFirstname();
+			String psientid = patient.getPatientregistrationid().getPatientid();
 			System.out.println(psientid);
-			String mobile = patient.getMobileno();
-			String bloodgroup = patient.getBloodgroup();
-			java.sql.Date admitedate = patient.getAdmintdate();
+			String mobile = patient.getPatientregistrationid().getMobileno();
+			String bloodgroup = patient.getPatientregistrationid().getBloodgroup();
+			String admitedate = patient.getAdmintdate();
 			String date = admitedate.toString();
-			String patientstatus = patient.getPatientstatus();
-			String doctorassigned = patient.getDoctorid().getFirstname();
+			String patientstatus = patient.getStatus();
+			int doctorid = patient.getDoctorid().getId();
+			doctorVo.setId(doctorid);
+			ArrayList<DoctorVo> listofdocotr = doctorDao.doctorEdit(doctorVo);
+			String doctorassigned = listofdocotr.get(0).getFirstname();
 
 			PatientList common = new PatientList();
 			common.setPatientstatus(patientstatus);
@@ -334,24 +329,6 @@ public class Patient extends HttpServlet {
 			HttpSession session = request.getSession();
 			int adminid = (int) session.getAttribute("patientadminid");
 			int patientid = Integer.parseInt(request.getParameter("patientId"));
-			String email = request.getParameter("email");
-			String firstName = request.getParameter("firstname");
-			String middleName = request.getParameter("middlename");
-			String lastName = request.getParameter("lastname");
-			String dateofbirth = request.getParameter("dob");
-			java.sql.Date dateOfBirth = java.sql.Date.valueOf(dateofbirth);
-			String bloodgroup = request.getParameter("blood_group");
-			String gender = request.getParameter("gender");
-			String homeAddress = request.getParameter("hometownaddress");
-			String homeCity = request.getParameter("homecity");
-			String homeState = request.getParameter("homestate");
-			String homeCountry = request.getParameter("homecountry");
-			String homeZipcode = request.getParameter("homezipcode");
-			String standardCode = request.getParameter("standardcode");
-			String mobileNumber = request.getParameter("mobilenumber");
-			String phoneNumber = request.getParameter("phonenumber");
-			String userName = request.getParameter("username");
-			String password = request.getParameter("password");
 			String guardianid = request.getParameter("guardianid");
 			String guardfirstName = request.getParameter("guardfirstname");
 			String guardMiddleName = request.getParameter("guardmiddlename");
@@ -363,45 +340,30 @@ public class Patient extends HttpServlet {
 			String guardhomeState = request.getParameter("guardhomestate");
 			String guardhomeCountry = request.getParameter("guardhomecountry");
 			String guardhomeZipcode = request.getParameter("guardhomezipcode");
+			String guardcode = request.getParameter("guardhomezipcode");
 			String guardmobileNumber = request.getParameter("guardmobilenumber");
 			String guardphoneNumber = request.getParameter("guardphonenumber");
 
 			String admitdate = request.getParameter("admitdate");
-			java.sql.Date admitDate = java.sql.Date.valueOf(admitdate);
 			String admittime = request.getParameter("admittime");
 			LocalTime localTime = LocalTime.parse(admittime);
 			java.sql.Time admitTime = java.sql.Time.valueOf(localTime);
 			System.out.println(admitTime);
-			
+
 			String patientstatus = request.getParameter("patientstatus");
 			int doctor = Integer.parseInt(request.getParameter("doctor"));
 
-			String symptoms = request.getParameter("symptoms");
+			String[] symptoms = request.getParameterValues("symptoms[]");
 
-			Part profileImage = request.getPart("profileimage");
-			Part guardianimage = request.getPart("guardianimage");
-
-			String profileImageName = getSubmittedFileName(profileImage);
-			String guardianimageName = getSubmittedFileName(guardianimage);
-
-			String profileImagepath = null;
+			Part gurdianImage = request.getPart("guardianimage");
+			String gurdianimageName = getSubmittedFileName(gurdianImage);
 			String guardianimagepath = null;
 
-			boolean s;
 			boolean s2;
-
 			int i = 1;
-			if ((profileImageName.isEmpty()) == false) {
+			if ((gurdianimageName.isEmpty()) == false) {
 				String uniq = String.valueOf(i);
-				profileImagepath = userName.concat(uniq).concat("@").concat(profileImageName);
-				s = true;
-			} else {
-				s = false;
-			}
-			if ((guardianimageName.isEmpty()) == false) {
-				i++;
-				String uniq = String.valueOf(i);
-				guardianimagepath = userName.concat(uniq).concat("@").concat(guardianimageName);
+				guardianimagepath = guardianid.concat(uniq).concat("@").concat(gurdianimageName);
 				s2 = true;
 			} else {
 				s2 = false;
@@ -410,116 +372,101 @@ public class Patient extends HttpServlet {
 			Timestamp t1 = new Timestamp(System.currentTimeMillis());
 			SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy  hh:mm:ss aa");
 			String joiningdate = sdf1.format(t1);
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+			String date = sdf.format(t1);
+			
+			AdminVo adminVo = new AdminVo();
+			adminVo.setId(adminid);
+
+			PatientRegistretionVo patientRegistretionVo = new PatientRegistretionVo();
+			patientRegistretionVo.setId(patientid);
 
 			DoctorVo doctorVo = new DoctorVo();
 			doctorVo.setId(doctor);
 
-			AdminVo adminVo = new AdminVo();
-			adminVo.setId(adminid);
+			PatientOtherInfo patientOtherInfo = new PatientOtherInfo();
+			patientOtherInfo.setPatientregistrationid(patientRegistretionVo);
+			patientOtherInfo.setAdminid(adminVo);
+			patientOtherInfo.setAdminttime(admitTime);
+			patientOtherInfo.setAdmintdate(admitdate);
+			patientOtherInfo.setDoctorid(doctorVo);
+			patientOtherInfo.setJoiningdate(joiningdate);
+			patientOtherInfo.setPatienttype("IN");
+			patientOtherInfo.setStatus(patientstatus);
 			
-			PatientRegistretionVo patientRegistretionVo = new PatientRegistretionVo();
-			patientRegistretionVo.setId(patientid);
+			PatientGuardianInfo patientGuardianInfo = new PatientGuardianInfo();
+			patientGuardianInfo.setAdminid(adminVo);
+			patientGuardianInfo.setGuardianfirstname(guardfirstName);
+			patientGuardianInfo.setGuardiangender(guardgender);
+			patientGuardianInfo.setGuardianhomecity(guardhomeCity);
+			patientGuardianInfo.setGuardianhomecountry(guardhomeCountry);
+			patientGuardianInfo.setGuardianhomeeaddrss(guardhomeAddress);
+			patientGuardianInfo.setGuardianhomestate(guardhomeState);
+			patientGuardianInfo.setGuardianhomezipcode(guardhomeZipcode);
+			patientGuardianInfo.setGuardianid(guardianid);
+			patientGuardianInfo.setGuardianimage(guardianimagepath);
+			patientGuardianInfo.setGuardianlastname(guardLastName);
+			patientGuardianInfo.setGuardianmidalname(guardMiddleName);
+			patientGuardianInfo.setGuardianmobilecountrycode(guardcode);
+			patientGuardianInfo.setGuardianmobileno(guardmobileNumber);
+			patientGuardianInfo.setGuardianphoneno(guardphoneNumber);
+			patientGuardianInfo.setPatientotherinfoid(patientOtherInfo);
+			patientGuardianInfo.setRelationwithpatient(raletionwithpatient);
 			
-			PatientVo patientVo = new PatientVo();
-			patientVo.setPatientregistreationid(patientRegistretionVo);
-			patientVo.setFirstname(firstName);
-			patientVo.setMidalname(middleName);
-			patientVo.setLastname(lastName);
-			patientVo.setBirthdate(dateOfBirth);
-			patientVo.setBloodgroup(bloodgroup);
-			patientVo.setGender(gender);
-			patientVo.setHomeeaddrss(homeAddress);
-			patientVo.setHomecity(homeCity);
-			patientVo.setHomestate(homeState);
-			patientVo.setHomecountry(homeCountry);
-			patientVo.setHomezipcode(homeZipcode);
-			patientVo.setMobilecountrycode(standardCode);
-			patientVo.setMobileno(mobileNumber);
-			patientVo.setPhoneno(phoneNumber);
-			patientVo.setEmail(email);
-			patientVo.setUsername(userName);
-			patientVo.setPassword(password);
-			patientVo.setProfileimage(profileImagepath);
-			patientVo.setGuardianfirstname(guardfirstName);
-			patientVo.setGuardianmidalname(guardMiddleName);
-			patientVo.setGuardianlastname(guardLastName);
-			patientVo.setGuardianid(guardianid);
-			patientVo.setGuardiangender(guardgender);
-			patientVo.setRelationwithpatient(raletionwithpatient);
-			patientVo.setGuardianhomeeaddrss(guardhomeAddress);
-			patientVo.setGuardianhomecity(guardhomeCity);
-			patientVo.setGuardianhomestate(guardhomeState);
-			patientVo.setGuardianhomecountry(guardhomeCountry);
-			patientVo.setGuardianhomezipcode(guardhomeZipcode);
-			patientVo.setGuardianmobileno(guardmobileNumber);
-			patientVo.setGuardianphoneno(guardphoneNumber);
-			patientVo.setGuardianimage(guardianimagepath);
-			patientVo.setAdmintdate(admitDate);
-			patientVo.setAdminttime(admitTime);
-			patientVo.setPatientstatus(patientstatus);
-			patientVo.setSymptoms(symptoms);
-			patientVo.setJoiningdate(joiningdate);
-			patientVo.setDoctorid(doctorVo);
-			patientVo.setAdminid(adminVo);
+			PatientDao patientDao = new PatientDao();
+			ArrayList<PatientOtherInfo> patentcheck = patientDao.patientCheck(patientOtherInfo);
+			if (patentcheck.isEmpty() == true) {
+				String chackdoctor = patientDao.patientInsert(patientOtherInfo , patientGuardianInfo);
+				if (chackdoctor == "true") {
+					CommonDataVo commonDataVo = new CommonDataVo();
+					commonDataVo.setSymptomspatientid(patientRegistretionVo);
+					patientDao.deletePatientSymptomes(commonDataVo);
+					for (int j = 0; j < symptoms.length; j++) {
 
-			LoginVO loginvo = new LoginVO();
-			loginvo.setPatientloginid(patientVo);
-			loginvo.setEmail(email);
-			loginvo.setPassword(password);
-			loginvo.setUsername(userName);
-			loginvo.setLastlogin(joiningdate);
-			loginvo.setRoll("Patient");
+						int symptom = Integer.valueOf(symptoms[j]);
+						SymptomsVo symptomsVo = new SymptomsVo();
+						symptomsVo.setId(symptom);
+						CommonDataVo commonDataVo1 = new CommonDataVo();
+						commonDataVo1.setAdminid(adminVo);
+						commonDataVo1.setSymptomspatientid(patientRegistretionVo);
+						commonDataVo1.setSymptomsid(symptomsVo);
 
-			LoginDAO logdao = new LoginDAO();
-			ArrayList<LoginVO> emailchack = logdao.emailverify(loginvo);
-			System.out.println(emailchack.size());
-			if (emailchack.isEmpty() == true) {
-				patientemail = "true";
-				ArrayList<LoginVO> usernamechack = logdao.userNameVerify(loginvo);
-				System.out.println(usernamechack.size());
-				if (usernamechack.isEmpty() == true) {
-					PatientDao patientDao = new PatientDao();
-					String chackdoctor = patientDao.patientInsert(patientVo, loginvo);
-					if (chackdoctor == "true") {
-						String uploadImagePath = getServletContext().getRealPath(File.separator + SAVE_DIR_Images);
-						File imageDir = new File(uploadImagePath);
-						if (!imageDir.exists()) {
-							imageDir.mkdirs();
-						}
-						String uploadDocumentPath = getServletContext()
-								.getRealPath(File.separator + SAVE_DIR_Guardian_Images);
-						File documentdir = new File(uploadDocumentPath);
-						if (!documentdir.exists()) {
-							documentdir.mkdirs();
-						}
-						PatientImage(s, s2, profileImagepath, guardianimagepath, profileImage, guardianimage);
-						patientupdate = "true";
-						String respose = "success";
-						response.setContentType("text/plain");
-						response.setCharacterEncoding("UTF-8");
-						response.getWriter().write(respose);
-					} else {
-						patientupdate = "false";
-						String respose = "error";
-						response.setContentType("text/plain");
-						response.setCharacterEncoding("UTF-8");
-						response.getWriter().write(respose);
+						patientDao.insertSymptoms(commonDataVo1);
 					}
-				} else {
-					patientuser = "false";
-					patientupdate = "false";
-					String respose = "error";
-					response.setContentType("text/plain");
-					response.setCharacterEncoding("UTF-8");
-					response.getWriter().write(respose);
+					PatientImage(s2, guardianimagepath, gurdianImage);
+					PatientDoctorVo patientVo = new PatientDoctorVo();
+					patientVo.setAdminid(adminVo);
+					patientVo.setDoctorid(doctorVo);
+					patientVo.setPatientotherinfoid(patientOtherInfo);
+					patientVo.setPatienttype("IN");
+					
+					ArrayList<PatientDoctorVo> patentchak = patientDao.checkPatientDoctor(patientVo);
+					patientupdate = "true";
+					if (patentchak.isEmpty() == true) {
+						patientDao.patientDoctorInsert(patientVo);
+					}
 				}
-			} else {
-				patientuser = "false";
-				patientemail = "false";
-				String respose = "error";
-				response.setContentType("text/plain");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().write(respose);
+			}
+			else if (patentcheck.isEmpty() == false) {
+				patientOtherInfo.setId(patentcheck.get(0).getId()); 
+				patientGuardianInfo.setPatientotherinfoid(patientOtherInfo);
+				ArrayList<PatientOtherInfo> gurdianlist = patientDao.guardianCheck(patientGuardianInfo);
+				patientGuardianInfo.setId(gurdianlist.get(0).getId());
+				String chackdoctor = patientDao.patientUpdate(patientOtherInfo , patientGuardianInfo);
+				if (chackdoctor == "true") {
+					PatientDoctorVo patientVo = new PatientDoctorVo();
+					patientVo.setAdminid(adminVo);
+					patientVo.setDoctorid(doctorVo);
+					patientVo.setPatientotherinfoid(patientOtherInfo);
+					patientVo.setPatienttype("IN");
+					
+					ArrayList<PatientDoctorVo> patentchak = patientDao.checkPatientDoctor(patientVo);
+					patientupdate = "true";
+					if (patentchak.isEmpty() == true) {
+						patientDao.patientDoctorInsert(patientVo);
+					}
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -543,8 +490,7 @@ public class Patient extends HttpServlet {
 			String firstName = patient.getFirstname();
 			String middleName = patient.getMidalname();
 			String lastName = patient.getLastname();
-			java.sql.Date dateofbirth = patient.getBirthdate();
-			String date = dateofbirth.toString();
+			String date = patient.getBirthdate();
 			String bloodgroup = patient.getBloodgroup();
 			String gender = patient.getGender();
 			String homeAddress = patient.getHomeeaddrss();
@@ -585,13 +531,12 @@ public class Patient extends HttpServlet {
 				a++;
 				gurdianimagename = gurdianprofileimage.substring(a);
 			}
-			java.sql.Date admint = patient.getAdmintdate();
+			String admint = patient.getAdmintdate();
 			String admintdate = admint.toString();
 			java.sql.Time time = patient.getAdminttime();
 			String adminttime = time.toString();
 			String patientstatus = patient.getPatientstatus();
 			int doctorid = patient.getDoctorid().getId();
-			String symptoms = patient.getSymptoms();
 			String joiningdate = patient.getJoiningdate();
 			PatientList common = new PatientList();
 			common.setPatientid(patinet.concat("-").concat(firstName));
@@ -636,7 +581,6 @@ public class Patient extends HttpServlet {
 			common.setAdminttime(adminttime);
 			common.setDoctorid(doctorid);
 			common.setPatientstatus(patientstatus);
-			common.setSymptoms(symptoms);
 			common.setJoiningdate(joiningdate);
 			list.add(common);
 		}
@@ -649,7 +593,8 @@ public class Patient extends HttpServlet {
 
 	}
 
-	private void patientUpdate(HttpServletRequest request, HttpServletResponse response)throws IOException, ServletException {
+	private void patientUpdate(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
 
 		int adminid = Integer.parseInt(request.getParameter("adminId"));
 		int id = Integer.parseInt(request.getParameter("id"));
@@ -659,7 +604,6 @@ public class Patient extends HttpServlet {
 		String middleName = request.getParameter("middlename");
 		String lastName = request.getParameter("lastname");
 		String dateofbirth = request.getParameter("dob");
-		java.sql.Date dateOfBirth = java.sql.Date.valueOf(dateofbirth);
 		String bloodgroup = request.getParameter("blood_group");
 		String gender = request.getParameter("gender");
 		String homeAddress = request.getParameter("hometownaddress");
@@ -689,15 +633,14 @@ public class Patient extends HttpServlet {
 		String editgurdianImage = request.getParameter("editgurdianImage");
 		String admitdate = request.getParameter("admitdate");
 		String joiningdate = request.getParameter("joiningdate");
-		java.sql.Date admitDate = java.sql.Date.valueOf(admitdate);
 		String admittime = request.getParameter("admittime");
 		LocalTime localTime = LocalTime.parse(admittime);
 		java.sql.Time admitTime = java.sql.Time.valueOf(localTime);
 		System.out.println(admitTime);
-		
+
 		String patientstatus = request.getParameter("patientstatus");
 		int doctor = Integer.parseInt(request.getParameter("doctor"));
-		String symptoms = request.getParameter("symptoms");
+		String[] symptoms = request.getParameterValues("symptoms[]");
 
 		Part profileImage = request.getPart("profileimage");
 		Part gurdianImage = request.getPart("gurdianimage");
@@ -737,19 +680,19 @@ public class Patient extends HttpServlet {
 		AdminVo adminVo = new AdminVo();
 		adminVo.setId(adminid);
 
+		PatientRegistretionVo patientRegistretionVo = new PatientRegistretionVo();
+		patientRegistretionVo.setId(patientid);
+
 		DoctorVo doctorVo = new DoctorVo();
 		doctorVo.setId(doctor);
 
-		PatientRegistretionVo patientRegistretionVo = new PatientRegistretionVo();
-		patientRegistretionVo.setId(patientid);
-		
 		PatientVo patientVo = new PatientVo();
 		patientVo.setId(id);
 		patientVo.setPatientregistreationid(patientRegistretionVo);
 		patientVo.setFirstname(firstName);
 		patientVo.setMidalname(middleName);
 		patientVo.setLastname(lastName);
-		patientVo.setBirthdate(dateOfBirth);
+		patientVo.setBirthdate(dateofbirth);
 		patientVo.setBloodgroup(bloodgroup);
 		patientVo.setGender(gender);
 		patientVo.setHomeeaddrss(homeAddress);
@@ -778,10 +721,9 @@ public class Patient extends HttpServlet {
 		patientVo.setGuardianmobileno(guardmobileNumber);
 		patientVo.setGuardianphoneno(guardphoneNumber);
 		patientVo.setGuardianimage(guardianimagepath);
-		patientVo.setAdmintdate(admitDate);
+		patientVo.setAdmintdate(admitdate);
 		patientVo.setAdminttime(admitTime);
 		patientVo.setPatientstatus(patientstatus);
-		patientVo.setSymptoms(symptoms);
 		patientVo.setJoiningdate(joiningdate);
 		patientVo.setDoctorid(doctorVo);
 		patientVo.setAdminid(adminVo);
@@ -800,6 +742,22 @@ public class Patient extends HttpServlet {
 			if (chackpassword.equals("add")) {
 				String checkpatient = patientDao.patientUpdateProfile(patientVo);
 				if (checkpatient == "Add") {
+
+					CommonDataVo commonDataVo = new CommonDataVo();
+					commonDataVo.setSymptomspatientid(patientVo);
+					patientDao.deletePatientSymptomes(commonDataVo);
+					for (int j = 0; j < symptoms.length; j++) {
+
+						int symptom = Integer.valueOf(symptoms[j]);
+						SymptomsVo symptomsVo = new SymptomsVo();
+						symptomsVo.setId(symptom);
+						CommonDataVo commonDataVo1 = new CommonDataVo();
+						commonDataVo1.setAdminid(adminVo);
+						commonDataVo1.setSymptomspatientid(patientVo);
+						commonDataVo1.setSymptomsid(symptomsVo);
+
+						patientDao.insertSymptoms(commonDataVo);
+					}
 					patientupdate = "true";
 					PatientImage(s, s2, profileImagepath, guardianimagepath, profileImage, gurdianImage);
 				} else {
@@ -813,6 +771,21 @@ public class Patient extends HttpServlet {
 				patientemail = "true";
 				String checkpatient = patientDao.patientUpdateProfile(patientVo);
 				if (checkpatient == "Add") {
+					CommonDataVo commonDataVo = new CommonDataVo();
+					commonDataVo.setSymptomspatientid(patientVo);
+					patientDao.deletePatientSymptomes(commonDataVo);
+					for (int j = 0; j < symptoms.length; j++) {
+
+						int symptom = Integer.valueOf(symptoms[j]);
+						SymptomsVo symptomsVo = new SymptomsVo();
+						symptomsVo.setId(symptom);
+						CommonDataVo commonDataVo1 = new CommonDataVo();
+						commonDataVo1.setAdminid(adminVo);
+						commonDataVo1.setSymptomspatientid(patientVo);
+						commonDataVo1.setSymptomsid(symptomsVo);
+
+						patientDao.insertSymptoms(commonDataVo);
+					}
 					patientupdate = "true";
 					PatientImage(s, s2, profileImagepath, guardianimagepath, profileImage, gurdianImage);
 				} else {
@@ -822,28 +795,28 @@ public class Patient extends HttpServlet {
 			}
 		}
 	}
-	
+
 	private void patientDelete(HttpServletRequest request, HttpServletResponse response) {
 		try {
-   			int patientId = Integer.parseInt(request.getParameter("patientId"));
-   			System.out.println(patientId);
+			int patientId = Integer.parseInt(request.getParameter("patientId"));
+			System.out.println(patientId);
 
-   			PatientVo patientVo = new PatientVo();
-   			patientVo.setId(patientId);
-   			
-   			LoginVO loginVO = new LoginVO();
+			PatientVo patientVo = new PatientVo();
+			patientVo.setId(patientId);
+
+			LoginVO loginVO = new LoginVO();
 			loginVO.setPatientloginid(patientVo);
-			
-   			PatientDao patientDao = new PatientDao();
-   			ArrayList<PatientVo> patientList = patientDao.editPatient(patientVo);
-   			String profileimage = patientList.get(0).getProfileimage();
-   			String gurdianimage = patientList.get(0).getGuardianimage();
-   			
-   			String loginmessage = patientDao.deleteLogin(loginVO);
+
+			PatientDao patientDao = new PatientDao();
+			ArrayList<PatientVo> patientList = patientDao.editPatient(patientVo);
+			String profileimage = patientList.get(0).getProfileimage();
+			String gurdianimage = patientList.get(0).getGuardianimage();
+
+			String loginmessage = patientDao.deleteLogin(loginVO);
 
 			if (loginmessage == "true") {
 				String message = patientDao.deletePatient(patientVo);
-	   			if (message  == "true") {
+				if (message == "true") {
 					if ((profileimage.isEmpty()) == false) {
 						String Path = getServletContext()
 								.getRealPath(File.separator + SAVE_DIR_Images + File.separator + profileimage);
@@ -866,17 +839,15 @@ public class Patient extends HttpServlet {
 					response.setCharacterEncoding("UTF-8");
 					response.getWriter().write(respose);
 				}
-			}
-			else {
+			} else {
 				System.out.println("delete not patient");
 				String respose = "error";
 				response.setContentType("text/plain");
 				response.setCharacterEncoding("UTF-8");
 				response.getWriter().write(respose);
 			}
-   		} catch (IOException e) {
-   			e.printStackTrace();
-   		}
-		
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

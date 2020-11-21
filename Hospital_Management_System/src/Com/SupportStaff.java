@@ -19,11 +19,13 @@ import javax.servlet.http.Part;
 
 import com.google.gson.Gson;
 
+import DAO.AllDataCountDao;
 import DAO.DepartmentDao;
 import DAO.LoginDAO;
 import DAO.NurseDao;
 import DAO.SupportStaffDao;
 import VO.AdminVo;
+import VO.AllDataCountVo;
 import VO.DepartmentVo;
 import VO.LoginVO;
 import VO.NurseList;
@@ -229,7 +231,6 @@ public class SupportStaff extends HttpServlet {
 				String middleName = request.getParameter("middlename");
 				String lastName = request.getParameter("lastname");
 				String dateofbirth = request.getParameter("dob");
-				java.sql.Date dateOfBirth = java.sql.Date.valueOf(dateofbirth);
 				String gender = request.getParameter("gender");
 				String homeAddress = request.getParameter("hometownaddress");
 				String homeCity = request.getParameter("homecity");
@@ -271,7 +272,7 @@ public class SupportStaff extends HttpServlet {
 				support_StaffVo.setFirstname(firstName);
 				support_StaffVo.setMidalname(middleName);
 				support_StaffVo.setLastname(lastName);
-				support_StaffVo.setBirthdate(dateOfBirth);
+				support_StaffVo.setBirthdate(dateofbirth);
 				support_StaffVo.setGender(gender);
 				support_StaffVo.setHomeeaddrss(homeAddress);
 				support_StaffVo.setHomecity(homeCity);
@@ -315,6 +316,10 @@ public class SupportStaff extends HttpServlet {
 								imageDir.mkdirs();
 							}
 							supportstaffImage(s, profileImagepath, profileImage);
+							AllDataCountVo allDataCountVo = new AllDataCountVo();
+							allDataCountVo.setAdminid(adminVo);
+							AllDataCountDao allDataCountDao = new AllDataCountDao();
+							allDataCountDao.increaseData(allDataCountVo, "supportingstaff");
 							supportstaffeupdate = "true";
 						} else {
 							supportstaffeupdate = "false";
@@ -356,8 +361,7 @@ public class SupportStaff extends HttpServlet {
 			String firstName = supportStaff.getFirstname();
 			String middleName = supportStaff.getMidalname();
 			String lastName = supportStaff.getLastname();
-			java.sql.Date dateofbirth = supportStaff.getBirthdate();
-			String date = dateofbirth.toString();
+			String date = supportStaff.getBirthdate();
 			String gender = supportStaff.getGender();
 			String homeAddress = supportStaff.getHomeeaddrss();
 			String homeCity = supportStaff.getHomecity();
@@ -427,7 +431,6 @@ public class SupportStaff extends HttpServlet {
 				String middleName = request.getParameter("middlename");
 				String lastName = request.getParameter("lastname");
 				String dateofbirth = request.getParameter("dob");
-				java.sql.Date dateOfBirth = java.sql.Date.valueOf(dateofbirth);
 				String gender = request.getParameter("gender");
 				String homeAddress = request.getParameter("hometownaddress");
 				String homeCity = request.getParameter("homecity");
@@ -474,7 +477,7 @@ public class SupportStaff extends HttpServlet {
 				support_StaffVo.setFirstname(firstName);
 				support_StaffVo.setMidalname(middleName);
 				support_StaffVo.setLastname(lastName);
-				support_StaffVo.setBirthdate(dateOfBirth);
+				support_StaffVo.setBirthdate(dateofbirth);
 				support_StaffVo.setGender(gender);
 				support_StaffVo.setHomeeaddrss(homeAddress);
 				support_StaffVo.setHomecity(homeCity);

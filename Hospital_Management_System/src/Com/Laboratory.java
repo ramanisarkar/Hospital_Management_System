@@ -19,9 +19,11 @@ import javax.servlet.http.Part;
 
 import com.google.gson.Gson;
 
+import DAO.AllDataCountDao;
 import DAO.LaboratoryDao;
 import DAO.LoginDAO;
 import VO.AdminVo;
+import VO.AllDataCountVo;
 import VO.LaboratoryList;
 import VO.LaboratoryVo;
 import VO.LoginVO;
@@ -205,7 +207,6 @@ public class Laboratory extends HttpServlet {
    				String middleName = request.getParameter("middlename");
    				String lastName = request.getParameter("lastname");
    				String dateofbirth = request.getParameter("dob");
-   				java.sql.Date dateOfBirth = java.sql.Date.valueOf(dateofbirth);
    				String gender = request.getParameter("gender");
    				String homeAddress = request.getParameter("hometownaddress");
    				String homeCity = request.getParameter("homecity");
@@ -244,7 +245,7 @@ public class Laboratory extends HttpServlet {
    				laboratoryVo.setFirstname(firstName);
    				laboratoryVo.setMidalname(middleName);
    				laboratoryVo.setLastname(lastName);
-   				laboratoryVo.setBirthdate(dateOfBirth);
+   				laboratoryVo.setBirthdate(dateofbirth);
    				laboratoryVo.setGender(gender);
    				laboratoryVo.setHomeeaddrss(homeAddress);
    				laboratoryVo.setHomecity(homeCity);
@@ -287,6 +288,10 @@ public class Laboratory extends HttpServlet {
    								imageDir.mkdirs();
    							}
    							laboratory_Staff_Image(s, profileImagepath, profileImage);
+   							AllDataCountVo allDataCountVo = new AllDataCountVo();
+   							allDataCountVo.setAdminid(adminVo);
+   							AllDataCountDao allDataCountDao = new AllDataCountDao();
+   							allDataCountDao.increaseData(allDataCountVo, "laboratorystaff");
    							laboratorystaffupdate = "true";
    						} else {
    							laboratorystaffupdate = "false";
@@ -326,8 +331,7 @@ public class Laboratory extends HttpServlet {
    			String firstName = laboratorystaff.getFirstname();
    			String middleName = laboratorystaff.getMidalname();
    			String lastName = laboratorystaff.getLastname();
-   			java.sql.Date dateofbirth = laboratorystaff.getBirthdate();
-   			String date = dateofbirth.toString();
+   			String date = laboratorystaff.getBirthdate();
    			String gender = laboratorystaff.getGender();
    			String homeAddress = laboratorystaff.getHomeeaddrss();
    			String homeCity = laboratorystaff.getHomecity();
@@ -394,7 +398,6 @@ public class Laboratory extends HttpServlet {
    				String middleName = request.getParameter("middlename");
    				String lastName = request.getParameter("lastname");
    				String dateofbirth = request.getParameter("dob");
-   				java.sql.Date dateOfBirth = java.sql.Date.valueOf(dateofbirth);
    				String gender = request.getParameter("gender");
    				String homeAddress = request.getParameter("hometownaddress");
    				String homeCity = request.getParameter("homecity");
@@ -438,7 +441,7 @@ public class Laboratory extends HttpServlet {
    				laboratoryVo.setFirstname(firstName);
    				laboratoryVo.setMidalname(middleName);
    				laboratoryVo.setLastname(lastName);
-   				laboratoryVo.setBirthdate(dateOfBirth);
+   				laboratoryVo.setBirthdate(dateofbirth);
    				laboratoryVo.setGender(gender);
    				laboratoryVo.setHomeeaddrss(homeAddress);
    				laboratoryVo.setHomecity(homeCity);

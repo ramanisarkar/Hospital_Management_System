@@ -1,8 +1,5 @@
 package VO;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -39,7 +35,7 @@ public class PatientRegistretionVo {
 	private String bloodgroup;
 	
 	@Column(name = "DateOfBirth")
-	private java.sql.Date birthdate;
+	private String birthdate;
 	
 	@Column(name = "Gender")
 	private String gender;
@@ -82,9 +78,9 @@ public class PatientRegistretionVo {
 	
 	@Column(name = "ProfileImage")
 	private String profileimage;
-	
-	@Column(name = "Diagnosis")
-	private String diagnosis;
+
+	@Column(name = "Fund")
+	private float fund;
 	
 	@Column(name = "JoiningDate")
 	private String joiningdate;
@@ -92,10 +88,7 @@ public class PatientRegistretionVo {
 	@ManyToOne
 	@JoinColumn(name="Adminid")
 	private AdminVo adminid;
-	
-	@OneToMany( mappedBy = "patientregistreationid", cascade = CascadeType.REMOVE)
-	private List<PatientVo> patientadmintid;	
-	
+
 	public int getId() {
 		return id;
 	}
@@ -110,14 +103,6 @@ public class PatientRegistretionVo {
 
 	public void setPatientid(String patientid) {
 		this.patientid = patientid;
-	}
-
-	public List<PatientVo> getPatientadmintid() {
-		return patientadmintid;
-	}
-
-	public void setPatientadmintid(List<PatientVo> patientadmintid) {
-		this.patientadmintid = patientadmintid;
 	}
 
 	public String getFirstname() {
@@ -144,22 +129,6 @@ public class PatientRegistretionVo {
 		this.lastname = lastname;
 	}
 
-	public java.sql.Date getBirthdate() {
-		return birthdate;
-	}
-
-	public void setBirthdate(java.sql.Date birthdate) {
-		this.birthdate = birthdate;
-	}
- 
-	public String getSymptoms() {
-		return symptoms;
-	}
-
-	public void setSymptoms(String symptoms) {
-		this.symptoms = symptoms;
-	}
-
 	public String getBloodgroup() {
 		return bloodgroup;
 	}
@@ -168,12 +137,28 @@ public class PatientRegistretionVo {
 		this.bloodgroup = bloodgroup;
 	}
 
+	public String getBirthdate() {
+		return birthdate;
+	}
+
+	public void setBirthdate(String birthdate) {
+		this.birthdate = birthdate;
+	}
+
 	public String getGender() {
 		return gender;
 	}
 
 	public void setGender(String gender) {
 		this.gender = gender;
+	}
+
+	public String getSymptoms() {
+		return symptoms;
+	}
+
+	public void setSymptoms(String symptoms) {
+		this.symptoms = symptoms;
 	}
 
 	public String getHomeeaddrss() {
@@ -264,20 +249,20 @@ public class PatientRegistretionVo {
 		this.password = password;
 	}
 
-	public String getDiagnosis() {
-		return diagnosis;
-	}
-
-	public void setDiagnosis(String diagnosis) {
-		this.diagnosis = diagnosis;
-	}
-
 	public String getProfileimage() {
 		return profileimage;
 	}
 
 	public void setProfileimage(String profileimage) {
 		this.profileimage = profileimage;
+	}
+
+	public float getFund() {
+		return fund;
+	}
+
+	public void setFund(float fund) {
+		this.fund = fund;
 	}
 
 	public String getJoiningdate() {
@@ -295,5 +280,4 @@ public class PatientRegistretionVo {
 	public void setAdminid(AdminVo adminid) {
 		this.adminid = adminid;
 	}
-
 }

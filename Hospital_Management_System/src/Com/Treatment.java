@@ -17,8 +17,10 @@ import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
+import DAO.AllDataCountDao;
 import DAO.TreatmentDao;
 import VO.AdminVo;
+import VO.AllDataCountVo;
 import VO.TreatmentList;
 import VO.TreatmentVo;
 
@@ -103,7 +105,12 @@ public class Treatment extends HttpServlet {
 			TreatmentDao treatmentDao = new TreatmentDao();
 			String chacktreatment = treatmentDao.treatmentInsert(treatmentVo);
 			if (chacktreatment == "true") {
+				AllDataCountVo allDataCountVo = new AllDataCountVo();
+				allDataCountVo.setAdminid(adminVo);
+				AllDataCountDao allDataCountDao = new AllDataCountDao();
+				allDataCountDao.increaseData(allDataCountVo, "treatment");
 				treatmentupdate = "true";
+				
 			} else {
 				treatmentupdate = "false";
 			}

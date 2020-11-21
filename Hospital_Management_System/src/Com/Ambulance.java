@@ -31,7 +31,6 @@ import VO.AmbulanceVo;
 import VO.DepartmentVo;
 import VO.LoginVO;
 import VO.NurseVo;
-import VO.PatientVo;
 
 /**
  * Servlet implementation class Abulance

@@ -19,9 +19,11 @@ import javax.servlet.http.Part;
 
 import com.google.gson.Gson;
 
+import DAO.AllDataCountDao;
 import DAO.LoginDAO;
 import DAO.PharmacistDao;
 import VO.AdminVo;
+import VO.AllDataCountVo;
 import VO.LoginVO;
 import VO.PharmacistList;
 import VO.PharmacistVo;
@@ -204,7 +206,6 @@ public class Pharmacist extends HttpServlet {
 				String middleName = request.getParameter("middlename");
 				String lastName = request.getParameter("lastname");
 				String dateofbirth = request.getParameter("dob");
-				java.sql.Date dateOfBirth = java.sql.Date.valueOf(dateofbirth);
 				String gender = request.getParameter("gender");
 				String homeAddress = request.getParameter("hometownaddress");
 				String homeCity = request.getParameter("homecity");
@@ -243,7 +244,7 @@ public class Pharmacist extends HttpServlet {
 				pharmacistVo.setFirstname(firstName);
 				pharmacistVo.setMidalname(middleName);
 				pharmacistVo.setLastname(lastName);
-				pharmacistVo.setBirthdate(dateOfBirth);
+				pharmacistVo.setBirthdate(dateofbirth);
 				pharmacistVo.setGender(gender);
 				pharmacistVo.setHomeeaddrss(homeAddress);
 				pharmacistVo.setHomecity(homeCity);
@@ -286,6 +287,10 @@ public class Pharmacist extends HttpServlet {
 								imageDir.mkdirs();
 							}
 							pharmacistImage(s, profileImagepath, profileImage);
+							AllDataCountVo allDataCountVo = new AllDataCountVo();
+							allDataCountVo.setAdminid(adminVo);
+							AllDataCountDao allDataCountDao = new AllDataCountDao();
+							allDataCountDao.increaseData(allDataCountVo, "pharmacist");
 							pharmacistupdate = "true";
 						} else {
 							pharmacistupdate = "false";
@@ -325,8 +330,7 @@ public class Pharmacist extends HttpServlet {
 			String firstName = pharmacist.getFirstname();
 			String middleName = pharmacist.getMidalname();
 			String lastName = pharmacist.getLastname();
-			java.sql.Date dateofbirth = pharmacist.getBirthdate();
-			String date = dateofbirth.toString();
+			String date = pharmacist.getBirthdate();
 			String gender = pharmacist.getGender();
 			String homeAddress = pharmacist.getHomeeaddrss();
 			String homeCity = pharmacist.getHomecity();
@@ -393,7 +397,6 @@ public class Pharmacist extends HttpServlet {
 				String middleName = request.getParameter("middlename");
 				String lastName = request.getParameter("lastname");
 				String dateofbirth = request.getParameter("dob");
-				java.sql.Date dateOfBirth = java.sql.Date.valueOf(dateofbirth);
 				String gender = request.getParameter("gender");
 				String homeAddress = request.getParameter("hometownaddress");
 				String homeCity = request.getParameter("homecity");
@@ -437,7 +440,7 @@ public class Pharmacist extends HttpServlet {
 				pharmacistVo.setFirstname(firstName);
 				pharmacistVo.setMidalname(middleName);
 				pharmacistVo.setLastname(lastName);
-				pharmacistVo.setBirthdate(dateOfBirth);
+				pharmacistVo.setBirthdate(dateofbirth);
 				pharmacistVo.setGender(gender);
 				pharmacistVo.setHomeeaddrss(homeAddress);
 				pharmacistVo.setHomecity(homeCity);

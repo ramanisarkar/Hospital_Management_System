@@ -6,24 +6,56 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap.min.css">
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" />
+
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'  type='text/css'>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js"></script>
 <script>
 $(document).ready(function(){
+	var symptomslist = "symptomsList";
+	var adminid = $('#adminid').val();
+	$('#symptomesadminid').val(adminid);
+	$.get('Symptoms', { flag: symptomslist, adminId : adminid }, function(response) {
+		var count=0;
+		var obj = JSON.parse(response);
+		console.log(response);
+		$.each(obj, function(index) {
+			count++;
+			var html = '';
+			html += '<tr id=' + count + '>';
+			html += '<td>' + obj[index].name + '</td>';
+			html += '<td><button type="button" class="btn-delete-cat badge badge-delete deletesymptomes" data-delete_id="' + count + '" id="symptomsId'+count+'"value="' + obj[index].id + '">x</button></td></tr>';
+			$('.symtopslisttable').append(html);
+		});
+		var select = $('.symptomsoutpatient');
+		select.find('option').remove();
+		$.each(obj, function(index, value) {
+			$('<option>').val(obj[index].id).text(obj[index].name).appendTo(select);
+		});
+		$('#symtomsmulti').multiselect({
+	        includeSelectAllOption: true,
+	    });
+		$('.multiselect-selected-text').text("Select Symptoms");
+	});
+	
+	var diagnosis = 1;
 	$("body").on("click", ".add_more_report", function(){
-		$(".diagnosissnosis_div").append('<div class="form-group"style="d margin-left: -10px;"><label class="col-sm-2 control-label" for="diagnosis">Diagnosis Report</label><div class="col-sm-8"><input type="file" class="dignosisreport form-control file" name="diagnosis[]"></div><div class="col-sm-2"><input type="button" value="Delete" onclick="deleteParentElement(this)" class="remove_cirtificate btn btn-default"></div></div>');
+		diagnosis++;
+		$(".diagnosissnosis_div").append('<div class="form-group row"style="d margin-left: -10px;"><label class="col-sm-2 control-label" for="diagnosis">Diagnosis Report</label><div class="col-sm-8"><input type="file" class="dignosisreport form-control file" name="diagnosis'+diagnosis+'" accept="application/pdf"></div><div class="col-sm-2"><input type="button" value="Delete" onclick="deleteParentElement(this)" class="remove_cirtificate btn btn-default"></div></div>');
+		$('#diagnosiscount').val(diagnosis);
 	});
 	
 	$("body").on("click", ".remove_cirtificate", function(){
@@ -33,7 +65,11 @@ $(document).ready(function(){
 	$(document).on('click', '.edit', function(){
 		
 	});
-	$('.input-group.date').datepicker({format: "dd/mm/yyyy"});
+	$('.input-group.date').datepicker({format: "dd/mm/yyyy",singleDatePicker: true,
+	    showDropdowns: true,
+	    minYear: 1901,
+	    maxYear: parseInt(0)
+	});
 	var count = 0;
 	var supportstaffusername;
 	var username="PatientRegistrationList";
@@ -55,6 +91,7 @@ $(document).ready(function(){
 	 	});
 			 $('#example').DataTable();
 	});
+	
 	$("#txt_username").keyup(function(){
 	      var patientuser = $(this).val().trim();
 	      var username = "chackuser";
@@ -80,7 +117,8 @@ $(document).ready(function(){
 	      }else{
 	         $("#available").html("");
 	      }
-	 });
+	});
+	
 	$("#username").keyup(function(){
 	      var pharmacist = $(this).val().trim();
 	      var username = "chackuser";
@@ -144,6 +182,8 @@ $(document).ready(function(){
 	        		$('#message2').show();
 	        		$('#message3').show();
 	        		$('#messagepass').text("Recored Add Successsfully");
+	        		$('#coveredit1').attr('src', '');
+	        		$(".diagnosissnosis_div").remove();
 	        		$("#insert_form")[0].reset();
 	        	}
 	        	else if(obj == "false"){
@@ -156,12 +196,12 @@ $(document).ready(function(){
 	            $("#btnSubmit").prop("disabled", false);
 	        },
 	        error: function (e) {
+	        	$(".diagnosissnosis_div").remove();
 	            $("#result").text(e.responseText);
 	            console.log("ERROR : ", e);
 	            $("#btnSubmit").prop("disabled", false);
 	        }
 	    });
-	
 	});
 	$(document).on('click', '.edit', function(){
 		var editid = $(this).data('edit_id');
@@ -292,16 +332,30 @@ $(document).ready(function(){
    	    	location.reload();
    	    }
    	});
+ 	
 });
 </script>
 
 <style type="text/css">
+html{
+	scroll-behavior:smooth;
+}
 .multiselect-container {
-    width: 653px;
+    width: 750px;
     overflow: scroll;
     overflow-x: scroll;
     overflow-y: scroll;
     height: 140px;
+}
+.dropdown-toggle{
+   width: 750px !important;
+}
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:focus, .dropdown-menu>.active>a:hover {
+    color: black;
+    text-decoration: none;
+    background-color: #f1f1f1;
+    border: 1px solid #e5e5e5;
+    outline: 0;
 }
 .title {
 	color: white;
@@ -403,24 +457,37 @@ border-radius: 0px;
 color: red;
 text-align: right;
 }
+.input-group-addon {
+    background-color: white !important;
+    border: none!important;
+}
+.icone {
+  float: left;
+  height: 20px !important;
+  margin-right: 5px;
+  overflow: hidden;
+  width: 25px !important;
+  text-align: center;
+}
 </style>
 </head>
 
-<body style="background-color: #f1f4f9; font-family: 'Open Sans',sans-serif;">
+<body style="background-color: #f1f4f9; font-family: 'Open Sans',sans-serif; font-size: 13px;height: 100%!important;">
 	
-	<c:forEach items="${sessionScope.hospitaldata }" var="q" end="0">
-		 <div class="navbar" style="padding-right: 14px;  background-color: white;     height: 69px;" >
+	<c:forEach items="${sessionScope.hospitaldata }" var="q" end="0"> 
+		<input type="hidden" id="adminid" value="${q.id }">
+		 <div class="navbar" style="padding-right: 14px;  background-color: white;height: 69px;" >
 		<div class="col-md-3 col-sm-2 col-xs-4">
 			<h3>
 				<img src="ing/hospitalmanagemantlogo.png"
-					class="img-circle head_logo" width="40" height="40" style="    margin-top: -8px;"> <span style="font-size:22px ">Hospital
+					class="img-circle head_logo" width="40" height="40" style="margin-top: -8px;"> <span style="font-size:21px ">Hospital
 					Management System</span>
 			</h3>
 		</div>
 		<ul class="nav navbar-right col-md-9 col-sm-10 col-xs-8">
 			<li class="dropdown"style="margin-left: 80%;">
-				<a style="background-color: white; margin-top: 17px; height: 49px;" data-toggle="dropdown" class="dropdown-toggle " href="javascript:;">
-						<img src="images/<%=session.getAttribute("hospitalimage")%>" height="40px" width="40px" class="img-circle" style="margin-top: -15px;" >								
+				<a style="background-color: white; color: #5f5f5f !important; margin-top: 17px; height: 49px;" data-toggle="dropdown" href="javascript:;">
+						<img src="Admin_Images/<%=session.getAttribute("hospitalimage")%>" height="40px" width="40px" class="img-circle" style="margin-top: -15px;" >								
 						<span>${q.hospitalname }</span> <b class="caret"></b>
 				</a>
 				<ul class="dropdown-menu extended logout">
@@ -433,8 +500,9 @@ text-align: right;
 	</div>
 	<div hidden="" id="message1" class="updated below-h2"style="width: 81%;margin-left: 253px;margin-top: 27px;"><p id="messagepass"></p></div>
 		<div id="message3"style="margin-top:-76px;" hidden=""></div>
-		<ul class="nav nav-pills nav-stacked ullist"style="margin-top: -20px; height: 1170;">
+		<ul class="nav nav-pills nav-stacked ullist"style="margin-top: -20px;height: 100%!important;">
 			<li><a href="Admin_Login.jsp"><span class="icone"><img src="ing/dashboard.png"></span><span class="title">Dashboard</span></a></li>
+			<li><a href="<%=request.getContextPath()%>/PatientRegistration?flag=insert&id=${q.id }"><span class="icone"><i class="fas fa fa-wheelchair" style="color: gray;"></i></span><span class="title">Patient Registration</span></a></li>
 			<li><a href="<%=request.getContextPath()%>/Department?flag=insert&id=${q.id }"><span class="icone"><i class="fas fa-briefcase" style="color: gray;"></i></span><span class="title">Department</span></a></li>
 			<li><a href="<%=request.getContextPath()%>/Specialization?flag=insert&id=${q.id }"><span class="icone"><i class="fa fa-lightbulb" style="color: gray;"></i></span><span class="title">Specialization</span></a></li>
 			<li><a href="<%=request.getContextPath()%>/Doctor?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Doctor" title="Doctor">
@@ -445,7 +513,7 @@ text-align: right;
 			<span class="icone"> <img src="ing/outpatient-logo.png"></span>
 			<span class="title">Outpatient</span></a></li>
 			
-			<li><a href="" class="left-tooltip" data-tooltip="Inpatient" title="Inpatient">
+			<li><a href="<%=request.getContextPath()%>/Patient?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Inpatient" title="Inpatient">
 			<span class="icone"> <img src="ing/Patient-logo.png"></span>
 			<span class="title">Inpatient</span></a></li>
 			
@@ -470,26 +538,31 @@ text-align: right;
 			<span class="icone"> <img src="ing/Medicine-logo.png"></span><span class="title">Medicine</span></a></li>
 			<li><a href="<%=request.getContextPath()%>/TreatmentUpdate?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Treatment" title="Treatment">
 			<span class="icone"> <img src="ing/Treatment-logo.png"></span><span class="title">Treatment</span></a></li>
-			<li><a href="" class="left-tooltip" data-tooltip="Prescription" title="Prescription">
-			<span class="icone"> <img src="ing/Prescription-logo.png"></span><span class="title">Prescription</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Assign Bed-Nurse" title="Assign Bed-Nurse">
+			<li><a href="<%=request.getContextPath()%>/Prescription?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Prescription" title="Prescription">
+			<span class="icone"> <img src="ing/Prescription-logo.png"></span><span class="title">Prescription</span></a></li>
+			<li><a href="<%=request.getContextPath()%>/Patient?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Inpatient" title="Inpatient">
+			<span class="icone"><i class="fa fa-bed" aria-hidden="true" style="color: gray;"></i></span>
+			<span class="title">Add Bad</span></a></li>
+			<li><a href="" class="left-tooltip" data-tooltip="Assign Bed-Nurse" title="Assign Bed-Nurse">
 			<span class="icone"> <img src="ing/Assign-Bed-logo.png"></span><span class="title">Assign Bed-Nurse</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Operation List" title="Operation List">
 			<span class="icone"> <img src="ing/Operation-List-logo.png"></span><span class="title">Operation List</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Diagnosis" title="Diagnosis">
 			<span class="icone"> <img src="ing/Diagnosis-Report-logo.png"></span><span class="title">Diagnosis</span></a></li>
 			<li><a href="<%=request.getContextPath()%>/BloodManage?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Blood Bank" title="Blood Bank">
 			<span class="icone"> <img src="ing/Blood-Bank-logo.png"></span><span class="title">Blood Bank</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Appointment" title="Appointment">
 			<span class="icone"> <img src="ing/Appointment-logo.png"></span><span class="title">Appointment</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Invoice" title="Invoice">
-			<span class="icone"> <img src="ing/payment-logo.png"></span><span class="title">Invoice</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Event" title="Event">
+			<span class="icone"> <img src="ing/payment-logo.png"></span><span class="title">Invoice</span></a></li><li>
+			<a href="<%=request.getContextPath()%>/Event?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Event" title="Event">
 			<span class="icone"> <img src="ing/notice-logo.png"></span><span class="title">Event</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Message" title="Message">
-			<span class="icone"> <img src="ing/message-logo.png"></span><span class="title">Message</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Ambulance" title="Ambulance">
+			<span class="icone"> <img src="ing/message-logo.png"></span><span class="title">Message</span></a></li>
+			<li><a href="<%=request.getContextPath()%>/Ambulance?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Ambulance" title="Ambulance">
 			<span class="icone"> <img src="ing/Ambulance-logo.png"></span><span class="title">Ambulance</span></a></li><li><a href="" class="left-tooltip" data-tooltip="instrument" title="instrument">
 			<span class="icone"> <img src="ing/Instrument-logo.png"></span><span class="title">Instrument</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Report" title="Report">
 			<span class="icone"> <img src="ing/Report-logo.png"></span><span class="title">Report</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Account" title="Account">
-			<span class="icone"> <img src="ing/account-logo.png"></span><span class="title">Account</span></a></li>	
+			<span class="icone"> <img src="ing/account-logo.png"></span><span class="title">Account</span></a></li>
 		</ul>
 	</c:forEach>
-	<div style="margin-top: 83px;"></div>
-	<div id="message2" style="margin-top: 149px;"hidden="" ></div>
-	<div style="margin-left: 236px; padding: 0px 16px; margin-top: -77%; background-color: white;">
+	<div id="message2" style="margin-top: 67px;"hidden="" ></div>
+	<div style="margin-left: 236px; padding: 0px 16px; margin-top: -73%; background-color: white;">
 		<div style="color: green; margin-top: 3px;" id="specializationadd"></div>
 		<div style="padding-top: 15px;"></div>
 		<div class="container" style="margin-right: 90px;">
@@ -523,7 +596,6 @@ text-align: right;
 			            </tr>
 			        </thead>
 			        <tbody class="patientRegistration">
-			        
 			        </tbody>
 			        <tfoot>
 			            <tr>
@@ -557,7 +629,7 @@ text-align: right;
 					<div class="form-group row">
 						<label class="col-sm-2 control-label" for="last_name">Last Name<span class="require-field">*</span></label>
 						<div class="col-sm-8">
-							<input class="form-control  " maxlength="50" type="text" value="" name="last_name"required>
+							<input class="form-control  " maxlength="50" type="text" value="" name="last_name" required>
 						</div>
 					</div>
 					
@@ -572,9 +644,9 @@ text-align: right;
 						<label class="col-sm-2 control-label" for="birth_date">Date of birth<span class="require-field">*</span></label>
 						<div class="col-sm-8">
 							<div class="input-group date" data-date-format="dd/mm/yyyy">
-				            	<input  type="text" name="birth_date" id="dateofbarth" class="form-control" placeholder="dd/mm/yyyy" required>
+				            	<input  type="text" name="birth_date" id="dateofbarth" class="form-control" placeholder="dd/mm/yyyy"    style="width: 750px;" required readonly>
 					            <div class="input-group-addon" >
-					              <span class="glyphicon glyphicon-th"></span>
+					              <span class=""></span>
 					            </div>
 				          	</div>
 						</div>
@@ -596,18 +668,25 @@ text-align: right;
 							</div>
 					  </div>
 					  <div class="form-group row">
-						<label class="col-sm-2 control-label" for="symptoms">Symptoms<span class="require-field">*</span></label>
+				            <label class="col-sm-2 control-label" for="symptoms">Symptoms<span class="require-field">*</span></label>
+				            <div class="col-sm-8">
+				                <select id="symtomsmulti" name="symptoms[]" multiple class="form-control symptomsoutpatient"
+				                    required="required">
+				                    
+				                </select>
+				            </div>
+				            <div class="col-sm-2">
+				                <button style="margin-left: 40px;" id="addremove" model="operation" class="btn " type="button"
+				                    data-toggle="modal" data-target="#BedModal">Add Or Remove</button>
+				            </div>
+				        </div>	
+					<div class="form-group row">
+						<label class="col-sm-2 control-label" for="diagnosis">Diagnosis Report</label>
 						<div class="col-sm-8">
-							<input class="form-control " type="text" name="symptoms" >
-						</div>					
-					</div>	
+							<input type="file" class="form-control" name="diagnosis1"accept="application/pdf">
+						</div>
+					</div>
 					<div class="diagnosissnosis_div">
-						<div class="form-group row">
-							<label class="col-sm-2 control-label" for="diagnosis">Diagnosis Report</label>
-							<div class="col-sm-8">
-								<input type="file" class="form-control" name="diagnosis"accept="application/pdf">
-							</div>
-						</div>	
 					</div>
 					<div class="form-group row" >			
 						<div class="col-sm-2 ">
@@ -653,26 +732,25 @@ text-align: right;
 						<input type="text" value="+91" class="form-control" name="phonecode" maxlength="5">
 						</div>
 						<div class="col-sm-7">
-							<input class="form-control" minlength="6" maxlength="15" type="number" value="" name="mobile">				
+							<input class="form-control" min="6" maxlength="15" type="number" value="" name="mobile">				
 						</div>
 					</div>
 					<div class="form-group row">
 						<label class="col-sm-2 control-label " for="phone">Phone</label>
 						<div class="col-sm-8">
-							<input class="form-control  " minlength="6" maxlength="15" type="text" value="" name="phone">				
+							<input class="form-control" min="6" maxlength="15" type="text" name="phone">				
 						</div>
 					</div>
 					<div class="form-group row">
 						<label class="col-sm-2 control-label " for="email">Email<span class="require-field">*</span></label>
 						<div class="col-sm-8">
-							<input class="form-control  " maxlength="100" type="email" name="email" value="" required="required">
+							<input class="form-control  " maxlength="100" type="email" name="email" required="required">
 						</div>
 					</div>
-					
 					<div class="form-group row">
 						<label class="col-sm-2 control-label" for="username">User Name<span class="require-field">*</span></label>
 						<div class="col-sm-8">
-							<input class="form-control" id="txt_username" type="text" name="username" maxlength="30" value="">
+							<input class="form-control" id="txt_username" type="text" name="username" maxlength="30" >
 						</div>
 						<div style="margin-left: 212px;margin-top: 36px;color: red;">
 				    		<span id="available"></span>
@@ -698,9 +776,12 @@ text-align: right;
 						    			<img id="coveredit1" alt="your image" width="150" height="150" style="margin-left: 290px; margin-top: 10px;" />
 						    		</div>
 			  					</div>
+			  					
 						</div>	
+													
 						<div class="col-sm-offset-2 col-sm-8">
 			        	<input type="hidden" name="flag" value="insert">
+			        	<input type="hidden" name="count" id="diagnosiscount" value="0">
 			        	<input type="submit" value="Patient Registration" id="btnSubmit" name="registration_front_patient" class="btn btn-success">
 			        </div>
 			    </form>
@@ -723,7 +804,7 @@ text-align: right;
 					<div class="form-group row">
 						<label class="col-sm-2 control-label" for="last_name">Last Name<span class="require-field">*</span></label>
 						<div class="col-sm-8">
-							<input id="last_name" class="form-control validate[required,custom[onlyLetter_specialcharacter]] text-input" maxlength="50" type="text" value="" name="last_name">
+							<input id="last_name" class="form-control text-input" maxlength="50" type="text" value="" name="last_name" required>
 						</div>
 					</div>
 					
@@ -741,7 +822,7 @@ text-align: right;
 						<label class="col-sm-2 control-label" for="birth_date">Date of birth<span class="require-field">*</span></label>
 						<div class="col-sm-8">
 							<div class="input-group date" data-date-format="dd/mm/yyyy">
-				            	<input id="dob"  type="text" name="birth_date"  class="form-control" placeholder="dd/mm/yyyy">
+				            	<input id="dob"  type="text" name="birth_date"  class="form-control" placeholder="dd/mm/yyyy" required readonly>
 					            <div class="input-group-addon" >
 					              <span class="glyphicon glyphicon-th"></span>
 					            </div>
@@ -774,7 +855,7 @@ text-align: right;
 			    		<label  class="col-sm-2 col-form-label text" >Diagnosis Report</label>
 			    		<div class="col-sm-8">
 			      			<input type="file" id="diagnosis" name="diagnosis" accept="application/pdf ">
-			      			<span id="experiencecertificateid" hidden></span><a hidden href="#" id="experiencecertificatebuttonid"  target="_blank" class="w3-btn w3-black" >Link Button</a>
+		      				<span id="experiencecertificateid" hidden></span><a hidden href="#" id="experiencecertificatebuttonid"  target="_blank" class="w3-btn w3-black" >Link Button</a>
 			    		</div>
 			    	</div>
 					<div class="form-group row">

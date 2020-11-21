@@ -37,6 +37,9 @@ public class EventVo {
 	@Column(name = "EndDate")	
 	private String enddate;
 
+	@Column(name = "EventFor")
+	private String eventfor;
+	
 	@Column(name = "JoiningDate")
 	private String joiningdate;
 	
@@ -44,11 +47,8 @@ public class EventVo {
 	@JoinColumn(name="Adminid")
 	private AdminVo adminid;
 	
-	@OneToMany( mappedBy = "eventid" , cascade = CascadeType.REMOVE)
-	private List<EventForVo> eventforid;
-	
 	private int aid;
-	private String eventfor , updateevent;
+	private String event, updateevent;
 	
 	public String getUpdateevent() {
 		return updateevent;
@@ -56,14 +56,6 @@ public class EventVo {
 
 	public void setUpdateevent(String updateevent) {
 		this.updateevent = updateevent;
-	}
-
-	public List<EventForVo> getEventforid() {
-		return eventforid;
-	}
-
-	public void setEventforid(List<EventForVo> eventforid) {
-		this.eventforid = eventforid;
 	}
 
 	public int getAid() {
@@ -140,6 +132,14 @@ public class EventVo {
 
 	public AdminVo getAdminid() {
 		return adminid;
+	}
+	
+	public String getEvent() {
+		return event;
+	}
+
+	public void setEvent(String event) {
+		this.event = event;
 	}
 
 	public void setAdminid(AdminVo adminid) {

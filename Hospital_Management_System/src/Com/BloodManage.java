@@ -27,8 +27,8 @@ import VO.BloodManageList;
 import VO.BloodManageVo;
 import VO.BloodOutwordVo;
 import VO.BloodStockVo;
+import VO.PatientOtherInfo;
 import VO.PatientRegistretionVo;
-import VO.PatientVo;
 
 /**
  * Servlet implementation class BloodManage
@@ -143,12 +143,14 @@ public class BloodManage extends HttpServlet {
 		AdminVo adminVo = new AdminVo();
 		adminVo.setId(adminid);
 
-		PatientVo patientVo = new PatientVo();
-		patientVo.setAdminid(adminVo);
+		PatientOtherInfo patientOtherInfo = new PatientOtherInfo();
+		patientOtherInfo.setAdminid(adminVo);
+		patientOtherInfo.setPatienttype("IN");
 
 		PatientDao patientDao = new PatientDao();
-		ArrayList<PatientVo> patientRegistration = patientDao.patientList(patientVo);
-		session.setAttribute("patientRagistrationList", patientRegistration);
+		ArrayList<PatientOtherInfo> patientList = patientDao.inPatientList(patientOtherInfo);
+		System.out.println(patientList.size());
+		session.setAttribute("patientList", patientList);
 	}
 
 	private void bloodStock(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -193,7 +195,6 @@ public class BloodManage extends HttpServlet {
 			String country = request.getParameter("country");
 			String zipCode = request.getParameter("zipCode");
 			String lastDonation = request.getParameter("lastdate");
-			java.sql.Date lastDonationDate = java.sql.Date.valueOf(lastDonation);
 			int donorid = Integer.parseInt(request.getParameter("donorId"));
 			int numberOfBags = Integer.parseInt(request.getParameter("numberofbags"));
 
@@ -215,7 +216,7 @@ public class BloodManage extends HttpServlet {
 			bloodManageVo.setCountry(country);
 			bloodManageVo.setState(state);
 			bloodManageVo.setZipcode(zipCode);
-			bloodManageVo.setLastdonationdate(lastDonationDate);
+			bloodManageVo.setLastdonationdate(lastDonation);
 			bloodManageVo.setJoiningdate(joiningdate);
 			bloodManageVo.setBloodgroup(bloodGroup);
 			bloodManageVo.setNumberofbags(numberOfBags);
@@ -257,7 +258,6 @@ public class BloodManage extends HttpServlet {
 			String middleName = request.getParameter("middlename");
 			String lastName = request.getParameter("lastname");
 			String dateofbirth = request.getParameter("dob");
-			java.sql.Date dateOfBirth = java.sql.Date.valueOf(dateofbirth);
 			String gender = request.getParameter("gender");
 			int age = Integer.parseInt(request.getParameter("age"));
 			String standardCode = request.getParameter("standardcode");
@@ -305,7 +305,7 @@ public class BloodManage extends HttpServlet {
 			bloodDonorVo.setFirstname(firstName);
 			bloodDonorVo.setLastname(lastName);
 			bloodDonorVo.setMidalname(middleName);
-			bloodDonorVo.setBirthdate(dateOfBirth);
+			bloodDonorVo.setBirthdate(dateofbirth);
 			bloodDonorVo.setAge(age);
 			bloodDonorVo.setEmail(email);
 			bloodDonorVo.setGender(gender);
@@ -344,7 +344,7 @@ public class BloodManage extends HttpServlet {
 			AdminVo adminVo = new AdminVo();
 			adminVo.setId(adminid);
 
-			PatientVo patientVo = new PatientVo();
+			PatientRegistretionVo patientVo = new PatientRegistretionVo();
 			patientVo.setId(patientid);
 
 			BloodOutwordVo bloodOutwordVo = new BloodOutwordVo();
@@ -416,7 +416,7 @@ public class BloodManage extends HttpServlet {
 			String adrress = bloodManage.getDonationcampaddres();
 			String phone = bloodManage.getDonorid().getMobileno();
 			String email = bloodManage.getDonorid().getEmail();
-			java.sql.Date admitedate = bloodManage.getLastdonationdate();
+			String admitedate = bloodManage.getLastdonationdate();
 			String date = admitedate.toString();
 			BloodManageList common = new BloodManageList();
 			common.setId(id);
@@ -545,7 +545,7 @@ public class BloodManage extends HttpServlet {
 				String phone = bloodManage.getDonorid().getMobileno();
 				int age = bloodManage.getDonorid().getAge();
 				int numberofbags = bloodManage.getNumberofbags();
-				java.sql.Date admitedate = bloodManage.getLastdonationdate();
+				String admitedate = bloodManage.getLastdonationdate();
 				String date = admitedate.toString();
 				String address = bloodManage.getDonationcampaddres();
 				String city = bloodManage.getCity();
@@ -605,7 +605,7 @@ public class BloodManage extends HttpServlet {
 				String bloodgroup = bloodManage.getBloodgroup();
 				int numberofbags = bloodManage.getNumberofbags();
 				String donorid = bloodManage.getDonorid().getDonorid();
-				java.sql.Date admitedate = bloodManage.getLastdonationdate();
+				String admitedate = bloodManage.getLastdonationdate();
 				String date = admitedate.toString();
 				String address = bloodManage.getDonationcampaddres();
 				String city = bloodManage.getCity();
@@ -659,7 +659,7 @@ public class BloodManage extends HttpServlet {
 				String middlename = bloodDonor.getMidalname();
 				String lastname = bloodDonor.getLastname();
 				String gender = bloodDonor.getGender();
-				java.sql.Date dob = bloodDonor.getBirthdate();
+				String dob = bloodDonor.getBirthdate();
 				String date = dob.toString();
 				String email = bloodDonor.getEmail();
 				String donorid = bloodDonor.getDonorid();
@@ -720,8 +720,7 @@ public class BloodManage extends HttpServlet {
 				String firstname = bloodOutword.getPatientid().getFirstname();
 				String midalname = bloodOutword.getPatientid().getMidalname();
 				String lastname = bloodOutword.getPatientid().getLastname();
-				java.sql.Date dob = bloodOutword.getPatientid().getBirthdate();
-				String bod = dob.toString();
+				String bod = bloodOutword.getPatientid().getBirthdate();
 				String bloodgroup = bloodOutword.getPatientid().getBloodgroup();
 				String gender = bloodOutword.getPatientid().getGender();
 				String joiningdate = bloodOutword.getJoiningdate();
@@ -766,7 +765,6 @@ public class BloodManage extends HttpServlet {
 			String country = request.getParameter("country");
 			String zipCode = request.getParameter("zipcode");
 			String lastDonation = request.getParameter("lastdate");
-			java.sql.Date lastDonationDate = java.sql.Date.valueOf(lastDonation);
 			int donorid = Integer.parseInt(request.getParameter("donorId"));
 			int numberOfBags = Integer.parseInt(request.getParameter("numberofbags"));
 
@@ -786,7 +784,7 @@ public class BloodManage extends HttpServlet {
 			bloodManageVo.setCountry(country);
 			bloodManageVo.setState(state);
 			bloodManageVo.setZipcode(zipCode);
-			bloodManageVo.setLastdonationdate(lastDonationDate);
+			bloodManageVo.setLastdonationdate(lastDonation);
 			bloodManageVo.setJoiningdate(joiningdate);
 			bloodManageVo.setBloodgroup(bloodGroup);
 			bloodManageVo.setNumberofbags(numberOfBags);
@@ -826,7 +824,6 @@ public class BloodManage extends HttpServlet {
 			String middleName = request.getParameter("middlename");
 			String lastName = request.getParameter("lastname");
 			String dateofbirth = request.getParameter("dateofbirth");
-			java.sql.Date dateOfBirth = java.sql.Date.valueOf(dateofbirth);
 			String gender = request.getParameter("gender");
 			int age = Integer.parseInt(request.getParameter("age"));
 			String standardCode = request.getParameter("standardcode");
@@ -846,7 +843,7 @@ public class BloodManage extends HttpServlet {
 			bloodDonorVo.setFirstname(firstName);
 			bloodDonorVo.setLastname(lastName);
 			bloodDonorVo.setMidalname(middleName);
-			bloodDonorVo.setBirthdate(dateOfBirth);
+			bloodDonorVo.setBirthdate(dateofbirth);
 			bloodDonorVo.setAge(age);
 			bloodDonorVo.setEmail(email);
 			bloodDonorVo.setGender(gender);
@@ -885,7 +882,7 @@ public class BloodManage extends HttpServlet {
 			AdminVo adminVo = new AdminVo();
 			adminVo.setId(adminid);
 
-			PatientVo patientVo = new PatientVo();
+			PatientRegistretionVo patientVo = new PatientRegistretionVo();
 			patientVo.setId(patientid);
 
 			BloodOutwordVo bloodOutwordVo = new BloodOutwordVo();

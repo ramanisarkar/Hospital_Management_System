@@ -17,11 +17,22 @@ import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
+import DAO.AllDataCountDao;
+import DAO.DispatchedMedicineDao;
 import DAO.MedicineDao;
+import DAO.PatientRegistreationDao;
+import DAO.PrescriptionDao;
 import VO.AdminVo;
+import VO.AllDataCountVo;
 import VO.CategoryVo;
+import VO.CommonFiledVo;
+import VO.DispatchMedicineInfoVo;
+import VO.DispatchedMedicineVo;
 import VO.MedicineList;
 import VO.MedicineVo;
+import VO.PatientRegistretionVo;
+import VO.PrescriptionMedicationVo;
+import VO.PrescriptionVo;
 
 /**
  * Servlet implementation class Medicine
@@ -55,6 +66,7 @@ public class Medicine extends HttpServlet {
 		if (flag.equalsIgnoreCase("insert")) {
 			int adminid = Integer.parseInt(request.getParameter("id"));
 			session.setAttribute("medicineAdminId", adminid);
+			patientRegistrationList(request, response);
 			response.sendRedirect("Admin_Medicine_Reg.jsp");
 		}
 		if (flag.equalsIgnoreCase("medicineList")) {
@@ -63,9 +75,57 @@ public class Medicine extends HttpServlet {
 		if (flag.equalsIgnoreCase("editMedicine")) {
 			medicineEdit(request, response);
 		}
+		if (flag.equalsIgnoreCase("getPriscriptionRecord")) {
+			getPriscription(request, response);
+		}
+		if (flag.equalsIgnoreCase("getPriscriptionMedicineRecord")) {
+			getPriscriptionMedicineRecord(request, response);
+		}
 		if (flag.equalsIgnoreCase("deleteMedicine")) {
 			medicineDelete(request, response);
 			medicineList(request, response);
+		}
+	}
+
+	private void getPriscriptionMedicineRecord(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			int prescriptionId = Integer.parseInt(request.getParameter("prescriptionId"));
+
+			PrescriptionVo prescriptionVo = new PrescriptionVo();
+			prescriptionVo.setId(prescriptionId);
+
+			PrescriptionMedicationVo prescriptionMedicationVo = new PrescriptionMedicationVo();
+			prescriptionMedicationVo.setPrescriptionid(prescriptionVo);
+
+			PrescriptionDao prescriptionDao = new PrescriptionDao();
+
+			ArrayList<PrescriptionMedicationVo> prescriptionMedicineList = prescriptionDao
+					.listPrescriptionMedicine(prescriptionMedicationVo);
+			ArrayList<CommonFiledVo> list = new ArrayList<CommonFiledVo>();
+			
+			for (PrescriptionMedicationVo medicineList : prescriptionMedicineList) {
+				int medicinid = medicineList.getMedicineid().getId();
+				String medicinename = medicineList.getMedicineid().getMedicinename();
+				String type = medicineList.getMedicineid().getTypeofdiscount();
+				int quantity = medicineList.getMedicineid().getMedicinequantity();
+				float price = medicineList.getMedicineid().getPrice();
+				CommonFiledVo common = new CommonFiledVo();
+				common.setId(medicinid);
+				common.setPrice(price);
+				common.setName(medicinename);
+				common.setQuantity(quantity);
+				common.setType(type);
+				list.add(common);
+			}
+			Gson gson = new Gson();
+			System.out.println(gson.toJson(list));
+			PrintWriter out = response.getWriter();
+			out.print(gson.toJson(list));
+			out.flush();
+			out.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -73,6 +133,50 @@ public class Medicine extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
+
+	private void getPriscription(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			HttpSession session = request.getSession();
+			int adminid = (int) session.getAttribute("medicineAdminId");
+			int patientid = Integer.parseInt(request.getParameter("patientId"));
+
+			AdminVo adminVo = new AdminVo();
+			adminVo.setId(adminid);
+
+			PatientRegistretionVo registretionVo = new PatientRegistretionVo();
+			registretionVo.setId(patientid);
+
+			PrescriptionVo prescriptionVo = new PrescriptionVo();
+			prescriptionVo.setAdminid(adminVo);
+			prescriptionVo.setPatientid(registretionVo);
+
+			PrescriptionDao prescriptionDao = new PrescriptionDao();
+
+			ArrayList<PrescriptionVo> prescriptionList = prescriptionDao.listPatientPrescription(prescriptionVo);
+			ArrayList<CommonFiledVo> list = new ArrayList<CommonFiledVo>();
+			for (PrescriptionVo prescription : prescriptionList) {
+				int id = prescription.getId();
+				String date = prescription.getDate();
+				String patientname = prescription.getPatientid().getFirstname();
+
+				CommonFiledVo common = new CommonFiledVo();
+				common.setDate(date);
+				common.setPatientName(patientname);
+				common.setPrescriptionId(id);
+				list.add(common);
+			}
+			Gson gson = new Gson();
+			System.out.println(gson.toJson(list));
+			PrintWriter out = response.getWriter();
+			out.print(gson.toJson(list));
+			out.flush();
+			out.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		System.out.println("-----------------------------------------------------------");
@@ -91,6 +195,29 @@ public class Medicine extends HttpServlet {
 		if (flag.equalsIgnoreCase("chackMedicineId")) {
 			chackMedicineId(request, response);
 		}
+		if (flag.equalsIgnoreCase("dispatchMedicineInsert")) {
+			dispatchMedicineInsert(request, response);
+		}
+		if (flag.equalsIgnoreCase("dispatchedMedicineList")) {
+			dispatchedMedicineList(request, response);
+		}
+	}
+
+	protected void patientRegistrationList(HttpServletRequest request, HttpServletResponse response) {
+		HttpSession session = request.getSession();
+		int adminid = (int) session.getAttribute("medicineAdminId");
+
+		AdminVo adminVo = new AdminVo();
+		adminVo.setId(adminid);
+
+		PatientRegistretionVo patientRegistretionVo = new PatientRegistretionVo();
+		patientRegistretionVo.setAdminid(adminVo);
+
+		PatientRegistreationDao patientRegistreationDao = new PatientRegistreationDao();
+		ArrayList<PatientRegistretionVo> patientRegistration = patientRegistreationDao
+				.patientRegistrationList(patientRegistretionVo);
+		System.out.println(patientRegistration.size());
+		session.setAttribute("patientRagistrationList", patientRegistration);
 	}
 
 	private void medicineList(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -114,10 +241,10 @@ public class Medicine extends HttpServlet {
 			String batchno = medicine.getMedicinebatchnumber();
 			float price = medicine.getPrice();
 			float discount = medicine.getDiscount();
-			java.sql.Date expiry = medicine.getExpirydate();
+			String expiry = medicine.getExpirydate();
 			String expirydate = expiry.toString();
 			int quantity = medicine.getMedicinequantity();
-			
+
 			if (quantity > 0) {
 				stock = "In";
 			} else {
@@ -136,6 +263,45 @@ public class Medicine extends HttpServlet {
 			common.setStock(stock);
 			common.setMedicineupdate(medicineupdate);
 
+			list.add(common);
+		}
+		Gson gson = new Gson();
+		System.out.println(gson.toJson(list));
+		PrintWriter out = response.getWriter();
+		out.print(gson.toJson(list));
+		out.flush();
+		out.close();
+	}
+
+	private void dispatchedMedicineList(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		HttpSession session = request.getSession();
+		int adminid = (int) session.getAttribute("medicineAdminId");
+
+		AdminVo adminVo = new AdminVo();
+		adminVo.setId(adminid);
+
+		DispatchedMedicineVo dispatchedMedicineVo = new DispatchedMedicineVo();
+		dispatchedMedicineVo.setAdminid(adminVo);
+
+		MedicineDao medicineDao = new MedicineDao();
+		ArrayList<DispatchedMedicineVo> dispatchedMedicinelist = medicineDao
+				.dispatchedMedicineList(dispatchedMedicineVo);
+		List<CommonFiledVo> list = new ArrayList<CommonFiledVo>();
+		for (DispatchedMedicineVo medicine : dispatchedMedicinelist) {
+			int id = medicine.getId();
+			String patientName = medicine.getPatientid().getFirstname();
+			String priscriptionDate = medicine.getPrescriptionid().getDate();
+			float medicinePrice = medicine.getTotalprice();
+			float discount = medicine.getTotaldiscount();
+			float subtotal = medicine.getSubtotal();
+
+			CommonFiledVo common = new CommonFiledVo();
+			common.setId(id);
+			common.setDate(priscriptionDate);
+			common.setName(patientName);
+			common.setPrice(medicinePrice);
+			common.setDiscount(discount);
+			common.setSubtotal(subtotal);
 			list.add(common);
 		}
 		Gson gson = new Gson();
@@ -235,8 +401,7 @@ public class Medicine extends HttpServlet {
 
 			String[] manufactured = request.getParameterValues("manufactured_date[]");
 			String[] expiry = request.getParameterValues("expiry_date[]");
-			
-			
+
 			Timestamp t1 = new Timestamp(System.currentTimeMillis());
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy  hh:mm:ss aa");
 			String joiningdate = sdf.format(t1);
@@ -248,12 +413,7 @@ public class Medicine extends HttpServlet {
 			categoryVo.setId(categoryId);
 			System.out.println(medicineId.length);
 			for (int i = 0; i < medicineId.length; i++) {
-				System.out.println("----------------------------");
-				System.out.println(medicineName[i]+" "+medicineDesrciption[i]+" "+medicineBatchNumber[i] +" "+medicineQuantity[i]+" "+
-						prices[i]+" "+medicineId[i]+" "+note[i] +" "+discount[i]+" "+typeOfDiscount[i] +" "+manufacturerCompanyName[i]+" "+manufactured[i]+" "+
-						expiry[i]);
-				System.out.println("----------------------------");
-				
+
 				String medicineName1 = medicineName[i];
 				String medicineDesrciption1 = medicineDesrciption[i];
 				String medicineBatchNumber1 = medicineBatchNumber[i];
@@ -264,19 +424,17 @@ public class Medicine extends HttpServlet {
 				float discount1 = Float.parseFloat(discount[i]);
 				String typeOfDiscount1 = typeOfDiscount[i];
 				String manufacturerCompanyName1 = manufacturerCompanyName[i];
-				
+
 				String manufactured1 = manufactured[i];
-				java.sql.Date manufacturedDate1 = java.sql.Date.valueOf(manufactured1);
 				String expiry1 = expiry[i];
-				java.sql.Date expiryDate1 = java.sql.Date.valueOf(expiry1);
 
 				MedicineVo medicineVo = new MedicineVo();
 				medicineVo.setAdminid(adminVo);
 				medicineVo.setCategoryid(categoryVo);
 				medicineVo.setDiscount(discount1);
-				medicineVo.setExpirydate(expiryDate1);
+				medicineVo.setExpirydate(expiry1);
 				medicineVo.setJoiningdate(joiningdate);
-				medicineVo.setManufacturedate(manufacturedDate1);
+				medicineVo.setManufacturedate(manufactured1);
 				medicineVo.setManufacturercompanyname(manufacturerCompanyName1);
 				medicineVo.setMedicinebatchnumber(medicineBatchNumber1);
 				medicineVo.setMedicinedesrciption(medicineDesrciption1);
@@ -290,9 +448,87 @@ public class Medicine extends HttpServlet {
 				MedicineDao medicineDao = new MedicineDao();
 				String chackmedicine = medicineDao.medicineInsert(medicineVo);
 				if (chackmedicine == "true") {
+					AllDataCountVo allDataCountVo = new AllDataCountVo();
+					allDataCountVo.setAdminid(adminVo);
+					AllDataCountDao allDataCountDao = new AllDataCountDao();
+					allDataCountDao.increaseData(allDataCountVo, "medicine");
 					medicineupdate = "true";
 				} else {
 					medicineupdate = "false";
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	private void dispatchMedicineInsert(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			System.out.println("----------------------");
+			HttpSession session = request.getSession();
+
+			int adminid = (int) session.getAttribute("medicineAdminId");
+			int patientId = Integer.parseInt(request.getParameter(""));
+			int prescriptionId = Integer.parseInt(request.getParameter(""));
+			float totalPrice = Float.parseFloat(request.getParameter(""));
+			float totalDiscount = Float.parseFloat(request.getParameter(""));
+			float subTotal = Float.parseFloat(request.getParameter(""));
+			String description = request.getParameter("");
+			String[] medicineId = request.getParameterValues("");
+			String[] Quantity = request.getParameterValues("");
+			String[] Discount = request.getParameterValues("Discount[]");
+			String[] discountAmount = request.getParameterValues("");
+
+			Timestamp t1 = new Timestamp(System.currentTimeMillis());
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy  hh:mm:ss aa");
+			String joiningdate = sdf.format(t1);
+
+			AdminVo adminVo = new AdminVo();
+			adminVo.setId(adminid);
+
+			PatientRegistretionVo patientRegistretionVo = new PatientRegistretionVo();
+			patientRegistretionVo.setId(patientId);
+
+			PrescriptionVo prescriptionVo = new PrescriptionVo();
+			prescriptionVo.setId(prescriptionId);
+
+			DispatchedMedicineVo dispatchedMedicineVo = new DispatchedMedicineVo();
+			dispatchedMedicineVo.setAdminid(adminVo);
+			dispatchedMedicineVo.setDiscription(description);
+			dispatchedMedicineVo.setPatientid(patientRegistretionVo);
+			dispatchedMedicineVo.setPrescriptionid(prescriptionVo);
+			dispatchedMedicineVo.setSubtotal(subTotal);
+			dispatchedMedicineVo.setJoinindate(joiningdate);
+			dispatchedMedicineVo.setTotaldiscount(totalDiscount);
+			dispatchedMedicineVo.setTotalprice(totalPrice);
+
+			DispatchedMedicineDao dispatchedMedicineDao = new DispatchedMedicineDao();
+			String checkDispatchedMedicine = dispatchedMedicineDao.insertDispatchedMedicince(dispatchedMedicineVo);
+			if (checkDispatchedMedicine.equalsIgnoreCase("true")) {
+				for (int i = 0; i < medicineId.length; i++) {
+					int medicine = Integer.valueOf(medicineId[i]);
+					int quantity = Integer.valueOf(Quantity[i]);
+					float discount = Float.valueOf(Discount[i]);
+					float discountamount = Float.valueOf(discountAmount[i]);
+
+					MedicineVo medicineVo = new MedicineVo();
+					medicineVo.setId(medicine);
+
+					DispatchMedicineInfoVo dispatchMedicineInfoVo = new DispatchMedicineInfoVo();
+					dispatchMedicineInfoVo.setAdminid(adminVo);
+					dispatchMedicineInfoVo.setDiscount(discount);
+					dispatchMedicineInfoVo.setDiscountamount(discountamount);
+					dispatchMedicineInfoVo.setMedicineId(medicineVo);
+					dispatchMedicineInfoVo.setQuantity(quantity);
+
+					String checkDispatchedMedicineInfo = dispatchedMedicineDao
+							.insertDispatchedMedicinceInfo(dispatchMedicineInfoVo);
+					if (checkDispatchedMedicineInfo == "true") {
+						medicineupdate = "true";
+					} else {
+						medicineupdate = "false";
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -324,9 +560,9 @@ public class Medicine extends HttpServlet {
 			float discount = medicine.getDiscount();
 			String typeofdiscount = medicine.getTypeofdiscount();
 			String manufacturercompanyname = medicine.getManufacturercompanyname();
-			java.sql.Date date = medicine.getManufacturedate();
+			String date = medicine.getManufacturedate();
 			String manufacturerdate = date.toString();
-			java.sql.Date expiry = medicine.getExpirydate();
+			String expiry = medicine.getExpirydate();
 			String expirydate = expiry.toString();
 			String joiningdate = medicine.getJoiningdate();
 			MedicineList common = new MedicineList();
@@ -356,6 +592,49 @@ public class Medicine extends HttpServlet {
 		out.flush();
 		out.close();
 	}
+	
+	private void dispatchedMedicineEdit(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		int dispatchedMedicineId = Integer.parseInt(request.getParameter("dispatchedMedicineId"));
+
+		DispatchedMedicineVo dispatchedMedicineVo = new DispatchedMedicineVo();
+		dispatchedMedicineVo.setId(dispatchedMedicineId);
+
+		DispatchedMedicineDao dispatchedMedicineDao = new DispatchedMedicineDao();
+		
+		ArrayList<DispatchedMedicineVo> diapatchedmedicinelist = dispatchedMedicineDao.editDispatechedMedicine(dispatchedMedicineVo);
+		List<CommonFiledVo> list = new ArrayList<CommonFiledVo>();
+		for (DispatchedMedicineVo medicine : diapatchedmedicinelist) {
+			int adminid = medicine.getAdminid().getId();
+			int patientId = medicine.getPatientid().getId();
+			int prescriptionId = medicine.getPrescriptionid().getId();
+			DispatchMedicineInfoVo dispatchMedicineInfoVo = new DispatchMedicineInfoVo();
+			dispatchMedicineInfoVo.setDispatchedmedicineid(dispatchedMedicineVo);
+			ArrayList<DispatchMedicineInfoVo> diapatchmedicinelist = dispatchedMedicineDao.editDispatechedMedicineInfo(dispatchMedicineInfoVo);
+			float medicinePrice = medicine.getTotalprice();
+			float discount = medicine.getTotaldiscount();
+			float subtotal = medicine.getSubtotal();
+			String joiningdate = medicine.getJoinindate();
+			String discription = medicine.getDiscription();
+			
+			CommonFiledVo common = new CommonFiledVo();
+			common.setJoiningdate(joiningdate);
+			common.setDiscount(discount);
+			common.setDispatchMedicineInfoVo(diapatchmedicinelist);
+			common.setAdminId(adminid);
+			common.setPatientID(patientId);
+			common.setPrescriptionId(prescriptionId);
+			common.setPrice(medicinePrice);
+			common.setSubtotal(subtotal);
+			common.setDiscription(discription);
+			list.add(common);
+		}
+		Gson gson = new Gson();
+		System.out.println(gson.toJson(list));
+		PrintWriter out = response.getWriter();
+		out.print(gson.toJson(list));
+		out.flush();
+		out.close();
+	}
 
 	private void medicineUpdate(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		try {
@@ -376,8 +655,6 @@ public class Medicine extends HttpServlet {
 			String manufacturerCompanyName = request.getParameter("mfg_cmp_name");
 			String manufactured = request.getParameter("manufactured_date");
 			String expiry = request.getParameter("expiry_date");
-			java.sql.Date manufacturedDate1 = java.sql.Date.valueOf(manufactured);
-			java.sql.Date expiryDate1 = java.sql.Date.valueOf(expiry);
 
 			AdminVo adminVo = new AdminVo();
 			adminVo.setId(adminid);
@@ -390,9 +667,9 @@ public class Medicine extends HttpServlet {
 			medicineVo.setAdminid(adminVo);
 			medicineVo.setCategoryid(categoryVo);
 			medicineVo.setDiscount(discount);
-			medicineVo.setExpirydate(expiryDate1);
+			medicineVo.setExpirydate(expiry);
 			medicineVo.setJoiningdate(joiningdate);
-			medicineVo.setManufacturedate(manufacturedDate1);
+			medicineVo.setManufacturedate(manufactured);
 			medicineVo.setManufacturercompanyname(manufacturerCompanyName);
 			medicineVo.setMedicinebatchnumber(medicineBatchNumber);
 			medicineVo.setMedicinedesrciption(medicineDesrciption);
@@ -427,9 +704,9 @@ public class Medicine extends HttpServlet {
 			MedicineDao medicineDao = new MedicineDao();
 			String message = medicineDao.deleteMedicine(medicineVo);
 			if (message == "true") {
-				medicineupdate= "true";
+				medicineupdate = "true";
 			} else {
-				medicineupdate="false";
+				medicineupdate = "false";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

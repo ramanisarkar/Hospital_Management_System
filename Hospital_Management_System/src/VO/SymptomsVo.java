@@ -56,6 +56,7 @@ public class SymptomsVo {
 		return adminid;
 	}
 
+	
 	public void setAdminid(AdminVo adminid) {
 		this.adminid = adminid;
 	}

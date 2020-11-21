@@ -45,10 +45,10 @@ $(document).ready(function() {
 			html += '<button style="margin-left: 10px; margin-top: 10px;" type="button" class="btn btn-danger delete" data-delete_id="'+count+'" id="patientId'+count+'" value="'+obj[index].id+'">Delete</button></td></tr>';
 			$('.patient').append(html);
 	 	});
-			 $('#example').DataTable();
+		$('#example').DataTable();
 	});
 		
-	$('#insertpatientid').change(function(event){  
+	$('#insertpatientid').change(function(event){
         var patient = $('#insertpatientid').val();
 		var username = "insertPatientId";
 		$.get('Patient',{flag:username , patientId:patient},function(response){
@@ -74,6 +74,8 @@ $(document).ready(function() {
 			$('#insertcode').val(obj[0].mobilecountrycode);
 			$('#insertmobile').val(obj[0].mobileno);
 			$('#insertphone').val(obj[0].phoneno);
+			$('#insertusername').val(obj[0].username);
+			$('#insertemai').val(obj[0].email);
 			$('#insertguardian').val(obj[0].guardianid);
 			$('#insertstep2patientid').val(obj[0].patientid);
 		});

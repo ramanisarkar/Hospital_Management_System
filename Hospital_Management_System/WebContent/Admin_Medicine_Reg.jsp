@@ -21,6 +21,7 @@
 <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
  
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'  type='text/css'>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js"></script>
 <script>
@@ -135,7 +136,7 @@ $(document).ready(function(){
 			 $('#example').DataTable();
 	});
 	
-	$(".main_medicine_div").append('<div class="medicine_div"><div class="form-group"><label class="col-sm-2 control-label" for="medicine_name">Medicine<span class="require-field"style="color: red;">*</span></label><div class="col-sm-3 margin_bottom_5px"><input id="medicine_name" class="form-control  text-input  medicine_name" maxlength="50" type="text" placeholder="Medicine Name"  name="medicine_name[]"></div><div class="col-sm-6"><textarea rows="1"  name="description[]"  class="form-control " id="description" maxlength="150" placeholder="Description"></textarea></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-3 margin_bottom_5px"><input class="form-control" type="text" maxlength="20" placeholder="Batch Number" name="batch_number[]"></div><div class="col-sm-2 margin_bottom_5px"><input  class="form-control text-input" min="0" type="number" onKeyPress="if(this.value.length==6) return false;"  placeholder="Quantity" name="med_quantity[]"></div><div class="col-sm-2 margin_bottom_5px"><input id="med_price" class="form-control text-input" min="1" type="number" step="0.01" onKeyPress="if(this.value.length==8) return false;"  placeholder="Price (&#36;)"  name="med_price[]"></div><div class="col-sm-2 margin_bottom_5px"><input id="" class="form-control text-input med_uniqueid" maxlength="10" type="text" placeholder="Medicine ID"	value="" name="med_uniqueid[]"></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-3 margin_bottom_5px"><textarea rows="1"  name="note[]"  class="form-control"  maxlength="150" placeholder="Note"></textarea></div><div class="col-sm-2 margin_bottom_5px"><input id="med_discount" class="form-control text-input" type="number" onKeyPress="if(this.value.length==10) return false;" step="0.01"  placeholder="Discount" name="med_discount[]"></div><div class="col-sm-2 margin_bottom_5px"><select class="form-control" name="med_discount_in[]"><option value="flat">Flat</option><option value="percentage">Percentage</option></select></div><div class="col-sm-2"></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-3 margin_bottom_5px"><input id="mfg_cmp_name" class="form-control" type="text" maxlength="50" placeholder="Manufacturer Company Name" name="mfg_cmp_name[]"></div><div class="col-sm-2 margin_bottom_5px"><div class="input-group date" data-date-format="dd/mm/yyyy"><input  type="text" name="manufactured_date[]"  class="form-control" placeholder="dd/mm/yyyy"><div class="input-group-addon" ><span class="glyphicon glyphicon-th"></span></div></div></div><div class="col-sm-2 margin_bottom_5px"><div class="input-group date" data-date-format="dd/mm/yyyy"><input  type="text" name="expiry_date[]"  class="form-control" placeholder="dd/mm/yyyy"><div class="input-group-addon" ><span class="glyphicon glyphicon-th"></span></div></div></div></div></div>');
+	$(".main_medicine_div").append('<div class="medicine_div"><div class="form-group"><label class="col-sm-2 text" for="medicine_name">Medicine<span class="require-field"style="color: red;">*</span></label><div class="col-sm-3 margin_bottom_5px"><input id="medicine_name" class="form-control  text-input  medicine_name" maxlength="50" type="text" placeholder="Medicine Name"  name="medicine_name[]"></div><div class="col-sm-6"><textarea rows="1"  name="description[]"  class="form-control " id="description" maxlength="150" placeholder="Description"></textarea></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-3 margin_bottom_5px"><input class="form-control" type="text" maxlength="20" placeholder="Batch Number" name="batch_number[]"></div><div class="col-sm-2 margin_bottom_5px"><input  class="form-control text-input" min="0" type="number" onKeyPress="if(this.value.length==6) return false;"  placeholder="Quantity" name="med_quantity[]"></div><div class="col-sm-2 margin_bottom_5px"><input id="med_price" class="form-control text-input" min="1" type="number" step="0.01" onKeyPress="if(this.value.length==8) return false;"  placeholder="Price (&#36;)"  name="med_price[]"></div><div class="col-sm-2 margin_bottom_5px"><input id="" class="form-control text-input med_uniqueid" maxlength="10" type="text" placeholder="Medicine ID"	value="" name="med_uniqueid[]"></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-3 margin_bottom_5px"><textarea rows="1"  name="note[]"  class="form-control"  maxlength="150" placeholder="Note"></textarea></div><div class="col-sm-2 margin_bottom_5px"><input id="med_discount" class="form-control text-input" type="number" onKeyPress="if(this.value.length==10) return false;" step="0.01"  placeholder="Discount" name="med_discount[]"></div><div class="col-sm-2 margin_bottom_5px"><select class="form-control" name="med_discount_in[]"><option value="flat">Flat</option><option value="percentage">Percentage</option></select></div><div class="col-sm-2"></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-3 margin_bottom_5px"><input id="mfg_cmp_name" class="form-control" type="text" maxlength="50" placeholder="Manufacturer Company Name" name="mfg_cmp_name[]"></div><div class="col-sm-2 margin_bottom_5px"><div class="input-group date" data-date-format="dd/mm/yyyy"><input  type="text" name="manufactured_date[]"  class="form-control" placeholder="dd/mm/yyyy"style="width:165px;"><div class="input-group-addon" ><span class=""></span></div></div></div><div class="col-sm-2 margin_bottom_5px"><div class="input-group date" data-date-format="dd/mm/yyyy"><input  type="text" name="expiry_date[]"  class="form-control" placeholder="dd/mm/yyyy" style="width:165px;"><div class="input-group-addon" ><span class=""></span></div></div></div></div></div>');
 	
 	$(document).on("click", ".delete_medicine_div", function(){
 		alert("Do you really want to delete this record ?");
@@ -143,9 +144,10 @@ $(document).ready(function(){
 	});
 	
 	$(document).on("click", "#add_new_entry", function(){
-		$(".main_medicine_div").append('<div class="medicine_div"><div class="form-group"><label class="col-sm-2 control-label" for="medicine_name">Medicine<span class="require-field"style="color: red;">*</span></label><div class="col-sm-3 margin_bottom_5px"><input id="medicine_name" class="form-control  text-input  medicine_name" maxlength="50" type="text" placeholder="Medicine Name"  name="medicine_name[]"></div><div class="col-sm-6"><textarea rows="1"  name="description[]"  class="form-control " id="description" maxlength="150" placeholder="Description"></textarea></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-3 margin_bottom_5px"><input class="form-control" type="text" maxlength="20" placeholder="Batch Number" name="batch_number[]"></div><div class="col-sm-2 margin_bottom_5px"><input  class="form-control text-input" min="0" type="number" onKeyPress="if(this.value.length==6) return false;"  placeholder="Quantity" name="med_quantity[]"></div><div class="col-sm-2 margin_bottom_5px"><input id="med_price" class="form-control text-input" min="1" type="number" step="0.01" onKeyPress="if(this.value.length==8) return false;"  placeholder="Price (&#36;)"  name="med_price[]"></div><div class="col-sm-2 margin_bottom_5px"><input id="" class="form-control text-input med_uniqueid" maxlength="10" type="text" placeholder="Medicine ID"	value="" name="med_uniqueid[]"></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-3 margin_bottom_5px"><textarea rows="1"  name="note[]"  class="form-control"  maxlength="150" placeholder="Note"></textarea></div><div class="col-sm-2 margin_bottom_5px"><input id="med_discount" class="form-control text-input" type="number" onKeyPress="if(this.value.length==10) return false;" step="0.01"  placeholder="Discount" name="med_discount[]"></div><div class="col-sm-2 margin_bottom_5px"><select class="form-control" name="med_discount_in[]"><option value="flat">Flat</option><option value="percentage">Percentage</option></select></div><div class="col-sm-2"></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-3 margin_bottom_5px"><input id="mfg_cmp_name" class="form-control" type="text" maxlength="50" placeholder="Manufacturer Company Name" name="mfg_cmp_name[]"></div><div class="col-sm-2 margin_bottom_5px"><div class="input-group date" data-date-format="dd/mm/yyyy"><input  type="text" name="manufactured_date[]"  class="form-control" placeholder="dd/mm/yyyy"><div class="input-group-addon" ><span class="glyphicon glyphicon-th"></span></div></div></div><div class="col-sm-2 margin_bottom_5px"><div class="input-group date" data-date-format="dd/mm/yyyy"><input  type="text" name="expiry_date[]"  class="form-control" placeholder="dd/mm/yyyy"><div class="input-group-addon" ><span class="glyphicon glyphicon-th"></span></div></div></div><div class="col-sm-offset-2 col-sm-1"><button type="button" class="btn btn-default delete_medicine_div"><i class="entypo-trash">Delete</i></button></div></div></div>');
+		$(".main_medicine_div").append('<div class="medicine_div"><div class="form-group"><label class="col-sm-2 text" for="medicine_name">Medicine<span class="require-field"style="color: red;">*</span></label><div class="col-sm-3 margin_bottom_5px"><input id="medicine_name" class="form-control  text-input  medicine_name" maxlength="50" type="text" placeholder="Medicine Name"  name="medicine_name[]"></div><div class="col-sm-6"><textarea rows="1"  name="description[]"  class="form-control " id="description" maxlength="150" placeholder="Description"></textarea></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-3 margin_bottom_5px"><input class="form-control" type="text" maxlength="20" placeholder="Batch Number" name="batch_number[]"></div><div class="col-sm-2 margin_bottom_5px"><input  class="form-control text-input" min="0" type="number" onKeyPress="if(this.value.length==6) return false;"  placeholder="Quantity" name="med_quantity[]"></div><div class="col-sm-2 margin_bottom_5px"><input id="med_price" class="form-control text-input" min="1" type="number" step="0.01" onKeyPress="if(this.value.length==8) return false;"  placeholder="Price (&#36;)"  name="med_price[]"></div><div class="col-sm-2 margin_bottom_5px"><input id="" class="form-control text-input med_uniqueid" maxlength="10" type="text" placeholder="Medicine ID"	value="" name="med_uniqueid[]"></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-3 margin_bottom_5px"><textarea rows="1"  name="note[]"  class="form-control"  maxlength="150" placeholder="Note"></textarea></div><div class="col-sm-2 margin_bottom_5px"><input id="med_discount" class="form-control text-input" type="number" onKeyPress="if(this.value.length==10) return false;" step="0.01"  placeholder="Discount" name="med_discount[]"></div><div class="col-sm-2 margin_bottom_5px"><select class="form-control" name="med_discount_in[]"><option value="flat">Flat</option><option value="percentage">Percentage</option></select></div><div class="col-sm-2"></div></div><div class="form-group"><div class="col-sm-offset-2 col-sm-3 margin_bottom_5px"><input id="mfg_cmp_name" class="form-control" type="text" maxlength="50" placeholder="Manufacturer Company Name" name="mfg_cmp_name[]"></div><div class="col-sm-2 margin_bottom_5px"><div class="input-group date" data-date-format="dd/mm/yyyy"><input  type="text" name="manufactured_date[]"  class="form-control" placeholder="dd/mm/yyyy"style="width:165px;"><div class="input-group-addon" ><span class=""></span></div></div></div><div class="col-sm-2 margin_bottom_5px"><div class="input-group date" data-date-format="dd/mm/yyyy"><input  type="text" name="expiry_date[]"  class="form-control" placeholder="dd/mm/yyyy"style="width:165px;"><div class="input-group-addon" ><span class=""></span></div></div></div><div class="col-sm-offset-2 col-sm-1"><button type="button" class="btn btn-default delete_medicine_div"><i class="entypo-trash">Delete</i></button></div></div></div>');
 		$('.input-group.date').datepicker({format: "dd/mm/yyyy"}); 
 	});
+	
 	$('.input-group.date').datepicker({format: "dd/mm/yyyy"}); 
 	$(document).on("keyup", ".medicine_name", function(){
 		var that = this;
@@ -390,6 +392,166 @@ $(document).ready(function(){
     		}
 		});
 	});
+	
+	$(document).on('change', '#insert_patientId', function(){
+		var patientid = $(this).val();
+		var username = "getPriscriptionRecord";
+		$.get('Medicine',{flag:username , patientId : patientid},function(response){
+			var obj = JSON.parse(response);
+			var priscription = $('#insert_priscription_record');
+			priscription.find('option').remove();
+        	$('<option disabled selected hidden="">').val("").text("Select Prescription").appendTo(priscription);  
+    	   	$.each(obj, function(index, value) {
+    	   		$('<option>').val(obj[index].prescriptionId).text(obj[index].patientName + obj[index].date ).appendTo(priscription);
+    		});
+		});
+	});
+
+	$(document).on('change', '#insert_priscription_record', function(){
+		var priscriptionid = $(this).val();
+		var username = "getPriscriptionMedicineRecord";
+		$.get('Medicine',{flag:username , prescriptionId : priscriptionid},function(response){
+			var obj = JSON.parse(response);
+			console.log(response);
+			console.log(obj.length === 0);
+			if((obj.length === 0) == false){
+				$('#prescriptionMedicineList').empty();
+				var count = 1; 
+				var html = '';
+				html += '<div id="madicinedata">';
+				html += '<div class="form-group row"><div class="col-sm-2"></div><div class="col-sm-2">Medicine</div><div class="col-sm-1">Quantity</div><div class="col-sm-1">Price (&#x20B9;)</div>';
+				html += '<div class="col-sm-2">Discount</div><div class="col-sm-1"style="margin-left: 19px;width: 175px;">Discount Amount</div><div class="col-sm-2"></div></div>';
+				
+				$.each(obj, function(index, value) {
+					count++;
+					html += '<div id="invoice_entry"><div class="form-group row"><div class="col-sm-2 margin_bottom_5px"></div>';
+					html +='<input type="hidden" name="madicine_id[]" value="'+obj[index].id+'"><input type="hidden" class="madicine_quantity_'+count+'" name="madicine_quantity" value="'+obj[index].quantity+'">';
+					html +='<div class="col-sm-2 margin_bottom_5px"><input type="text" name="madicine_title[]" class="form-control" value="'+obj[index].Name+'" readonly>';
+					html +='</div><div class="col-sm-1 margin_bottom_5px"><input id="qty_'+count+'" class="days form-control  medicineqty_'+count+'" data-id="'+count+'" counter="1" type="number" min="0" value="0" name="qty[]">';
+					html +='</div><div class="col-sm-1 margin_bottom_5px"><input type="hidden" id="med_discount_Price'+count+'" value="'+obj[index].price+'">';
+					html +='<input id="price_'+count+'" class="med_price_ form-control" type="text" value="0" name="price[]" readonly></div>';
+					html +='<div class="col-sm-1 margin_bottom_5px" style="padding-right:0px;"><input id="discount_value_'+count+'" data-id="'+count+'" onkeypress="if(this.value.length==10) return false;" step="0.01"class="med_discount_value form-control" type="number" value="0.00" name="discount_value[]"counter="1"></div>';
+					html +='<div class="col-sm-1 margin_bottom_5px"style="width: 114px;"><select class="form-control" id="med_discount_in_'+count+'" name="med_discountin[]" disabled="">';
+					html +='<option value="flat">Flat</option><option value="percentage">%</option></select><input type="hidden" id="med_discount_type'+count+'" name="med_discount_in[]" value="'+obj[index].type+'"></div>';
+					html +='<div class="col-sm-1 margin_bottom_5px"style="width: 175px;"><input id="discount_'+count+'" class="med_discount form-control" type="text" value="0" name="discount_amount[]"readonly=""></div>';
+					html +='<div class="col-sm-2"></div></div></div>';
+	    		});
+				html += '</div>';
+				$('#prescriptionMedicineList').append(html);
+				count=1;
+				$.each(obj, function(index, value) {
+					count++;
+					$('#med_discount_in_'+count+'').val(obj[index].type);
+				});
+			}else{
+				$('#prescriptionMedicineList').empty();
+				$('#prescriptionMedicineList').append('<p style="margin-left: 197px;color: red;font-weight: bold;">No Record Found</p>');
+			}
+		});
+	});
+	
+	$(document).on("change", ".days", function(){
+		var quntittyId = $(this).data('id');
+		var totalQuntity = $('.madicine_quantity_'+quntittyId).val();
+		var quntity = $('#qty_'+quntittyId).val();
+		var medicinePrice= $('#med_discount_Price'+quntittyId).val();
+		var discount = $('#discount_value_'+quntittyId).val();
+		var discountType = $('#med_discount_type'+quntittyId).val();
+		var totalAmount;
+		if(parseInt(totalQuntity) >= parseInt(quntity)){
+			$('#price_'+quntittyId).val(quntity*medicinePrice);
+			var price = [];
+			var med_price = document.querySelectorAll('.med_price_');
+			for(var i =0; i < med_price.length; i++){ 
+				price.push(med_price[i].value);
+			}
+			var amountTotal =0; 
+			$.each(price, function(index, value) {
+				amountTotal+=parseFloat(price[index]);
+			});
+			var discount = [];
+			$('#dispatch_medicine_price').val(amountTotal);
+			var med_discount = document.querySelectorAll('.med_discount');
+			for(var i =0; i < med_discount.length; i++){ 
+				discount.push(med_discount[i].value);
+			}
+			var discountTotal =0; 
+			$.each(discount, function(index, value) {
+				discountTotal+=parseFloat(discount[index]);
+			});
+			$('#discount').val(discountTotal);
+			if(parseFloat(amountTotal) < parseFloat(discountTotal)){
+				alert("please chack the discount");
+			}
+			else {
+				var subtotal = amountTotal - discountTotal;
+				console.log(subtotal);
+				$('#sub_total').val(subtotal);
+			}
+			
+		}
+		else {
+			alert("no stock");
+			$('#qty_'+quntittyId).val(0);
+			$('#discount_value_'+quntittyId).val(0);
+			$('#discount_'+quntittyId).val(0);
+		}
+	});
+	
+	$(document).on("change", ".med_discount_value", function(){
+		var quntittyId = $(this).data('id');
+		var totalQuntity = $('.madicine_quantity_'+quntittyId).val();
+		var quntity = $('#qty_'+quntittyId).val();
+		var medicinePrice= $('#med_discount_Price'+quntittyId).val();
+		var discount = $('#discount_value_'+quntittyId).val();
+		var discountType = $('#med_discount_type'+quntittyId).val();
+		var totalAmount;
+		if (parseInt(quntity) > 0){
+			if(discountType == "flat"){
+				$('#discount_'+quntittyId).val(discount);
+			}
+			else if (discountType == "percentage") {
+				$('#discount_'+quntittyId).val((quntity*medicinePrice)/100 * discount);
+			}
+			
+			var price = [];
+			var med_price = document.querySelectorAll('.med_price_');
+			for(var i =0; i < med_price.length; i++){ 
+				price.push(med_price[i].value);
+			}
+			var amountTotal =0; 
+			$.each(price, function(index, value) {
+				amountTotal+=parseFloat(price[index]);
+			});
+			var discount = [];
+			$('#dispatch_medicine_price').val(amountTotal);
+			var med_discount = document.querySelectorAll('.med_discount');
+			for(var i =0; i < med_discount.length; i++){ 
+				discount.push(med_discount[i].value);
+			}
+			var discountTotal =0; 
+			$.each(discount, function(index, value) {
+				discountTotal+=parseFloat(discount[index]);
+			});
+			$('#discount').val(discountTotal);
+			if(parseFloat(amountTotal) < parseFloat(discountTotal)){
+				alert("Your discount was out of total");
+				$('#discount_value_'+quntittyId).val(0);
+				
+			}
+			else {
+				var subtotal = amountTotal - discountTotal;
+				console.log(subtotal);
+				$('#sub_total').val(subtotal);
+			}
+		}
+		else{
+			alert("Please Select Quntity");
+			$('#discount_value_'+quntittyId).val(0);
+		}
+		
+	});
+	
  	$(".nav-tabs a").click(function(){
    		$("#medicinetab2").hide();
    		$('#message1').hide();
@@ -401,18 +563,19 @@ $(document).ready(function(){
 </script>
 <script type="text/javascript">
 $(function () {
-$('[data-toggle="popover"]').popover({
-    container: "body",
-    sanitize: false,
-    content: function () {
-        return $("#choose-user-popover-content").html();
-    }
-}).on('shown.bs.popover', function () {
-    $('#ExecutorSNPSearchStr').focus();
-});
+	$('[data-toggle="popover"]').popover({
+	    container: "body",
+	    sanitize: false,
+	    content: function () {
+	        return $("#choose-user-popover-content").html();
+	    }
+	}).on('shown.bs.popover', function () {
+	    $('#ExecutorSNPSearchStr').focus();
+	});
 });
 </script>
 <style type="text/css">
+
 .multiselect-container {
     width: 653px;
     overflow: scroll;
@@ -420,13 +583,23 @@ $('[data-toggle="popover"]').popover({
     overflow-y: scroll;
     height: 140px;
 }
+.icone {
+    float: left;
+    height: 20px !important;
+    line-height: 0px;
+    margin-right: 0px;
+    overflow: hidden;
+    width: 25px !important;
+    text-align: center;
+}
 .title {
 	color: white;
-	padding: 8px;
 }
 .text{
-
 text-align: right;
+}
+.require-field{
+color: red;
 }
 .ullist {
 	list-style-type: none;
@@ -516,24 +689,35 @@ display:none !important;
 .btn {
 border-radius: 0px;
 }
+.input-group-addon {
+    background-color: white !important;
+    border: none!important;
+}
+.icone {
+  float: left;
+  height: 20px !important;
+  margin-right: 5px;
+  overflow: hidden;
+  width: 25px !important;
+  text-align: center;
+}
 </style>
 </head>
 
-<body style="background-color: #f1f4f9; font-family: 'Open Sans',sans-serif;">
-	
+<body style="background-color: #f1f4f9; font-family: 'Open Sans',sans-serif; font-size: 13px;">
 	<c:forEach items="${sessionScope.hospitaldata }" var="q" end="0"> 
-		 <div class="navbar" style="padding-right: 14px;  background-color: white;     height: 69px;" >
+		 <div class="navbar" style="padding-right: 14px;  background-color: white;height: 69px;" >
 		<div class="col-md-3 col-sm-2 col-xs-4">
 			<h3>
 				<img src="ing/hospitalmanagemantlogo.png"
-					class="img-circle head_logo" width="40" height="40" style="    margin-top: -8px;"> <span style="font-size:22px ">Hospital
+					class="img-circle head_logo" width="40" height="40" style="margin-top: -8px;"> <span style="font-size:21px ">Hospital
 					Management System</span>
 			</h3>
 		</div>
 		<ul class="nav navbar-right col-md-9 col-sm-10 col-xs-8">
 			<li class="dropdown"style="margin-left: 80%;">
-				<a style="background-color: white; margin-top: 17px; height: 49px;" data-toggle="dropdown" class="dropdown-toggle " href="javascript:;">
-						<img src="images/<%=session.getAttribute("hospitalimage")%>" height="40px" width="40px" class="img-circle" style="margin-top: -15px;" >								
+				<a style="background-color: white;color: #5f5f5f !important; margin-top: 17px; height: 49px;" data-toggle="dropdown" class="dropdown-toggle " href="javascript:;">
+						<img src="Admin_Images/<%=session.getAttribute("hospitalimage")%>" height="40px" width="40px" class="img-circle" style="margin-top: -15px;" >								
 						<span>${q.hospitalname }</span> <b class="caret"></b>
 				</a>
 				<ul class="dropdown-menu extended logout">
@@ -548,6 +732,7 @@ border-radius: 0px;
 		<div id="message3"style="margin-top:-76px;" hidden=""></div>
 		<ul class="nav nav-pills nav-stacked ullist"style="margin-top: -20px; height: 1170;">
 			<li><a href="Admin_Login.jsp"><span class="icone"><img src="ing/dashboard.png"></span><span class="title">Dashboard</span></a></li>
+			<li><a href="<%=request.getContextPath()%>/PatientRegistration?flag=insert&id=${q.id }"><span class="icone"><i class="fas fa fa-wheelchair" style="color: gray;"></i></span><span class="title">Patient Registration</span></a></li>
 			<li><a href="<%=request.getContextPath()%>/Department?flag=insert&id=${q.id }"><span class="icone"><i class="fas fa-briefcase" style="color: gray;"></i></span><span class="title">Department</span></a></li>
 			<li><a href="<%=request.getContextPath()%>/Specialization?flag=insert&id=${q.id }"><span class="icone"><i class="fa fa-lightbulb" style="color: gray;"></i></span><span class="title">Specialization</span></a></li>
 			<li><a href="<%=request.getContextPath()%>/Doctor?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Doctor" title="Doctor">
@@ -558,7 +743,7 @@ border-radius: 0px;
 			<span class="icone"> <img src="ing/outpatient-logo.png"></span>
 			<span class="title">Outpatient</span></a></li>
 			
-			<li><a href="" class="left-tooltip" data-tooltip="Inpatient" title="Inpatient">
+			<li><a href="<%=request.getContextPath()%>/Patient?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Inpatient" title="Inpatient">
 			<span class="icone"> <img src="ing/Patient-logo.png"></span>
 			<span class="title">Inpatient</span></a></li>
 			
@@ -583,31 +768,35 @@ border-radius: 0px;
 			<span class="icone"> <img src="ing/Medicine-logo.png"></span><span class="title">Medicine</span></a></li>
 			<li><a href="<%=request.getContextPath()%>/TreatmentUpdate?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Treatment" title="Treatment">
 			<span class="icone"> <img src="ing/Treatment-logo.png"></span><span class="title">Treatment</span></a></li>
-			<li><a href="" class="left-tooltip" data-tooltip="Prescription" title="Prescription">
-			<span class="icone"> <img src="ing/Prescription-logo.png"></span><span class="title">Prescription</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Assign Bed-Nurse" title="Assign Bed-Nurse">
+			<li><a href="<%=request.getContextPath()%>/Prescription?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Prescription" title="Prescription">
+			<span class="icone"> <img src="ing/Prescription-logo.png"></span><span class="title">Prescription</span></a></li>
+			<li><a href="<%=request.getContextPath()%>/Patient?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Inpatient" title="Inpatient">
+			<span class="icone"><i class="fa fa-bed" aria-hidden="true" style="color: gray;"></i></span>
+			<span class="title">Add Bad</span></a></li>
+			<li><a href="" class="left-tooltip" data-tooltip="Assign Bed-Nurse" title="Assign Bed-Nurse">
 			<span class="icone"> <img src="ing/Assign-Bed-logo.png"></span><span class="title">Assign Bed-Nurse</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Operation List" title="Operation List">
 			<span class="icone"> <img src="ing/Operation-List-logo.png"></span><span class="title">Operation List</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Diagnosis" title="Diagnosis">
 			<span class="icone"> <img src="ing/Diagnosis-Report-logo.png"></span><span class="title">Diagnosis</span></a></li>
 			<li><a href="<%=request.getContextPath()%>/BloodManage?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Blood Bank" title="Blood Bank">
 			<span class="icone"> <img src="ing/Blood-Bank-logo.png"></span><span class="title">Blood Bank</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Appointment" title="Appointment">
 			<span class="icone"> <img src="ing/Appointment-logo.png"></span><span class="title">Appointment</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Invoice" title="Invoice">
-			<span class="icone"> <img src="ing/payment-logo.png"></span><span class="title">Invoice</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Event" title="Event">
+			<span class="icone"> <img src="ing/payment-logo.png"></span><span class="title">Invoice</span></a></li><li>
+			<a href="<%=request.getContextPath()%>/Event?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Event" title="Event">
 			<span class="icone"> <img src="ing/notice-logo.png"></span><span class="title">Event</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Message" title="Message">
-			<span class="icone"> <img src="ing/message-logo.png"></span><span class="title">Message</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Ambulance" title="Ambulance">
+			<span class="icone"> <img src="ing/message-logo.png"></span><span class="title">Message</span></a></li>
+			<li><a href="<%=request.getContextPath()%>/Ambulance?flag=insert&id=${q.id }" class="left-tooltip" data-tooltip="Ambulance" title="Ambulance">
 			<span class="icone"> <img src="ing/Ambulance-logo.png"></span><span class="title">Ambulance</span></a></li><li><a href="" class="left-tooltip" data-tooltip="instrument" title="instrument">
 			<span class="icone"> <img src="ing/Instrument-logo.png"></span><span class="title">Instrument</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Report" title="Report">
 			<span class="icone"> <img src="ing/Report-logo.png"></span><span class="title">Report</span></a></li><li><a href="" class="left-tooltip" data-tooltip="Account" title="Account">
-			<span class="icone"> <img src="ing/account-logo.png"></span><span class="title">Account</span></a></li>	
+			<span class="icone"> <img src="ing/account-logo.png"></span><span class="title">Account</span></a></li>
 		</ul>
 	</c:forEach>
 	
-	<div style="margin-top: 83px;"></div>
-	<div id="message2" style="margin-top: 149px;"hidden="" ></div>
-	<div style="margin-left: 236px; padding: 0px 16px; margin-top: -77%; background-color: white;">
+	<div id="message2" style="margin-top: 67px;"hidden="" ></div>
+	<div style="margin-left: 236px; padding: 0px 16px; margin-top: -73%; background-color: white;">
 		<div style="color: green; margin-top: 3px;" id="specializationadd"></div>
 		<div style="padding-top: 15px;"></div>
-		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-			aria-labelledby="exampleModalLabel">
+		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"aria-labelledby="exampleModalLabel">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content"
 					style="width: 773px; margin-left: -117px;">
@@ -633,7 +822,7 @@ border-radius: 0px;
 					<div class="modal-footer">
 						<form id="category_insert" >
 						<div class="form-group">
-							<label class="control-label col-sm-3" for="text" style="    margin-top: 8px;">Category
+							<label class="text col-sm-3" for="text" style="    margin-top: 8px;">Category
 								Name<span style="color: red">*</span>
 							</label>
 							<div class="col-sm-6">
@@ -665,9 +854,20 @@ border-radius: 0px;
 					href="#menu2" style="display: none;"><i class="fas fa-edit"
 						aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Edit Medicine</a>
 				</li>
+				<li style="margin-left: 15px; background-color: #f1f4f9;"><a
+					id="medicinetab3" data-toggle="tab"
+					href="#menu3"><i class="fas fa-bars"
+					aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Dispatched Medicine List</a>
+					
+				</li>
+					<li style="margin-left: 15px; background-color: #f1f4f9;"><a id="medicinetab4" data-toggle="tab"href="#menu4" >
+					<i class="fas fa-plus-circle"aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Dispatched  Medicine</a>
+				</li>
+					<li style="margin-left: 15px; background-color: #f1f4f9;"><a id="medicinetab5" data-toggle="tab" href="#menu5" style="display: none;">
+					<i class="fas fa-plus-circle" aria-hidden="true" style="border-radius: 50%; padding: 8px;"></i>Edit  Dispatched  Medicine</a>
+				</li>
 			</ul>
 			<div class="tab-content">
-			
 			<div id="home"  class="container tab-pane active"style="margin-top: 10px;">
 					<table id="example" class="display table table-striped table-hover" style="width:100%">
 			        <thead>
@@ -701,10 +901,39 @@ border-radius: 0px;
 			    </table>
 			    <div style="margin-top: 26px;"></div>
    			 </div>
+   			  <div id="menu3" class="tab-pane">
+				<table id="despatichetable" class="display table table-striped table-hover" style="width:100%">
+			       <thead>
+			           <tr>
+							<th style="padding-left: 15px;">Patient Name</th>
+							<th style="padding-left: 15px;">Prescription </th>
+							<th style="padding-left: 15px;">Medicine Price($)</th>
+							<th style="padding-left: 15px;">Discount(&#x20B9;)</th>
+							<th style="padding-left: 15px;">Tax Amount<span>(&#x20B9;)</span> </th>
+							<th style="padding-left: 15px;">Sub Total(&#x20B9;)</th>
+							<th style="padding-left: 15px;">Action</th>
+			           </tr>
+				       </thead>
+				       <tbody class="medicine">
+				       </tbody>
+				       <tfoot>
+				           <tr>
+				            <th style="padding-left: 15px;">Patient Name</th>
+							<th style="padding-left: 15px;">Prescription</th>
+							<th style="padding-left: 15px;">Medicine Price($)</th>
+							<th style="padding-left: 15px;">Discount(&#x20B9;)</th>
+							<th style="padding-left: 15px;">Tax Amount<span>(&#x20B9;)</span> </th>
+							<th style="padding-left: 15px;">Sub Total(&#x20B9;)</th>
+							<th style="padding-left: 15px;">Action</th>
+				           </tr>
+				       </tfoot>
+				   </table>
+				   <div style="margin-top: 26px;"></div>
+		    </div>
 			<div id="menu1" class="tab-pane">
-				<form name="medicine_form" action="" method="post" class="form-horizontal" id="medicine_form"><!-- START Medicine FORM-->
+				<form name="medicine_form" action="" method="post" class="form-horizontal" id="medicine_form">
 				<div class="form-group"style="    margin-top: 15px;">
-				<label class="col-sm-2 control-label" for="medicine_category">Category Name<span class="require-field" style="color: red;">*</span></label>
+				<label class="col-sm-2 text" for="medicine_category">Category Name<span class="require-field" style="color: red;">*</span></label>
 				<div class="col-sm-8 margin_bottom_5px">
 				
 					<select class="form-control validate[required]" name="medicine_category" id="category_data">
@@ -722,7 +951,7 @@ border-radius: 0px;
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label" for="expense_entry"></label>
+				<label class="col-sm-2 text" for="expense_entry"></label>
 				<div class="col-sm-3 margin_bottom_5px">				
 					<button id="add_new_entry" class="btn btn-default btn-sm btn-icon icon-left" type="button"   name="add_new_entry" >Add More Medicine						</button>
 				</div>
@@ -731,15 +960,12 @@ border-radius: 0px;
 			<div class="col-sm-offset-2 col-sm-8">
 				<input type="submit" value="Save" name="save_medicine" class="btn btn-success"style="margin-bottom: 15px;"/>
 			</div>
-			
 			</form>
-			
 			</div>
-		
 			<div id="menu2" class="tab-pane" style="margin-top: 15px;">
 				<form action="" method="post" class="form-horizontal" id="update_form">
 					<div class="form-group">
-						<label class="col-sm-2 control-label" >Category Name<span class="require-field">*</span></label>
+						<label class="col-sm-2 text" >Category Name<span class="require-field">*</span></label>
 						<div class="col-sm-8 margin_bottom_5px">
 							<select class="form-control validate[required]" name="edit_medicine_category" id="edit_category_data">
 							</select>
@@ -747,7 +973,7 @@ border-radius: 0px;
 						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Add Or Remove</button>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 control-label" for="medicine_name">Medicine<span class="require-field">*</span></label>
+						<label class="col-sm-2 text" for="medicine_name">Medicine<span class="require-field">*</span></label>
 						<div class="col-sm-3 margin_bottom_5px">
 							<input id="edit_medicine_name" class="form-control validate[required,custom[popup_category_validation]] text-input edit_medicine_name" maxlength="50" type="text" placeholder="Medicine Name" value="adetest" name="medicine_name">
 						</div>
@@ -769,7 +995,7 @@ border-radius: 0px;
 						<div class="col-sm-2 margin_bottom_5px">
 							<input id="" class="form-control validate[custom[popup_category_validation]] text-input edit_med_uniqueid" maxlength="10" type="text" placeholder="Medicine ID" value="eee258" name="med_uniqueid">
 						</div>
-					</div>	
+					</div>
 					<div class="form-group">				
 						<div class="col-sm-offset-2 col-sm-3 margin_bottom_5px">				
 						<textarea rows="1" id="note" name="note" class="form-control validate[custom[address_description_validation]]" maxlength="150" placeholder="Note"></textarea>
@@ -794,7 +1020,7 @@ border-radius: 0px;
 							<input id="edit_manufactured_date" class="form-control " type="text" name="manufactured_date" placeholder="Manufactured Date" value="2020-03-01" readonly="">
 						</div>	
 						<div class="col-sm-2 margin_bottom_5px">
-							<input id="edit_expiry_date" class="form-control " type="text" name="expiry_date" placeholder="Expiry Date" value="2021-01-22" readonly="">
+							<input id="edit_expiry_date" class="form-control " type="text" name="expiry_date" placeholder="Expiry Date" value="2021-01-22">
 						</div>									
 					</div>			
 					<div class="col-sm-offset-2 col-sm-8">
@@ -804,12 +1030,128 @@ border-radius: 0px;
 						<input type="hidden" id="joiningdateid" name="joinig" >
 						<input type="submit" value="Save" name="save_medicine" id="update" class="btn btn-success"style="margin-bottom: 15px;">
 					</div>	
-				
 				</form>
-				
+			</div>
+			 <div id="menu4" class="tab-pane">
+			    <form id="dipatch_medicine_insert_form">
+			        <div class="form-group row" style="    margin-top: 15px;">
+			            <label class="col-sm-2 text">Patient<span class="require-field">*</span></label>
+			            <div class="col-sm-8">
+			                <select name="patient_id" id="insert_patientId"  class="form-control">
+								<option value="" disabled selected hidden="">Select Patient </option>	
+								<c:forEach items="${sessionScope.patientRagistrationList }" var="q">
+									<option value="${q.id }">${q.patientid } - ${q.firstname }</option>
+								</c:forEach>
+							</select>
+			            </div>
+			        </div>
+			        <div class="form-group row">
+			            <label class="col-sm-2 text" for="patient">Prescription<span class="require-field">*</span></label>
+			            <div class="col-sm-8">
+			                <select name="prescription_id" class="form-control" id="insert_priscription_record">
+			                    <option>Select Prescription</option>
+			                </select>
+			            </div>
+			        </div>
+			
+			        <div id="prescriptionMedicineList"></div>
+			
+			        <div class="form-group row">
+			            <label class="col-sm-2 text" for="med_price">Total Price Amount (&#x20B9;)<span
+			                    class="require-field">*</span></label>
+			            <div class="col-sm-8">
+			                <input id="dispatch_medicine_price" class="form-control text-input" type="text" value=""
+			                    name="med_price" readonly>
+			            </div>
+			        </div>
+			        <div class="form-group row">
+			            <label class="col-sm-2 text" for="discount">Total Discount Amount (&#x20B9;)</label>
+			            <div class="col-sm-8">
+			                <input id="discount" class="form-control discount text-input" min="0" type="number"
+			                    onkeypress="if(this.value.length==8) return false;" step="0.01" value="" name="discount" readonly>
+			            </div>
+			        </div>
+			        <div class="form-group  row">
+			            <label class="col-sm-2 text" for="sub_total">Sub Total (&#x20B9;)</label>
+			            <div class="col-sm-8">
+			                <input id="sub_total" class="form-control  text-input" type="text" value="" name="sub_total" readonly>
+			            </div>
+			        </div>
+			
+			        <div class="form-group row">
+			            <label class="col-sm-2 text" for="description">Description</label>
+			            <div class="col-sm-8">
+			                <textarea name="description" id="description" maxlength="150"
+			                    class="form-control validate[custom[address_description_validation]]"></textarea>
+			            </div>
+			        </div>
+			        <div class="col-sm-offset-2 col-sm-8" style="margin-bottom: 15px;">
+			            <input type="submit" value="Save" name="save_dispatch_medicine" class="btn btn-success">
+			        </div>
+			    </form>
+			</div>
+			<div id="menu5" class="tab-pane">
+			    <form method="post" class="form-horizontal" id="dipatch_medicine_form">
+			        <div class="form-group row" style="margin-top: 15px;">
+			
+			            <label class="col-sm-2 text" for="patient">Patient<span class="require-field">*</span></label>
+			            <div class="col-sm-8">
+			                <select name="patient" class="form-control" id="Edit_ patient_id">
+			                    <option value="">select Patient</option>
+			                </select>
+			            </div>
+			
+			        </div>
+			
+			        <div class="form-group row">
+			            <label class="col-sm-2 text" for="patient">Prescription<span class="require-field">*</span></label>
+			            <div class="col-sm-8">
+			                <select name="prescription_id" class="form-control" id="Edit_prescription">
+			                    <option>Select Prescription</option>
+			                </select>
+			            </div>
+			        </div>
+			
+			        <div id="madicinedata"></div>
+			
+			        <div class="form-group row">
+			            <label class="col-sm-2 text" for="med_price">Total Price Amount (&#x20B9;)<span
+			                    class="require-field">*</span></label>
+			            <div class="col-sm-8">
+			                <input id="Edit_dispatch_medicine_price" class="form-control  text-input" type="text" value=""
+			                    name="med_price" readonly>
+			            </div>
+			        </div>
+			        <div class="form-group row">
+			            <label class="col-sm-2 text" for="discount">Total Discount Amount (&#x20B9;)</label>
+			            <div class="col-sm-8">
+			                <input id="Edit_discount" class="form-control discount text-input" min="0" type="number"
+			                    onkeypress="if(this.value.length==8) return false;" step="0.01" value="" name="discount"
+			                    readonly>
+			            </div>
+			        </div>
+			        <div class="form-group row">
+			            <label class="col-sm-2 text" for="sub_total">Sub Total (&#x20B9;)</label>
+			            <div class="col-sm-8">
+			                <input id="Edit_sub_total" class="form-control  text-input" type="text" value="" name="sub_total"readonly>
+			            </div>
+			        </div>
+			
+			        <div class="form-group row">
+			            <label class="col-sm-2 text" for="description">Description</label>
+			            <div class="col-sm-8">
+			                <textarea name="description" id="description" maxlength="150"
+			                    class="form-control validate[custom[address_description_validation]]"></textarea>
+			
+			            </div>
+			        </div>
+			        <div class="col-sm-offset-2 col-sm-8">
+			            <input type="submit" value="Save" name="save_dispatch_medicine" class="btn btn-success">
+			        </div>
+			    </form>
 			</div>
 		</div>
-		</div>
 	</div>
+</div>
 </body>
 </html>

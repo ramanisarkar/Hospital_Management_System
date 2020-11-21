@@ -18,7 +18,7 @@
 		<property name="hibernate.connection.pool_size">10</property>
 
 		<property name="show_sql">true</property>
-
+		
 		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
 		
 		<property name="hibernate.hbm2ddl.auto">update</property>
@@ -57,21 +57,65 @@
 		
 		<mapping class="VO.PatientRegistretionVo"/>
 		
-		<mapping class="VO.PatientVo"/>
+		<mapping class="VO.PatientDoctorVo"/>
 		
 		<mapping class="VO.BloodOutwordVo"/>
+		
+		<mapping class="VO.PatientOtherInfo"/>
+		
+		<mapping class="VO.PatientGuardianInfo"/>
 		
 		<mapping class="VO.BloodStockVo"/>
 		
 		<mapping class="VO.EventVo"/>
 		
-		<mapping class="VO.EventForVo"/>
-		
 		<mapping class="VO.ReportVo"/>
 		
 		<mapping class="VO.SymptomsVo"/>
 
-		<mapping class="VO.OutPatientVo"/>
+		<mapping class="VO.BedCategoryVo"/>
+		
+		<mapping class="VO.AddBedVo"/>
+		
+		<mapping class="VO.AssignBedVo"/>
+		
+		<mapping class="VO.AssginBedNurseVo"/>
+		
+		<mapping class="VO.PrescriptionVo"/>
+
+		<mapping class="VO.DispatchMedicineVo"/>
+		
+		<mapping class="VO.InstrumentVO"/>
+		
+		<mapping class="VO.InstrumentAssignVO"/>
+		
+		<mapping class="VO.OpreationAddVo"/>
+		
+		<mapping class="VO.OperationVo"/>
+		
+		<mapping class="VO.TransferBedVo"/>
+		
+		<mapping class="VO.CommonDataVo"/>
+		
+		<mapping class="VO.DiagnosisReportAddVo"/>
+		
+		<mapping class="VO.DiagnosisReportApplyVo"/>
+		
+		<mapping class="VO.PrescriptionVo"/>
+		
+		<mapping class="VO.PrescriptionReportVo"/>
+		
+		<mapping class="VO.PrescriptionMedicationVo"/>
+		
+		<mapping class="VO.PrescriptionNoteVo"/>
+		
+		<mapping class="VO.PatientChargesHistoryVo"/>
+		
+		<mapping class="VO.DispatchedMedicineVo"/>
+		
+		<mapping class="VO.DispatchMedicineInfoVo"/>
+		
+		<mapping class="VO.AllDataCountVo"/>
 		
 	</session-factory>
 </hibernate-configuration>

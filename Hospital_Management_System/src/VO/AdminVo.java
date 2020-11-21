@@ -108,9 +108,6 @@ public class AdminVo {
 	@OneToMany( mappedBy = "adminid" , cascade = CascadeType.REMOVE)
 	private List<PatientRegistretionVo> patientRegistrationid;
 
-    @OneToMany( mappedBy = "adminid", cascade = CascadeType.REMOVE)
-    private List<PatientVo> patientid;
-    
 	@OneToMany( mappedBy = "adminid" , cascade = CascadeType.REMOVE)
 	private List<BloodStockVo> bloodstockid;
 
@@ -119,9 +116,6 @@ public class AdminVo {
     
 	@OneToMany( mappedBy = "adminid" , cascade = CascadeType.REMOVE)
 	private List<EventVo> eventid;
-
-    @OneToMany( mappedBy = "adminid", cascade = CascadeType.REMOVE)
-    private List<EventForVo> eventforid;
 
 	public int getId() {
 		return id;
@@ -363,16 +357,17 @@ public class AdminVo {
 		this.patientRegistrationid = patientRegistrationid;
 	}
 
-	public List<PatientVo> getPatientid() {
-		return patientid;
-	}
-
-	public void setPatientid(List<PatientVo> patientid) {
-		this.patientid = patientid;
-	}
-
 	public List<BloodStockVo> getBloodstockid() {
 		return bloodstockid;
+	}
+	
+	@Override
+	public String toString() {
+		return "AdminVo [id=" + id + ", hospitalname=" + hospitalname + ", startingyear=" + startingyear + ", address="
+				+ address + ", con_no=" + con_no + ", country=" + country + ", currency=" + currency + ", email="
+				+ email + ", password=" + password + ", hospitallogo=" + hospitallogo + ", coverimage=" + coverimage
+				+ ", usercanchangeimage=" + usercanchangeimage + ", hospitalnameprescription="
+				+ hospitalnameprescription + ", messageadmin=" + messageadmin + "]";
 	}
 
 	public void setBloodstockid(List<BloodStockVo> bloodstockid) {
@@ -393,13 +388,5 @@ public class AdminVo {
 
 	public void setEventid(List<EventVo> eventid) {
 		this.eventid = eventid;
-	}
-
-	public List<EventForVo> getEventforid() {
-		return eventforid;
-	}
-
-	public void setEventforid(List<EventForVo> eventforid) {
-		this.eventforid = eventforid;
 	}
 }

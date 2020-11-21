@@ -33,7 +33,7 @@ public class DoctorVo {
 	private String lastname;
 	
 	@Column(name = "DateOfBirth")
-	private java.sql.Date birthdate;
+	private String birthdate;
 	
 	@Column(name = "Gender")
 	private String gender;
@@ -90,10 +90,10 @@ public class DoctorVo {
 	private String password;
 	
 	@Column(name = "VisitingCharge")
-	private String visitingcharge;
+	private float visitingcharge;
 
 	@Column(name = "ConsultingCharge")
-	private String consultingcharge;
+	private float consultingcharge;
 	
 	@Column(name = "ProfileImage")
 	private String profileimage;
@@ -125,11 +125,13 @@ public class DoctorVo {
 	@OneToMany( mappedBy = "doctorid", cascade = CascadeType.REMOVE)
 	private List<LoginVO> loginid;
 	
-	@OneToMany( mappedBy = "doctorid", cascade = CascadeType.REMOVE)
-	private List<MedicineVo> medicinid;
-	
-	@OneToMany( mappedBy = "doctorid", cascade = CascadeType.REMOVE)
-	private List<PatientVo> patientloginid;	
+	/*
+	 * @OneToMany( mappedBy = "doctorid", cascade = CascadeType.REMOVE) private
+	 * List<MedicineVo> medicinid;
+	 * 
+	 * @OneToMany( mappedBy = "doctorid", cascade = CascadeType.REMOVE) private
+	 * List<PatientVo> patientloginid;
+	 */
 
 	public int getId() {
 		return id;
@@ -163,11 +165,11 @@ public class DoctorVo {
 		this.lastname = lastname;
 	}
 
-	public java.sql.Date getBirthdate() {
+	public String getBirthdate() {
 		return birthdate;
 	}
 
-	public void setBirthdate(java.sql.Date birthdate) {
+	public void setBirthdate(String birthdate) {
 		this.birthdate = birthdate;
 	}
 
@@ -307,19 +309,19 @@ public class DoctorVo {
 		this.password = password;
 	}
 
-	public String getVisitingcharge() {
+	public float getVisitingcharge() {
 		return visitingcharge;
 	}
 
-	public void setVisitingcharge(String visitingcharge) {
+	public void setVisitingcharge(float visitingcharge) {
 		this.visitingcharge = visitingcharge;
 	}
 
-	public String getConsultingcharge() {
+	public float getConsultingcharge() {
 		return consultingcharge;
 	}
 
-	public void setConsultingcharge(String consultingcharge) {
+	public void setConsultingcharge(float consultingcharge) {
 		this.consultingcharge = consultingcharge;
 	}
 
@@ -402,21 +404,6 @@ public class DoctorVo {
 	public void setDegree(String degree) {
 		this.degree = degree;
 	}
-
-	public List<MedicineVo> getMedicinid() {
-		return medicinid;
-	}
-
-	public void setMedicinid(List<MedicineVo> medicinid) {
-		this.medicinid = medicinid;
-	}
-
-	public List<PatientVo> getPatientloginid() {
-		return patientloginid;
-	}
-
-	public void setPatientloginid(List<PatientVo> patientloginid) {
-		this.patientloginid = patientloginid;
-	}
+	
 
 }

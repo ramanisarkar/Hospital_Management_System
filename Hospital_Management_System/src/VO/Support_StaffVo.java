@@ -32,7 +32,7 @@ public class Support_StaffVo {
 	private String lastname;
 	
 	@Column(name = "DateOfBirth")
-	private java.sql.Date birthdate;
+	private String birthdate;
 	
 	@Column(name = "Gender")
 	private String gender;
@@ -83,13 +83,13 @@ public class Support_StaffVo {
 	@JoinColumn(name="Adminid")
 	private AdminVo adminid;
 	
-	@OneToMany( mappedBy = "supportstaffloginid", cascade = CascadeType.REMOVE)
-	private List<LoginVO> loginid;
-	
 	@ManyToOne
 	@JoinColumn(name="Departmentid")
 	private DepartmentVo departmentid;
-
+	
+	@OneToMany( mappedBy = "supportstaffloginid", cascade = CascadeType.REMOVE)
+	private List<LoginVO> loginid;
+	
 	public int getId() {
 		return id;
 	}
@@ -122,11 +122,11 @@ public class Support_StaffVo {
 		this.lastname = lastname;
 	}
 
-	public java.sql.Date getBirthdate() {
+	public String getBirthdate() {
 		return birthdate;
 	}
 
-	public void setBirthdate(java.sql.Date birthdate) {
+	public void setBirthdate(String birthdate) {
 		this.birthdate = birthdate;
 	}
 

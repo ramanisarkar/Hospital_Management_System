@@ -19,11 +19,14 @@ import javax.servlet.http.Part;
 
 import com.google.gson.Gson;
 
+import DAO.AllDataCountDao;
 import DAO.DepartmentDao;
 import DAO.DoctorDao;
 import DAO.LoginDAO;
 import DAO.NurseDao;
 import VO.AdminVo;
+import VO.AllDataCountVo;
+import VO.CommonDataVo;
 import VO.DepartmentVo;
 import VO.DoctorList;
 import VO.DoctorVo;
@@ -32,6 +35,7 @@ import VO.NurseList;
 import VO.NurseVo;
 import VO.SpecializationVo;
 import VO.Support_StaffList;
+import VO.SymptomsVo;
 
 /**
  * Servlet implementation class Nurse
@@ -232,7 +236,6 @@ public class Nurse extends HttpServlet {
 				String middleName = request.getParameter("middlename");
 				String lastName = request.getParameter("lastname");
 				String dateofbirth = request.getParameter("dob");
-				java.sql.Date dateOfBirth = java.sql.Date.valueOf(dateofbirth);
 				String gender = request.getParameter("gender");
 				String homeAddress = request.getParameter("hometownaddress");
 				String homeCity = request.getParameter("homecity");
@@ -244,7 +247,7 @@ public class Nurse extends HttpServlet {
 				String phoneNumber = request.getParameter("phonenumber");
 				String userName = request.getParameter("username");
 				String password = request.getParameter("password");
-				String charge = request.getParameter("charge");
+				float charge = Float.parseFloat(request.getParameter("charge"));
 
 				Part profileImage = request.getPart("profileimage");
 				String profileImageName = getSubmittedFileName(profileImage);
@@ -274,7 +277,7 @@ public class Nurse extends HttpServlet {
 				nurseVo.setFirstname(firstName);
 				nurseVo.setMidalname(middleName);
 				nurseVo.setLastname(lastName);
-				nurseVo.setBirthdate(dateOfBirth);
+				nurseVo.setBirthdate(dateofbirth);
 				nurseVo.setGender(gender);
 				nurseVo.setHomeeaddrss(homeAddress);
 				nurseVo.setHomecity(homeCity);
@@ -318,6 +321,11 @@ public class Nurse extends HttpServlet {
 								imageDir.mkdirs();
 							}
 							nurseImage(s, profileImagepath, profileImage);
+							AllDataCountVo allDataCountVo = new AllDataCountVo();
+							allDataCountVo.setAdminid(adminVo);
+							AllDataCountDao allDataCountDao = new AllDataCountDao();
+							allDataCountDao.increaseData(allDataCountVo, "nurse");
+							
 							nurseupdate = "true";
 						} else {
 							nurseupdate = "false";
@@ -358,8 +366,7 @@ public class Nurse extends HttpServlet {
 			String firstName = doctor.getFirstname();
 			String middleName = doctor.getMidalname();
 			String lastName = doctor.getLastname();
-			java.sql.Date dateofbirth = doctor.getBirthdate();
-			String date = dateofbirth.toString();
+			String date = doctor.getBirthdate();
 			String gender = doctor.getGender();
 			String homeAddress = doctor.getHomeeaddrss();
 			String homeCity = doctor.getHomecity();
@@ -372,7 +379,7 @@ public class Nurse extends HttpServlet {
 			String email = doctor.getEmail();
 			String password = doctor.getPassword();
 			String userName = doctor.getUsername();
-			String charge = doctor.getCharge();
+			float charge = doctor.getCharge();
 			String profileimage = doctor.getProfileimage();
 			String profileimagename = "";
 			if (profileimage != null) {
@@ -429,7 +436,6 @@ public class Nurse extends HttpServlet {
 				String middleName = request.getParameter("middlename");
 				String lastName = request.getParameter("lastname");
 				String dateofbirth = request.getParameter("dob");
-				java.sql.Date dateOfBirth = java.sql.Date.valueOf(dateofbirth);
 				String gender = request.getParameter("gender");
 				String homeAddress = request.getParameter("hometownaddress");
 				String homeCity = request.getParameter("homecity");
@@ -441,7 +447,7 @@ public class Nurse extends HttpServlet {
 				String phoneNumber = request.getParameter("phonenumber");
 				String userName = request.getParameter("username");
 				String password = request.getParameter("password");
-				String charge = request.getParameter("charge");
+				float charge = Float.parseFloat(request.getParameter("charge"));
 				String editprofileImage = request.getParameter("editprofileImage");
 				System.out.println(editprofileImage);
 
@@ -476,7 +482,7 @@ public class Nurse extends HttpServlet {
 				nurseVo.setFirstname(firstName);
 				nurseVo.setMidalname(middleName);
 				nurseVo.setLastname(lastName);
-				nurseVo.setBirthdate(dateOfBirth);
+				nurseVo.setBirthdate(dateofbirth);
 				nurseVo.setGender(gender);
 				nurseVo.setHomeeaddrss(homeAddress);
 				nurseVo.setHomecity(homeCity);
@@ -610,7 +616,7 @@ public class Nurse extends HttpServlet {
 			
 			String loginmessage = nurseDao.deleteLogin(loginVO);
 			if (loginmessage == "true") {
-				String message = NurseDao.deleteNurse(nurseVo);
+				String message = nurseDao.deleteNurse(nurseVo);
 				if (message == "true") {
 					if ((profileimage.isEmpty()) == false) {
 						String Path = getServletContext()

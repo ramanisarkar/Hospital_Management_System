@@ -13,69 +13,75 @@ import VO.CategoryVo;
 import VO.MedicineVo;
 import VO.NurseVo;
 
-public class CategoryDao {
+public class CategoryDao{
 
 	public String categoryInsert(CategoryVo categoryVo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
 		String message;
 		try {
-			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
-			Session session = sessionfactory.openSession();
-			Transaction transaction = session.beginTransaction();
 			session.save(categoryVo);
-			transaction.commit();
-			session.close();
 		} catch (Exception e) {
 			return message = "error";
+		}
+		finally {
+			transaction.commit();
+			session.close();
 		}
 		return message = "true";
 	}
 	public String deleteCategory(CategoryVo categoryVo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
 		String message = null;
 		try {
-			System.out.println(categoryVo.getId());
-			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
-			Session session = sessionfactory.openSession();
-			Transaction transaction = session.beginTransaction();
 			Query q = session.createQuery("delete from CategoryVo AS d where d.id =:id");
 			q.setParameter("id", categoryVo.getId());
 			q.executeUpdate();
-			transaction.commit();
-			session.close();
 		} catch (Exception e) {
 			return message = "error";
+		}
+		finally {
+			transaction.commit();
+			session.close();
 		}
 		return message = "true";
 	}
 	public ArrayList<CategoryVo> categoryList(CategoryVo categoryVo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
 		List<CategoryVo> categoryList = new ArrayList<CategoryVo>();
 		try {
-			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
-			Session session = sessionfactory.openSession();
-			Transaction transaction = session.beginTransaction();
 			Query q = session.createQuery("from CategoryVo AS d where d.adminid =:id");
 			q.setParameter("id", categoryVo.getAdminid());
 			categoryList = q.list();
-			transaction.commit();
-			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		finally {
+			transaction.commit();
+			session.close();
 		}
 		return (ArrayList<CategoryVo>) categoryList;
 	}
 	public String deleteMedicine(MedicineVo medicineVo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
 		String message = null;
 		try {
-			System.out.println(medicineVo.getId());
-			SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
-			Session session = sessionfactory.openSession();
-			Transaction transaction = session.beginTransaction();
 			Query q = session.createQuery("delete from MedicineVo AS d where d.categoryid =:id");
 			q.setParameter("id", medicineVo.getCategoryid());
 			q.executeUpdate();
-			transaction.commit();
-			session.close();
 		} catch (Exception e) {
 			return message = "error";
+		}
+		finally {
+			transaction.commit();
+			session.close();
 		}
 		return message = "true";
 		

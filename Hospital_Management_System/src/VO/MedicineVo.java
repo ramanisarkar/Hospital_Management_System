@@ -50,10 +50,10 @@ public class MedicineVo {
 	private String manufacturercompanyname;
 	
 	@Column(name = "ManufactureDate")
-	private java.sql.Date manufacturedate;
+	private String manufacturedate;
 	
 	@Column(name = "ExpiryDate")
-	private java.sql.Date expirydate;
+	private String expirydate;
 	
 	@Column(name = "JoiningDate")
 	private String joiningdate;
@@ -157,20 +157,20 @@ public class MedicineVo {
 	public void setManufacturercompanyname(String manufacturercompanyname) {
 		this.manufacturercompanyname = manufacturercompanyname;
 	}
-
-	public java.sql.Date getManufacturedate() {
+	
+	public String getManufacturedate() {
 		return manufacturedate;
 	}
 
-	public void setManufacturedate(java.sql.Date manufacturedate) {
+	public void setManufacturedate(String manufacturedate) {
 		this.manufacturedate = manufacturedate;
 	}
 
-	public java.sql.Date getExpirydate() {
+	public String getExpirydate() {
 		return expirydate;
 	}
 
-	public void setExpirydate(java.sql.Date expirydate) {
+	public void setExpirydate(String expirydate) {
 		this.expirydate = expirydate;
 	}
 

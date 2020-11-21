@@ -41,7 +41,7 @@ public class BloodManageVo {
 	private String zipcode;
 	
 	@Column(name = "LastDonationDate")
-	private java.sql.Date lastdonationdate;
+	private  String lastdonationdate;
 	
 	@Column(name = "JoiningDate")
 	private String joiningdate;
@@ -94,11 +94,11 @@ public class BloodManageVo {
 		this.city = city;
 	}
 
-	public java.sql.Date getLastdonationdate() {
+	public String getLastdonationdate() {
 		return lastdonationdate;
 	}
 
-	public void setLastdonationdate(java.sql.Date lastdonationdate) {
+	public void setLastdonationdate(String lastdonationdate) {
 		this.lastdonationdate = lastdonationdate;
 	}
 

@@ -33,7 +33,7 @@ public class PharmacistVo {
 	private String lastname;
 	
 	@Column(name = "DateOfBirth")
-	private java.sql.Date birthdate;
+	private String birthdate;
 	
 	@Column(name = "Gender")
 	private String gender;
@@ -119,11 +119,11 @@ public class PharmacistVo {
 		this.lastname = lastname;
 	}
 
-	public java.sql.Date getBirthdate() {
+	public String getBirthdate() {
 		return birthdate;
 	}
 
-	public void setBirthdate(java.sql.Date birthdate) {
+	public void setBirthdate(String birthdate) {
 		this.birthdate = birthdate;
 	}
 

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+	
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,17 +20,18 @@
 </style>
 </head>
 <body>
-<div class="navbar">
-		<div class="col-md-3 col-sm-2 col-xs-4" style="width: 150px;">
-			<h3 style="width: 102%;">
-				<img src="ing/hospitalmanagemantlogo.png"
-					class="img-circle head_logo" width="40" height="40"> <span style="font-size:22px; ">Hospital
-					Management System</span>
-			</h3>
+	<div class="navbar">
+			<div class="col-md-3 col-sm-2 col-xs-4" style="width: 150px;">
+				<h3 style="width: 102%;">
+					<img src="ing/hospitalmanagemantlogo.png"
+						class="img-circle head_logo" width="40" height="40"> <span style="font-size:22px; ">Hospital
+						Management System</span>
+				</h3>
+			</div>
 		</div>
-	</div>
-<div>
+	<div>
 	<section id="login" class="login">
+	
 		<div class="container" style="position: relative;">
 			<div class="row">
 				<div class="col-lg-6">
@@ -51,7 +53,6 @@
 
 							</div>
 							<div class="form-group">
-
 								<input type="password" name="pwd" class="form-control"
 									id="exampleInputPassword1" placeholder="password"
 									style="border: none; border-bottom: 1px solid #e3e3e3">
@@ -61,8 +62,7 @@
 									<div class="form-group form-check">
 										<input type="checkbox" class="form-check-input"
 											id="exampleCheck1" style="border-radius: 5px"> <label
-											class="form-check-label" for="exampleCheck1">Remember
-											Me</label>
+											class="form-check-label" for="exampleCheck1">Remember Me</label>
 									</div>
 								</div>
 							</div>

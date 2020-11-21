@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -20,15 +21,22 @@ import javax.servlet.http.Part;
 import com.google.gson.Gson;
 
 import DAO.AccountantStaffDao;
+import DAO.AllDataCountDao;
 import DAO.LoginDAO;
+import DAO.PatientDao;
 import DAO.PatientRegistreationDao;
 import VO.AccountantList;
 import VO.AccountantStaffVo;
 import VO.AdminVo;
+import VO.AllDataCountVo;
 import VO.AmbulanceVo;
+import VO.CommonDataVo;
+import VO.DiagnosisReportAddVo;
+import VO.DiagnosisReportApplyVo;
 import VO.LoginVO;
 import VO.PatentRegistreationList;
 import VO.PatientRegistretionVo;
+import VO.SymptomsVo;
 
 /**
  * Servlet implementation class PatientRegistration
@@ -55,26 +63,26 @@ public class PatientRegistration extends HttpServlet {
 
    	private static String getSubmittedFileName(Part part) {
    		String filename = "null";
-   		for (String cd : part.getHeader("content-disposition").split(";")) {
-   			if (cd.trim().startsWith("filename")) {
-   				String fileName = cd.substring(cd.indexOf('=') + 1).trim().replace("\"", "");
-   				return fileName.substring(fileName.lastIndexOf('/') + 1).substring(fileName.lastIndexOf('\\') + 1);
-   			}
+   		System.out.println(part);
+   		if(part != null) {
+   			System.out.println("dbjsagdjlsflvsdaf--------------------------------");
+			for (String cd : part.getHeader("content-disposition").split(";")) {
+				if (cd.trim().startsWith("filename")) {
+					String fileName = cd.substring(cd.indexOf('=') + 1).trim().replace("\"", "");
+					return fileName.substring(fileName.lastIndexOf('/') + 1).substring(fileName.lastIndexOf('\\') + 1);
+				}
+			}
+			return filename;
    		}
    		return filename;
    	}
 
-   	private void patientImage(boolean s, String profileImagepath, Part profileImage, boolean s2, String diagosispath, Part diagnosis) {
+   	private void patientImage(boolean s, String profileImagepath, Part profileImage) {
    		try {
    			if (s == true) {
    				String Path = getServletContext()
    						.getRealPath(File.separator + SAVE_DIR_Images + File.separator + profileImagepath);
    				profileImage.write(Path);
-   			}
-   			if (s2 == true) {
-   				String Path = getServletContext()
-   						.getRealPath(File.separator + SAVE_DIR_Images + File.separator + diagosispath);
-   				diagnosis.write(Path);
    			}
    		} catch (IOException e) {
    			e.printStackTrace();
@@ -108,9 +116,6 @@ public class PatientRegistration extends HttpServlet {
    		// TODO Auto-generated method stub
    		System.out.println("---------------sasasa--------------------------------------------");
    		String flag = request.getParameter("flag");
-   		String firstName = request.getParameter("firstname");
-   		
-   		System.out.println(firstName);
    		System.out.println(flag);
    		if (flag.equalsIgnoreCase("insert")) {
    			patientRegistrationInsert(request, response);
@@ -125,6 +130,7 @@ public class PatientRegistration extends HttpServlet {
 
    	private void patientReagistrationChack(HttpServletRequest request, HttpServletResponse response)
    			throws IOException {
+   		
    		String patientuserId = request.getParameter("patientuserId");
    		System.out.println(patientuserId);
    		
@@ -180,7 +186,6 @@ public class PatientRegistration extends HttpServlet {
    			String email = patient.getEmail();
    			String mobile = patient.getMobileno();
    			String patientid = patient.getPatientid();
-   			System.out.println(patientid);
    			PatentRegistreationList common = new PatentRegistreationList();
    			common.setId(id);
    			common.setFirstname(name);
@@ -200,7 +205,7 @@ public class PatientRegistration extends HttpServlet {
    		out.close();
    	}
 
-   	private void patientRegistrationInsert(HttpServletRequest request, HttpServletResponse response) {
+   	private void patientRegistrationInsert(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
    		try {
    			System.out.println("----------------------");
    			HttpSession session = request.getSession();
@@ -208,15 +213,12 @@ public class PatientRegistration extends HttpServlet {
    			if (EmailValidation.isValid(email)) {
    				int adminid = (int) session.getAttribute("patientRaggistrationAdminid");
    				String firstName = request.getParameter("first_name");
+   				System.out.println(firstName);
    				String middleName = request.getParameter("middle_name");
    				String lastName = request.getParameter("last_name");
    				String dateofbirth = request.getParameter("birth_date");
-   				System.out.println(dateofbirth);
-   				System.out.println(dateofbirth);
-   				java.sql.Date dateOfBirth = java.sql.Date.valueOf(dateofbirth);
    				String gender = request.getParameter("gender");
    				String blood_group = request.getParameter("blood_group");
-   				String symptoms = request.getParameter("symptoms");
    				String address = request.getParameter("address");
    				String city_name = request.getParameter("city_name");
    				String state_name = request.getParameter("state_name");
@@ -227,30 +229,20 @@ public class PatientRegistration extends HttpServlet {
    				String phone = request.getParameter("phone");
    				String userName = request.getParameter("username");
    				String password = request.getParameter("password");
-
+   				String[] symptoms = request.getParameterValues("symptoms[]");
    				Part profileImage = request.getPart("profileimage");
-   				Part diagnosis = request.getPart("diagnosis");
    				
    				String profileImageName = getSubmittedFileName(profileImage);
-   				String diagonsisName = getSubmittedFileName(diagnosis);
    				String profileImagepath = null;
-   				String diagosispath = null;
 
-   				boolean s,s2;
+   				boolean s;
    				int i = 1;
    				if ((profileImageName.isEmpty()) == false) {
    					String uniq = String.valueOf(i);
    					profileImagepath = userName.concat(uniq).concat("@").concat(profileImageName);
    					s = true;
-   				} else {
+   				} else { 
    					s = false;
-   				}
-   				if ((diagonsisName.isEmpty()) == false) {
-   					String uniq = String.valueOf(i);
-   					diagosispath = userName.concat(uniq).concat("@").concat(diagonsisName);
-   					s2 = true;
-   				} else {
-   					s2 = false;
    				}
 
    				Timestamp t1 = new Timestamp(System.currentTimeMillis());
@@ -292,9 +284,8 @@ public class PatientRegistration extends HttpServlet {
    				patientRegistretionVo.setFirstname(firstName);
    				patientRegistretionVo.setMidalname(middleName);
    				patientRegistretionVo.setLastname(lastName);
-   				patientRegistretionVo.setBirthdate(dateOfBirth);
+   				patientRegistretionVo.setBirthdate(dateofbirth);
    				patientRegistretionVo.setBloodgroup(blood_group);
-   				patientRegistretionVo.setSymptoms(symptoms);
    				patientRegistretionVo.setGender(gender);
    				patientRegistretionVo.setHomeeaddrss(address);
    				patientRegistretionVo.setHomecity(city_name);
@@ -308,27 +299,95 @@ public class PatientRegistration extends HttpServlet {
    				patientRegistretionVo.setUsername(userName);
    				patientRegistretionVo.setPassword(password);
    				patientRegistretionVo.setProfileimage(profileImagepath);
-   				patientRegistretionVo.setDiagnosis(diagosispath);
    				patientRegistretionVo.setJoiningdate(joiningdate);
    				patientRegistretionVo.setAdminid(adminVo);
 
-				String chackPatient = patientRegistreationDao.insertPatient(patientRegistretionVo);
-				if (chackPatient == "true") {
-					String uploadImagePath = getServletContext().getRealPath(File.separator + SAVE_DIR_Images);
-					File imageDir = new File(uploadImagePath);
-					if (!imageDir.exists()) {
-						imageDir.mkdirs();
-					}
-					patientImage(s, profileImagepath, profileImage, s2, diagosispath, diagnosis);
-					patientupdate="true";
-					System.out.println(patientupdate);
-   					String respose = "success";
-   					response.setContentType("text/plain");
-   					response.setCharacterEncoding("UTF-8");
-   					response.getWriter().write(respose);
-				} else {
-					patientupdate = "false";
-				}
+   				LoginVO loginvo = new LoginVO();
+				loginvo.setPatientloginid(patientRegistretionVo);
+				loginvo.setEmail(email);
+				loginvo.setPassword(password);
+				loginvo.setUsername(userName);
+				loginvo.setLastlogin(joiningdate);
+				loginvo.setRoll("Patient");
+				
+				LoginDAO logdao = new LoginDAO();
+				ArrayList<LoginVO> emailchack = logdao.emailverify(loginvo);
+				System.out.println(emailchack.size());
+				if (emailchack.isEmpty() == true) {
+					ArrayList<LoginVO> usernamechack = logdao.userNameVerify(loginvo);
+					System.out.println(usernamechack.size());
+					if (usernamechack.isEmpty() == true) {
+						String chackPatient = patientRegistreationDao.insertPatient(patientRegistretionVo , loginvo);
+						if (chackPatient == "true") {
+							
+							AllDataCountVo allDataCountVo = new AllDataCountVo();
+							allDataCountVo.setAdminid(adminVo);
+							AllDataCountDao allDataCountDao = new AllDataCountDao();
+							allDataCountDao.increaseData(allDataCountVo, "patient");
+							
+							PatientDao patientDao = new PatientDao();
+							for (int j = 0; j < symptoms.length; j++) {
+
+								int symptom = Integer.valueOf(symptoms[j]);
+								SymptomsVo symptomsVo = new SymptomsVo();
+								symptomsVo.setId(symptom);
+								CommonDataVo commonDataVo = new CommonDataVo();
+								commonDataVo.setAdminid(adminVo);
+								commonDataVo.setSymptomspatientid(patientRegistretionVo);
+								commonDataVo.setSymptomsid(symptomsVo);
+
+								patientDao.insertSymptoms(commonDataVo);
+							}
+							String uploadImagePath = getServletContext().getRealPath(File.separator + SAVE_DIR_Images);
+							File imageDir = new File(uploadImagePath);
+							if (!imageDir.exists()) {
+								imageDir.mkdirs();
+							}
+							patientImage(s, profileImagepath, profileImage);
+							int count = Integer.parseInt(request.getParameter("count"));
+			   				System.out.println(count);
+							int a = 1;
+							for (int i1 = 1; i1 <= count; i1++) {
+								Part guardianimage = request.getPart("diagnosis" + i1 + "");
+								String guardianimageName = getSubmittedFileName(guardianimage);
+								String guardianimagepath = null;
+								if(guardianimageName != "null") {
+									if ((guardianimageName.isEmpty()) == false) {
+										String uniq = String.valueOf(a);
+										guardianimagepath = userName.concat(uniq).concat("@").concat(guardianimageName);
+										String Path2 = getServletContext().getRealPath(
+												File.separator + SAVE_DIR_Images + File.separator + guardianimagepath);
+										guardianimage.write(Path2);
+										DiagnosisReportAddVo diagnosisReportAddVo =  new DiagnosisReportAddVo();
+										diagnosisReportAddVo.setAdminid(adminVo);
+										diagnosisReportAddVo.setPatientid(patientRegistretionVo);
+										DiagnosisReportApplyVo diagnosisReportApplyVo = new DiagnosisReportApplyVo();
+										diagnosisReportApplyVo.setDiagnosisreportid(diagnosisReportAddVo);
+										diagnosisReportApplyVo.setReport(guardianimagepath);
+										patientRegistreationDao.diagnosisReportInsert(diagnosisReportAddVo,diagnosisReportApplyVo);
+										
+									}
+								}
+							}
+						} else {
+							patientupdate = "false";
+						}
+					}else {
+		   				patientupdate = "false";
+		   				patientuser = "false";
+		   				System.out.println(patientupdate);
+						response.setContentType("text/plain");
+						response.setCharacterEncoding("UTF-8");
+						response.getWriter().write(patientemailinvalid);
+		   			}
+				}else {
+	   				patientupdate = "false";
+	   				patientemail = "false";
+	   				System.out.println(patientupdate);
+					response.setContentType("text/plain");
+					response.setCharacterEncoding("UTF-8");
+					response.getWriter().write(patientemailinvalid);
+	   			}
    					
    			} else {
    				patientupdate = "false";
@@ -362,8 +421,7 @@ public class PatientRegistration extends HttpServlet {
    			String firstName = patient.getFirstname();
    			String middleName = patient.getMidalname();
    			String lastName = patient.getLastname();
-   			java.sql.Date dateofbirth = patient.getBirthdate();
-   			String date = dateofbirth.toString();
+   			String date = patient.getBirthdate();
    			String gender = patient.getGender();
    			String homeAddress = patient.getHomeeaddrss();
    			String homeCity = patient.getHomecity();
@@ -384,19 +442,10 @@ public class PatientRegistration extends HttpServlet {
    				a++;
    				profileimagename = profileimage.substring(a);
    			}
-   			String diagnosis = patient.getDiagnosis();
-   			String diagnosisname = "";
-   			if (diagnosis != null) {
-   				int a = diagnosis.indexOf("@");
-   				a++;
-   				diagnosisname = diagnosis.substring(a);
-   			}
    			String joiningdate = patient.getJoiningdate();
    			PatentRegistreationList common = new PatentRegistreationList();
    			common.setId(patientId);
    			common.setPatientid(patientid);
-   			common.setDignosis(diagnosis);
-   			common.setDignosisname(diagnosisname);
    			common.setSymptoms(symptoms);
    			common.setAdminid(adminid);
    			common.setFirstname(firstName);
@@ -442,7 +491,6 @@ public class PatientRegistration extends HttpServlet {
    				String middleName = request.getParameter("middle_name");
    				String lastName = request.getParameter("last_name");
    				String dateofbirth = request.getParameter("birth_date");
-   				java.sql.Date dateOfBirth = java.sql.Date.valueOf(dateofbirth);
    				String gender = request.getParameter("gender");
    				String blood_group = request.getParameter("blood_group");
    				String symptoms = request.getParameter("symptoms");
@@ -503,7 +551,7 @@ public class PatientRegistration extends HttpServlet {
    				patientRegistretionVo.setFirstname(firstName);
    				patientRegistretionVo.setMidalname(middleName);
    				patientRegistretionVo.setLastname(lastName);
-   				patientRegistretionVo.setBirthdate(dateOfBirth);
+   				patientRegistretionVo.setBirthdate(dateofbirth);
    				patientRegistretionVo.setBloodgroup(blood_group);
    				patientRegistretionVo.setSymptoms(symptoms);
    				patientRegistretionVo.setGender(gender);
@@ -519,16 +567,23 @@ public class PatientRegistration extends HttpServlet {
    				patientRegistretionVo.setUsername(userName);
    				patientRegistretionVo.setPassword(password);
    				patientRegistretionVo.setProfileimage(profileImagepath);
-   				patientRegistretionVo.setDiagnosis(diagosispath);
    				patientRegistretionVo.setJoiningdate(joiningdate);
    				patientRegistretionVo.setAdminid(adminVo);
    				patientRegistretionVo.setId(id);
-
+   				
+   				LoginVO loginvo = new LoginVO();
+				loginvo.setPatientloginid(patientRegistretionVo);
+				loginvo.setEmail(email);
+				loginvo.setPassword(password);
+				loginvo.setUsername(userName);
+				loginvo.setLastlogin(joiningdate);
+				loginvo.setRoll("Patient");
+				
    				PatientRegistreationDao  patientRegistreationDao = new PatientRegistreationDao();
 				String chackpatient = patientRegistreationDao.UpdatePatientProfile(patientRegistretionVo);
 				if (chackpatient == "true") {
 					patientupdate = "true";
-					patientImage(s, profileImagepath, profileImage,s2, diagosispath, diagnosis );
+					patientImage(s, profileImagepath, profileImage);
 					System.out.println(patientupdate);
    					String respose = "success";
    					response.setContentType("text/plain");
@@ -562,7 +617,6 @@ public class PatientRegistration extends HttpServlet {
    			PatientRegistreationDao patientRegistreationDao = new PatientRegistreationDao();
    			ArrayList<PatientRegistretionVo> patientList = patientRegistreationDao.editPatient(patientRegistretionVo);
    			String profileimage = patientList.get(0).getProfileimage();
-   			String diagnosis = patientList.get(0).getDiagnosis();
    			
    			String message = patientRegistreationDao.deletePatient(patientRegistretionVo);
    			if (message  == "true") {
@@ -571,10 +625,6 @@ public class PatientRegistration extends HttpServlet {
 							.getRealPath(File.separator + SAVE_DIR_Images + File.separator + profileimage);
 					File dir = new File(Path);
 					dir.delete();
-					String Path1 = getServletContext()
-							.getRealPath(File.separator + SAVE_DIR_Images + File.separator + diagnosis);
-					File dir1 = new File(Path1);
-					dir1.delete();
 				}
 				System.out.println(message);
 				String respose = "success";

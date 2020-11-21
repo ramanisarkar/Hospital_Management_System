@@ -58,14 +58,22 @@ public class Admin extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String flag = request.getParameter("flag");
+		HttpSession session = request.getSession();
 		if (flag.equalsIgnoreCase("editprofile")) {
-			HttpSession session = request.getSession();
 			int adminid = (Integer.parseInt(request.getParameter("id")));
 			session.setAttribute("adminid", adminid);
 			editAdminProfile(request, response);
 			response.sendRedirect("Admin_Edit_Profile.jsp");
 		}
+		if (flag.equalsIgnoreCase("desbord")) {
+			int adminid = (Integer.parseInt(request.getParameter("id")));
+			session.setAttribute("loginadminid", adminid);
+			CommonDataCount commonDataCount = new CommonDataCount();
+			commonDataCount.doGet(request, response);
+			response.sendRedirect("Admin_Login.jsp");
+		}
 	}
+
 
 	private void editAdminProfile(HttpServletRequest request, HttpServletResponse response) {
 		HttpSession session = request.getSession();
@@ -76,6 +84,7 @@ public class Admin extends HttpServlet {
 		ArrayList<AdminVo> adminlist = adminDao.editAdminProfile(adminVo);
 		System.out.println(adminlist.size());
 		session.setAttribute("aadminData", adminlist);
+		
 	}
 
 	/**
