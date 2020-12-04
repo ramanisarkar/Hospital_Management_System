@@ -54,7 +54,7 @@ public class Ambulance extends HttpServlet {
 	 */
 	private String ambulanceeUpdate = null;
 
-	private static final String SAVE_DIR_Images = "Ambulance_Image";
+	private static final String SAVE_DIR_Images = "User_Image";
 
 	private static String getSubmittedFileName(Part part) {
 		String filename = "null";

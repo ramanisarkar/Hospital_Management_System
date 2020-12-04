@@ -46,6 +46,7 @@ public class CommonDataCount extends HttpServlet {
 		
 		AllDataCountDao allDataCountDao = new AllDataCountDao();
 		ArrayList<AllDataCountVo> alldata = allDataCountDao.allDataList(allDataCountVo);
+		System.out.println(alldata.size());
 		session.setAttribute("dashboarddata", alldata);
 	}
 }

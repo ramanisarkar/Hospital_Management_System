@@ -49,7 +49,7 @@ public class Pharmacist extends HttpServlet {
 	private String pharmacistuser = null;
 	private String pharmacistemailinvalid = null;
 
-	private static final String SAVE_DIR_Images = "Pharmacist_Image";
+	private static final String SAVE_DIR_Images = "User_Image";
 
 	private static String getSubmittedFileName(Part part) {
 		String filename = "null";
@@ -265,6 +265,7 @@ public class Pharmacist extends HttpServlet {
 				LoginVO loginvo = new LoginVO();
 				loginvo.setPharmacistloginid(pharmacistVo);
 				loginvo.setEmail(email);
+				loginvo.setAdminid(adminVo);
 				loginvo.setPassword(password);
 				loginvo.setUsername(userName);
 				loginvo.setLastlogin(joiningdate);

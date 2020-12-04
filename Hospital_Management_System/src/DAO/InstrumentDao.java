@@ -175,15 +175,14 @@ public class InstrumentDao {
 	    return (ArrayList<InstrumentAssignVO>) instrumentList;
 	}
 
-	public ArrayList<InstrumentAssignVO> checkInstrumentAssginHourly(InstrumentAssignVO instrumentAssignVO) {
+	public List<Object[]> checkInstrumentAssginHourly(InstrumentAssignVO instrumentAssignVO) {
 		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
 		Session session = sessionfactory.openSession();
 		Transaction transaction = session.beginTransaction();
-		List<InstrumentAssignVO> instrumentList = new ArrayList<InstrumentAssignVO>();
+		List<Object[]> instrumentList = new ArrayList<Object[]>();
 	    try {
-			Query q = session.createQuery("SELECT  p.FirstName ,p.PatientId, MIN(ExpectedEndTime) FROM instrumentassign a INNER JOIN patientregistration p ON a.ExpectedEndDate IN (SELECT MIN(ExpectedEndDate) FROM instrumentassign WHERE EndDate IS NULL AND InstrumentId =:id )WHERE EndDate IS NULL AND InstrumentId =:id GROUP BY ExpectedEndTime LIMIT 1;");
+			Query q = session.createSQLQuery("SELECT  p.FirstName ,p.PatientId,a.ExpectedEndDate,MIN(ExpectedEndTime) FROM instrumentassign a INNER JOIN patientregistration p ON a.ExpectedEndDate IN (SELECT MIN(ExpectedEndDate) FROM instrumentassign WHERE EndDate IS NULL AND InstrumentId =:id )WHERE EndDate IS NULL AND InstrumentId =:id GROUP BY ExpectedEndTime LIMIT 1");
 			q.setParameter("id", instrumentAssignVO.getInstrumnetid());
-			q.setParameter("start", instrumentAssignVO.getStartdate());
 			instrumentList = q.list();
 	    } catch (Exception e) {
 	        e.printStackTrace();
@@ -192,7 +191,7 @@ public class InstrumentDao {
 	        transaction.commit();
 	        session.close();
 	    }
-	    return (ArrayList<InstrumentAssignVO>) instrumentList;
+	    return (List<Object[]>) instrumentList;
 	}
 
 	public List<Object[]> checkInsertInstrumentAssginDaly(InstrumentAssignVO instrumentAssignVO) {

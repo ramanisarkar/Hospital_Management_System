@@ -121,7 +121,7 @@ $(document).ready(function(){
 			count++;
 		   	var html = '';
 		   	html += '<tr id='+count+'>';
-		   	html += '<td><img src="Doctor_Image/'+obj[index].profileimage+'" height="50px" width="50px" class="img-circle"></td>';
+		   	html += '<td><img src="User_Image/'+obj[index].profileimage+'" height="50px" width="50px" class="img-circle"></td>';
 		   	html += '<td style="padding-left: 15px; padding-top: 23px;" ><a href="#">'+obj[index].firstname+'</a></td>';
 		   	html += '<td style="padding-left: 15px; padding-top: 23px; " >'+obj[index].departmentname+'</td>';
 			html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].specailizationname+'</td>';
@@ -239,7 +239,7 @@ $(document).ready(function(){
   				$('#profileimageid').show();
   				$('#profileimageid').text(obj[0].profileimagename);
   				$('#editprofileImage').val(obj[0].profileimage);
-  				$("#coveredit").attr("src", "Doctor_Image/"+obj[0].profileimage+"");
+  				$("#coveredit").attr("src", "User_Image/"+obj[0].profileimage+"");
   			}else{
   				$('#profileimageid').hide();
   			}

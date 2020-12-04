@@ -1,5 +1,7 @@
 package VO;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,9 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "InvoiceForPatient")
+@Table(name = "InvoiceForPatient",uniqueConstraints = @UniqueConstraint(name = "unique", columnNames =  "InvoiceID"))
 public class InvoiceHospitalVo {
 	
 	@Id
@@ -19,7 +22,7 @@ public class InvoiceHospitalVo {
 	private int id;
 	
 	@Column(name = "InvoiceID")
-	private int InvoiceID;
+	private int invoiceid;
 	
 	@Column(name = "InvoiceTitle")
 	private String invoicetitle;
@@ -29,12 +32,24 @@ public class InvoiceHospitalVo {
 
 	@Column(name = "AdjustmentAmount")
 	private float adjustmentamount;
+	
+	@Column(name = "TotalAmount")
+	private float totalamount;
+	
+	@Column(name = "PaidAmount")
+	private float paidamount;
 
 	@Column(name = "Date")
-	private String date;
+	private java.sql.Date date;
 	
 	@Column(name = "Comments")
 	private String comments;
+	
+	@Column(name = "Status")
+	private String status;
+	
+	@Column(name = "Joiningdate")
+	private Timestamp joiningdate;
 
 	@ManyToOne
 	@JoinColumn(name="Adminid")
@@ -52,16 +67,32 @@ public class InvoiceHospitalVo {
 		this.id = id;
 	}
 
-	public int getInvoiceID() {
-		return InvoiceID;
+	public int getInvoiceid() {
+		return invoiceid;
 	}
 
-	public void setInvoiceID(int invoiceID) {
-		InvoiceID = invoiceID;
+	public void setInvoiceid(int invoiceid) {
+		this.invoiceid = invoiceid;
 	}
 
 	public String getInvoicetitle() {
 		return invoicetitle;
+	}
+
+	public float getTotalamount() {
+		return totalamount;
+	}
+
+	public Timestamp getJoiningdate() {
+		return joiningdate;
+	}
+
+	public void setJoiningdate(Timestamp joiningdate) {
+		this.joiningdate = joiningdate;
+	}
+
+	public void setTotalamount(float totalamount) {
+		this.totalamount = totalamount;
 	}
 
 	public void setInvoicetitle(String invoicetitle) {
@@ -84,11 +115,11 @@ public class InvoiceHospitalVo {
 		this.adjustmentamount = adjustmentamount;
 	}
 
-	public String getDate() {
+	public java.sql.Date getDate() {
 		return date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(java.sql.Date date) {
 		this.date = date;
 	}
 
@@ -114,5 +145,21 @@ public class InvoiceHospitalVo {
 
 	public void setPatientid(PatientRegistretionVo patientid) {
 		this.patientid = patientid;
+	}
+
+	public float getPaidamount() {
+		return paidamount;
+	}
+
+	public void setPaidamount(float paidamount) {
+		this.paidamount = paidamount;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b5d4a7c3-00f6-4a22-b805-cefcba40da59">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter "/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<style name="Style1" mode="Opaque"/>
+	<parameter name="patientName" class="java.lang.String"/>
+	<parameter name="patientAddress" class="java.lang.String"/>
+	<parameter name="InvoiceNumber" class="java.lang.Integer"/>
+	<parameter name="InvoiceDate" class="java.sql.Date"/>
+	<parameter name="invoiceStatus" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT admin.`Address`  ,  admin.`Email` ,  admin.`Contact_NO`  FROM admin]]>
+	</queryString>
+	<field name="Address" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Address"/>
+		<property name="com.jaspersoft.studio.field.label" value="Address"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="admin"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Email" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Email"/>
+		<property name="com.jaspersoft.studio.field.label" value="Email"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="admin"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Contact_NO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Contact_NO"/>
+		<property name="com.jaspersoft.studio.field.label" value="Contact_NO"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="admin"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="Address1" class="java.lang.Integer" resetType="Column" calculation="DistinctCount">
+		<variableExpression><![CDATA[$F{Address}]]></variableExpression>
+	</variable>
+	<variable name="PAGE_NUMBER_SUM" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{PAGE_NUMBER}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="187" splitType="Stretch">
+			<image>
+				<reportElement x="70" y="1" width="488" height="170" uuid="819883a1-b509-41b8-8a49-02cc7fa70241">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA["C:/Users/Hardik/OneDrive/Pictures/invoice.jpg"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement style="Style1" x="10" y="48" width="40" height="46" uuid="985b30f5-630f-4143-b006-153d1c209601">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA["C:/Users/Hardik/OneDrive/Desktop/Vishvas-Photo.jpg"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="116" y="49" width="94" height="15" uuid="9120694c-86c9-430c-9aee-18d19c66e3a8">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{Address}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="60" y="49" width="56" height="15" uuid="01e2f0e4-efb0-40be-af4f-e6b6a1b63247">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<text><![CDATA[Address:	]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="116" y="64" width="94" height="15" uuid="ac3c171c-0422-4d3e-963f-947bf09a84eb">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{Email}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="116" y="79" width="94" height="15" uuid="6caa0e59-67dd-4dc2-8835-86a11ddecf62">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{Contact_NO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="60" y="64" width="56" height="15" uuid="2aeac851-2857-4afa-a545-a6de937c7a2f">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<text><![CDATA[Email:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="60" y="79" width="56" height="15" uuid="61a3b816-3628-4071-87c8-2943c16a693e">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<text><![CDATA[Phone No:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="160" height="20" uuid="9be36f72-135e-43bf-b773-378d1105e9d0"/>
+				<text><![CDATA[Hospital Management Syatem]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="110" width="40" height="15" uuid="3794b072-646d-49ff-98ce-e6405eae7352">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<text><![CDATA[| Bill To.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Style1" x="390" y="111" width="100" height="24" forecolor="#FFFFFF" backcolor="#48ADD9" uuid="70cd0abd-e449-45b3-98dd-0798061b0364">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[INVOICE#
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="390" y="135" width="25" height="15" uuid="b5e5e9f7-39c0-4938-b001-6519aa31d203">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<text><![CDATA[Date:		
+
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="390" y="150" width="33" height="15" uuid="71dff194-5b2c-4379-a95f-da958d560296">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<text><![CDATA[Status:
+]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="60" y="125" width="150" height="46" uuid="31694f21-1a73-4125-9a9d-9d837533c9dc">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{patientAddress}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="60" y="110" width="150" height="15" uuid="fc600207-a473-4d33-9f7b-37f0d93f1ecd"/>
+				<textFieldExpression><![CDATA[$P{patientName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="390" y="121" width="100" height="14" forecolor="#FFFFFF" uuid="27c466c0-8e19-4df0-a6d2-651bf80c07d6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{InvoiceNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="415" y="135" width="75" height="15" uuid="6af106aa-3513-4e26-b576-ad200c8f827a"/>
+				<textFieldExpression><![CDATA[$P{InvoiceDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="423" y="150" width="67" height="15" uuid="b6bc3af5-5c75-44f2-8495-d5d211ce663e"/>
+				<textFieldExpression><![CDATA[$P{invoiceStatus}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="90" height="20" uuid="efa7a662-01a0-459a-a16a-16d4e53c6a0b"/>
+				<text><![CDATA[Patient Transaction	]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

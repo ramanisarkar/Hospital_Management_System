@@ -30,6 +30,7 @@ import DAO.InstrumentDao;
 import DAO.PatientChargesHistoryDao;
 import DAO.PatientDao;
 import VO.AdminVo;
+import VO.CommonFiledVo;
 import VO.InstrumentAssignVO;
 import VO.InstrumentList;
 import VO.InstrumentVO;
@@ -51,7 +52,6 @@ public class InstrumentManagement extends HttpServlet {
 	 */
 	public InstrumentManagement() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	SimpleDateFormat sdfdate = new SimpleDateFormat("dd-MM-yyyy");
@@ -116,7 +116,6 @@ public class InstrumentManagement extends HttpServlet {
 		}
 		if (flag.equalsIgnoreCase("instrumentAssginInsert")) {
 			instrumentAssginInsertShre(request, response);
-			instrumentAssignList(request, response);
 		}
 		if (flag.equalsIgnoreCase("instruemntAssginUpdate")) {
 			instrumentAssignUpdate(request, response);
@@ -490,7 +489,7 @@ public class InstrumentManagement extends HttpServlet {
 			java.sql.Date dischage = null;
 			String startdate = sdfdateconvert.format(sdfdate.parse(startDate));
 			java.sql.Date allocation = java.sql.Date.valueOf(startdate);
-			boolean flag;
+			boolean flag; 
 			if (charge_type.equalsIgnoreCase("Hourly")) {
 				flag = false;
 				LocalTime localTime = LocalTime.parse(starttime);
@@ -549,14 +548,45 @@ public class InstrumentManagement extends HttpServlet {
 						instrumentUpdate = "true";
 					}
 				}
+				instrumentAssignList(request, response);
 			} else {
 				if (charge_type.equalsIgnoreCase("Hourly")) {
-					ArrayList<InstrumentAssignVO> iav = instrumentDao.checkInstrumentAssginHourly(instrumentAssignVO);
+					List<Object[]> iav = instrumentDao.checkInstrumentAssginHourly(instrumentAssignVO);
+					String patientName = String.valueOf(iav.get(0)[0]);
+					String patientid = String.valueOf(iav.get(0)[1]);
+					String date = String.valueOf(iav.get(0)[2]);
+					String time = String.valueOf(iav.get(0)[3]);
+					
+					ArrayList<CommonFiledVo> list = new ArrayList<CommonFiledVo>();
+					CommonFiledVo common = new CommonFiledVo();
+					common.setField1(patientName.concat("-").concat(patientid));
+					common.setField2("erorr");
+					common.setField3(date.concat(" ").concat(time));
+					list.add(common);
+				
+					Gson gson = new Gson();
+					PrintWriter out = response.getWriter();
+					out.print(gson.toJson(list));
+					out.flush();
+					out.close();
 				} else {
 					List<Object[]> iav = instrumentDao.checkInsertInstrumentAssginDaly(instrumentAssignVO);
-					for (int i = 0; i < iav.get(0).length; i++) {
-						System.out.println(iav.get(0)[i]);
-					}
+					String patientName = String.valueOf(iav.get(0)[0]);
+					String patientid = String.valueOf(iav.get(0)[1]);
+					String time = String.valueOf(iav.get(0)[2]);
+					
+					ArrayList<CommonFiledVo> list = new ArrayList<CommonFiledVo>();
+					CommonFiledVo common = new CommonFiledVo();
+					common.setField2("erorr");
+					common.setField1(patientName.concat("-").concat(patientid));
+					common.setField3(time);
+					list.add(common);
+				
+					Gson gson = new Gson();
+					PrintWriter out = response.getWriter();
+					out.print(gson.toJson(list));
+					out.flush();
+					out.close();
 				}
 				instrumentUpdate = "false";
 			}
@@ -675,7 +705,6 @@ public class InstrumentManagement extends HttpServlet {
 
 				PatientChargesHistoryDao chargesHistoryDao = new PatientChargesHistoryDao();
 				chargesHistoryDao.insertCharges(chargesHistoryVo);
-
 			}
 
 		} catch (ParseException e) {

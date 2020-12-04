@@ -33,11 +33,14 @@ public class PatientChargesHistoryVo {
 	@Column(name="Amount")
 	private float amount;
 	
+	@Column(name="DiscountAmount")
+	private float discountamount;
+	
 	@Column(name="TotalAmount")
 	private float totalamount;
 	
 	@Column(name="PramentType")
-	private String pramenttype;
+	private boolean pramenttype;
 
 	@ManyToOne
 	@JoinColumn(name="Adminid")
@@ -107,6 +110,14 @@ public class PatientChargesHistoryVo {
 		return amount;
 	}
 
+	public float getDiscountamount() {
+		return discountamount;
+	}
+
+	public void setDiscountamount(float discountamount) {
+		this.discountamount = discountamount;
+	}
+
 	public void setAmount(float amount) {
 		this.amount = amount;
 	}
@@ -119,11 +130,11 @@ public class PatientChargesHistoryVo {
 		this.totalamount = totalamount;
 	}
 
-	public String getPramenttype() {
+	public boolean isPramenttype() {
 		return pramenttype;
 	}
 
-	public void setPramenttype(String pramenttype) {
+	public void setPramenttype(boolean pramenttype) {
 		this.pramenttype = pramenttype;
 	}
 

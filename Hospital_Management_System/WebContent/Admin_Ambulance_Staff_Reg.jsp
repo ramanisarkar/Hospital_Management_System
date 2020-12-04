@@ -31,7 +31,7 @@ $(document).ready(function(){
 			count++;
 		   	var html = '';
 		   	html += '<tr id='+count+'>';
-		   	html += '<td><img src="Ambulance_Image/'+obj[index].driverimage+'" height="50px" width="50px" class="img-circle"></td>';
+		   	html += '<td><img src="User_Image/'+obj[index].driverimage+'" height="50px" width="50px" class="img-circle"></td>';
 		   	html += '<td style="padding-left: 15px; padding-top: 23px;" ><a href="#">'+obj[index].ambulanceid+'</a></td>';
 		  	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].registrationnumber+'</td>';
 		   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].name+'</td>';
@@ -109,7 +109,7 @@ $(document).ready(function(){
 				$('#profileimageid').show();
 				$('#profileimageid').text(obj[0].driverimagename);
 				$('#editprofileImage').val(obj[0].driverimage);
-				$("#coveredit").attr("src", "Ambulance_Image/"+obj[0].driverimage+"");
+				$("#coveredit").attr("src", "User_Image/"+obj[0].driverimage+"");
 			}else{
 				$('#profileimageid').hide();
 			}
@@ -159,7 +159,7 @@ $(document).ready(function(){
 			count++;
 		   	var html = '';
 		   	html += '<tr id='+count+'>';
-		   	html += '<td><img src="Ambulance_Image/'+obj[index].driverimage+'" height="50px" width="50px" class="img-circle"></td>';
+		   	html += '<td><img src="User_Image/'+obj[index].driverimage+'" height="50px" width="50px" class="img-circle"></td>';
 		   	html += '<td style="padding-left: 15px; padding-top: 23px;" ><a href="#">'+obj[index].ambulanceid+'</a></td>';
 		  	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].registrationnumber+'</td>';
 		   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].name+'</td>';

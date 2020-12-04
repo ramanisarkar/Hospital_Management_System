@@ -619,7 +619,7 @@ public class Medicine extends HttpServlet {
 			CommonFiledVo common = new CommonFiledVo();
 			common.setJoiningdate(joiningdate);
 			common.setDiscount(discount);
-			common.setDispatchMedicineInfoVo(diapatchmedicinelist);
+//			common.setDispatchMedicineInfoVo(diapatchmedicinelist);
 			common.setAdminId(adminid);
 			common.setPatientID(patientId);
 			common.setPrescriptionId(prescriptionId);

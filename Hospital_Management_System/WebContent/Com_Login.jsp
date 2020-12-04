@@ -23,9 +23,7 @@
 	<div class="navbar">
 			<div class="col-md-3 col-sm-2 col-xs-4" style="width: 150px;">
 				<h3 style="width: 102%;">
-					<img src="ing/hospitalmanagemantlogo.png"
-						class="img-circle head_logo" width="40" height="40"> <span style="font-size:22px; ">Hospital
-						Management System</span>
+					<img src="ing/hospitalmanagemantlogo.png"class="img-circle head_logo" width="40" height="40"> <span style="font-size:22px;">HospitalManagement System</span>
 				</h3>
 			</div>
 		</div>
@@ -84,7 +82,7 @@
 	style=" color: black; position: fixed; bottom: 0%; width: 100%; text-align: center; margin-top: 15px;">
 	<div class=" container">
 		<p style="margin: 3px 98px -1px">
-			© Copyright <strong>EXPERT WEB DESIGNING</strong> All Rights Reserved
+			© Copyright <strong>RamaniGroup</strong> All Rights Reserved
 		</p>
 	</div>
 </footer>

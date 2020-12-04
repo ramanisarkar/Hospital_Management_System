@@ -12,7 +12,11 @@ import org.hibernate.cfg.AnnotationConfiguration;
 
 import Com.Login;
 import VO.AdminVo;
+import VO.DoctorVo;
+import VO.LaboratoryVo;
 import VO.LoginVO;
+import VO.NurseVo;
+import VO.PatientRegistretionVo;
 
 public class LoginDAO {
 	static Logger logger = Logger.getLogger(Login.class);
@@ -347,6 +351,116 @@ public class LoginDAO {
 	        session.close();
 	    }
 		return chack="add";
+	}
+
+	public ArrayList<LoginVO> getUserWithRole(LoginVO loginVO) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		
+		Transaction transaction = session.beginTransaction();
+		List<LoginVO> listUser = new ArrayList<LoginVO>();
+		try {
+			Query q = session.createQuery("from LoginVO where adminid =:adminid and roll =:role");
+			q.setParameter("adminid", loginVO.getAdminid());
+			q.setParameter("role", loginVO.getRoll());
+			listUser = q.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+	        transaction.commit();
+	        session.close();
+	    }
+		
+		return (ArrayList<LoginVO>) listUser;
+	}
+
+	public ArrayList<DoctorVo> doctorVerify(DoctorVo doctorVo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		
+		Transaction transaction = session.beginTransaction();
+		List<DoctorVo> listUser = new ArrayList<DoctorVo>();
+		try {
+			Query q = session.createQuery("from DoctorVo where email =:email and password =:pass");
+			q.setParameter("email", doctorVo.getEmail());
+			q.setParameter("pass", doctorVo.getPassword());
+			listUser = q.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+	        transaction.commit();
+	        session.close();
+	    }
+		
+		return (ArrayList<DoctorVo>) listUser;
+	}
+
+	public ArrayList<NurseVo> nurseVerify(NurseVo nurseVo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		
+		Transaction transaction = session.beginTransaction();
+		List<NurseVo> listUser = new ArrayList<NurseVo>();
+		try {
+			Query q = session.createQuery("from NurseVo where email =:email and password =:pass");
+			q.setParameter("email", nurseVo.getEmail());
+			q.setParameter("pass", nurseVo.getPassword());
+			listUser = q.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+	        transaction.commit();
+	        session.close();
+	    }
+		
+		return (ArrayList<NurseVo>) listUser;
+	}
+
+	public ArrayList<PatientRegistretionVo> patientVerify(PatientRegistretionVo patientRegistretionVo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		
+		Transaction transaction = session.beginTransaction();
+		List<PatientRegistretionVo> listUser = new ArrayList<PatientRegistretionVo>();
+		try {
+			Query q = session.createQuery("from PatientRegistretionVo where email =:email and password =:pass");
+			q.setParameter("email", patientRegistretionVo.getEmail());
+			q.setParameter("pass", patientRegistretionVo.getPassword());
+			listUser = q.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+	        transaction.commit();
+	        session.close();
+	    }
+		
+		return (ArrayList<PatientRegistretionVo>) listUser;
+	}
+
+	public ArrayList<LaboratoryVo> laboratoryVerify(LaboratoryVo laboratoryVo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		
+		Transaction transaction = session.beginTransaction();
+		List<LaboratoryVo> listUser = new ArrayList<LaboratoryVo>();
+		try {
+			Query q = session.createQuery("from LaboratoryVo where email =:email and password =:pass");
+			q.setParameter("email", laboratoryVo.getEmail());
+			q.setParameter("pass", laboratoryVo.getPassword());
+			listUser = q.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+	        transaction.commit();
+	        session.close();
+	    }
+		
+		return (ArrayList<LaboratoryVo>) listUser;
 	}
 
 //	public void forgetPasswordProfessor(ProfessorVo professorvo, LoginVO login) {

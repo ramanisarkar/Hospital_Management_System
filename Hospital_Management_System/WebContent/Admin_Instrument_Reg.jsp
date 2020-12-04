@@ -155,7 +155,6 @@ border-radius: 0px;
 </style>
 <script>
 $(document).ready(function () {
-    
     /*
     $('#start_time').timepicki(
         {
@@ -204,7 +203,7 @@ $(document).ready(function () {
 		
 	});
 	
-	$(document).on('change','.insert_instrument_id	', function() {
+	$(document).on('change','.insert_instrument_id', function() {
 		var instrumentid = $(this).val();
 		var patientId  =  $('#patient_id').val();
 		if(patientId !== null){
@@ -257,9 +256,7 @@ $(document).ready(function () {
 				}
 			});
 		}
-	})
-	
-	
+	});
     
     $('#Insert_instrument_form').on('submit' , function(event){
 	    event.preventDefault();
@@ -340,33 +337,40 @@ $(document).ready(function () {
 				}
 				var count = 0;
 				console.log(response);
-				table = $('#assginInstrumentTable').DataTable();
-				table.destroy();
-				$('.inssginInstrumentlist').children('tr').remove();
-				$.each(obj, function(index, value) {
-					count++;
-					var html = '';
-					html += '<tr id=' + count + '>';
-					html += '<td style="padding-top: 15px;">' + obj[index].patientname + '</td>';
-					html += '<td style="padding-top: 15px; word-break: break-all;">' + obj[index].instrument + '</td>';
-					html += '<td style="padding-top: 15px;">' + obj[index].assigndate + '</td>';
-					html += '<td style="padding-top: 15px;">' + obj[index].enddate + '</td>';
-					html += '<td style="padding-top: 15px;">' + obj[index].charege + '</td>';
-					html += '<td style="padding-top: 15px;">' + obj[index].total + '</td>';
-					html += '<td style="text-align: center;"><button style="" type="button" class="btn btn-info  endAssginInstrument" data-end_id="' + count + '" id="AssginId' + count + '"value="' + obj[index].id + '">Get</button>';
-					html += '<button style="margin-left: 10px; " type="button" class="btn btn-info  editAssginInstrument" data-edit_id="' + count + '" id="AssginId' + count + '"value="' + obj[index].id + '">Edit</button>';
-					html += '<button style="margin-left: 10px; " type="button" class="btn btn-danger deleteAssginInstrument" data-delete_id="' + count + '" id="AssginId' + count + '" value="' + obj[index].id + '">Delete</button></td></tr>';
-					$('.inssginInstrumentlist').append(html);
-				});
-				var message = obj[0].instrumentUpdate;
-				if (message == "true") {
-					$('#message1').show();
-					$('#message2').show();
-					$('#message3').show();
-					$('#messagepass').text("Record Added Successsfully");
-					$("#assign_insert_instrument_form")[0].reset();
+				if(obj[0].field2 == "erorr"){
+					$('#patientname').text(obj[0].field1);
+					$('#untiletime').text(obj[0].field3);
+					$('#basicModal').modal('show');
 				}
-				$('#assginInstrumentTable').DataTable();
+				else {
+					table = $('#assginInstrumentTable').DataTable();
+					table.destroy();
+					$('.inssginInstrumentlist').children('tr').remove();
+					$.each(obj, function(index, value) {
+						count++;
+						var html = '';
+						html += '<tr id=' + count + '>';
+						html += '<td style="padding-top: 15px;">' + obj[index].patientname + '</td>';
+						html += '<td style="padding-top: 15px; word-break: break-all;">' + obj[index].instrument + '</td>';
+						html += '<td style="padding-top: 15px;">' + obj[index].assigndate + '</td>';
+						html += '<td style="padding-top: 15px;">' + obj[index].enddate + '</td>';
+						html += '<td style="padding-top: 15px;">' + obj[index].charege + '</td>';
+						html += '<td style="padding-top: 15px;">' + obj[index].total + '</td>';
+						html += '<td style="text-align: center;"><button style="" type="button" class="btn btn-info  endAssginInstrument" data-end_id="' + count + '" id="AssginId' + count + '"value="' + obj[index].id + '">Get</button>';
+						html += '<button style="margin-left: 10px; " type="button" class="btn btn-info  editAssginInstrument" data-edit_id="' + count + '" id="AssginId' + count + '"value="' + obj[index].id + '">Edit</button>';
+						html += '<button style="margin-left: 10px; " type="button" class="btn btn-danger deleteAssginInstrument" data-delete_id="' + count + '" id="AssginId' + count + '" value="' + obj[index].id + '">Delete</button></td></tr>';
+						$('.inssginInstrumentlist').append(html);
+					});
+					var message = obj[0].instrumentUpdate;
+					if (message == "true") {
+						$('#message1').show();
+						$('#message2').show();
+						$('#message3').show();
+						$('#messagepass').text("Record Added Successsfully");
+						$("#assign_insert_instrument_form")[0].reset();
+					}
+					$('#assginInstrumentTable').DataTable();
+				}
 				$("#assigned_instrument_validation").prop("disabled", false);
 			},
 			error: function(e) {
@@ -540,6 +544,20 @@ $(document).ready(function () {
 	<div style="margin-left: 236px; padding: 0px 16px; margin-top: -73%; background-color: white;">
 	    <div style="color: green; margin-top: 3px;" id="specializationadd"></div>
 	    <div style="padding-top: 15px;"></div>
+	    <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		
+		            <div class="modal-body">
+		                <i class="fa fa-times-circle" style="font-size: 100px;margin-left: 250px; color: red;"></i>
+		                <p style="color: red;font-size: 19px;margin-top: 10px;">Already Assigned Instrument TO <span id="patientname"></span> Until <span id="untiletime"></span>.</p>
+		            </div>
+		
+		            <button type="button" class="btn btn-info" data-dismiss="modal"
+		                style="margin-bottom: 20px;margin-left: 276px;padding: 11px 24px 10px">Ok</button>
+		        </div>
+		    </div>
+		</div>
 	    <div class="container" style="margin-right: 90px;">
 	        <ul class="nav nav-tabs tabcalss">
 		        <li style="background-color: f1f4f9;">

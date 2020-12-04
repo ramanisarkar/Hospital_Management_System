@@ -117,5 +117,21 @@
 		
 		<mapping class="VO.AllDataCountVo"/>
 		
+		<mapping class="VO.InvoiceHospitalVo"/>
+		
+		<mapping class="VO.InvoiceCollectVo"/>
+		
+		<mapping class="VO.InvoiceIncomeVo"/>
+		
+		<mapping class="VO.InvoiceIncomeLabelVo"/>
+		
+		<mapping class="VO.InvoiceExpenseVo"/>
+		
+		<mapping class="VO.InvoiceExpenseLabelVo"/>
+		
+		<mapping class="VO.UserRoleVo"/>
+		
+		<mapping class="VO.ParsonRollVo"/>
+		
 	</session-factory>
 </hibernate-configuration>

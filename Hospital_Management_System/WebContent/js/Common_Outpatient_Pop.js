@@ -1,5 +1,5 @@
 $(document).ready(function(){
-
+alert("Hello");
     var html = '';
 	html += '<!--  ----Add new Out Patient----  --><div class="modal fade outpatiebnt" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">';
 	html += '<div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">x</button><h3 class="modal-title">Add Outpatient</h3>';

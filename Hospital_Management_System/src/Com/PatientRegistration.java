@@ -59,7 +59,7 @@ public class PatientRegistration extends HttpServlet {
 	private String patientuser = null;
 	private String patientemailinvalid = null;
    	
-    private static final String SAVE_DIR_Images = "Patient_Registration_Image";
+    private static final String SAVE_DIR_Images = "User_Image";
 
    	private static String getSubmittedFileName(Part part) {
    		String filename = "null";
@@ -99,6 +99,11 @@ public class PatientRegistration extends HttpServlet {
    			int adminid = Integer.parseInt(request.getParameter("id"));
    			session.setAttribute("patientRaggistrationAdminid", adminid);
    			response.sendRedirect("Admin_Patient_Registration.jsp");
+   		}
+   		if (flag.equalsIgnoreCase("role_insert")) {
+   			int adminid = Integer.parseInt(request.getParameter("id"));
+   			session.setAttribute("patientRaggistrationAdminid", adminid);
+   			response.sendRedirect("Role_Base_Patient_Registration.jsp");
    		}
    		if (flag.equalsIgnoreCase("PatientRegistrationList")) {
    			patientList(request, response);
@@ -305,6 +310,7 @@ public class PatientRegistration extends HttpServlet {
    				LoginVO loginvo = new LoginVO();
 				loginvo.setPatientloginid(patientRegistretionVo);
 				loginvo.setEmail(email);
+				loginvo.setAdminid(adminVo);
 				loginvo.setPassword(password);
 				loginvo.setUsername(userName);
 				loginvo.setLastlogin(joiningdate);

@@ -14,6 +14,7 @@ $(document).ready(function(){
             cache: false,
             timeout: 600000,
             success: function(response){
+				alert("hello");
             	$("#out_patient_insert_form").prop("disabled", false);
             	var count=0;
         		var obj = JSON.parse(response);

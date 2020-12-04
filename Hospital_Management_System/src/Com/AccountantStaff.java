@@ -49,7 +49,7 @@ public class AccountantStaff extends HttpServlet {
    	private String accountantstaffuser = null;
    	private String accountantstaffemailinvalid = null;
 
-   	private static final String SAVE_DIR_Images = "Accountant_Staff_Image";
+   	private static final String SAVE_DIR_Images = "User_Image";
 
    	private static String getSubmittedFileName(Part part) {
    		String filename = "null";
@@ -155,7 +155,6 @@ public class AccountantStaff extends HttpServlet {
    		HttpSession session = request.getSession(false);
    		System.out.println(session);
    		if(session == null) {
-   			System.out.println("-9--9-9--9-9-9-99--9999999999999999999999999");
    			response.sendRedirect("Com_Login.jsp");
    		}
    		int adminid = (int) session.getAttribute("accountantStaffAdminid");
@@ -198,7 +197,6 @@ public class AccountantStaff extends HttpServlet {
 
    	private void accountantStaffInsert(HttpServletRequest request, HttpServletResponse response) {
    		try {
-   			System.out.println("----------------------");
    			HttpSession session = request.getSession(false);
    	   		if(session == null) {
    	   			response.sendRedirect("Com_Login.jsp");
@@ -268,11 +266,12 @@ public class AccountantStaff extends HttpServlet {
 
    				LoginVO loginvo = new LoginVO();
    				loginvo.setAccountantloginid(accountantStaffVo);
+   				loginvo.setAdminid(adminVo);
    				loginvo.setEmail(email);
    				loginvo.setPassword(password);
    				loginvo.setUsername(userName);
    				loginvo.setLastlogin(joiningdate);
-   				loginvo.setRoll("Accountant");
+   				loginvo.setRoll("Accountant Staff");
 
    				LoginDAO logdao = new LoginDAO();
    				ArrayList<LoginVO> emailchack = logdao.emailverify(loginvo);

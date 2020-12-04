@@ -7,7 +7,9 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -168,7 +170,7 @@ public class DiagnosisReport extends HttpServlet {
 
 			DiagnosisReportDao diagnosisReportDao = new DiagnosisReportDao();
 			
-			boolean s = false;
+			
 
 			DiagnosisReportAddVo diagnosisReportAddVo = new DiagnosisReportAddVo();
 			diagnosisReportAddVo.setPatientid(patientVo);
@@ -202,18 +204,10 @@ public class DiagnosisReport extends HttpServlet {
 					Part profileImage = request.getPart("document" + i + "");
 
 					String profileImageName = getSubmittedFileName(profileImage);
-					String profileImagepath = null;
 					
-					if (profileImageName != "null") {
-						if ((profileImageName.isEmpty()) == false) {
-							String uniq = String.valueOf(i);
-							profileImagepath = name.concat(uniq).concat("@").concat(profileImageName);
-							s = true;
-						} else {
-							s = false;
-						}
-					}
-					
+					Map<String,Object> profileMap = new HashMap<>();
+					boolean s = (boolean) profileMap.get("s");
+					String profileImagepath = (String) profileMap.get("profileImagepath");
 					DiagnosisReportApplyVo diagnosisReportApplyVo = new DiagnosisReportApplyVo();
 					diagnosisReportApplyVo.setAdminid(adminVo);
 					diagnosisReportApplyVo.setDiagnosisreportid(diagnosisReportAddVo);
@@ -232,17 +226,7 @@ public class DiagnosisReport extends HttpServlet {
 					}
 				}
 				
-				PatientChargesHistoryVo chargesHistoryVo = new PatientChargesHistoryVo();
-				chargesHistoryVo.setAdminid(adminVo);
-				chargesHistoryVo.setDiagnosisid(diagnosisReportAddVo);
-				chargesHistoryVo.setAmount(charge);
-				chargesHistoryVo.setChargetype("Dignosis Report Charges");
-				chargesHistoryVo.setDate(date);
-				chargesHistoryVo.setPatientid(patientVo);
-				chargesHistoryVo.setTitle(titleforcharge);
-
-				PatientChargesHistoryDao chargesHistoryDao = new PatientChargesHistoryDao();
-				chargesHistoryDao.insertCharges(chargesHistoryVo);
+				insertChargeSheetDetails(date, adminVo, patientVo, diagnosisReportAddVo, titleforcharge, charge);
 
 				AllDataCountVo allDataCountVo = new AllDataCountVo();
 				allDataCountVo.setAdminid(adminVo);
@@ -252,6 +236,36 @@ public class DiagnosisReport extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	public Map<String,Object> getProfileImage(String profileImageName, String name, int i){
+		String profileImagepath = null;
+		boolean s = false;
+		if (profileImageName != "null") {
+			if (!profileImageName.isEmpty()) {
+				profileImagepath = name.concat(String.valueOf(i)).concat("@").concat(profileImageName);
+				s = true;
+			} else {
+				s = false;
+			}
+		}
+		Map<String,Object> returnMap = new HashMap<String,Object>();
+		returnMap.put("s",s);
+		returnMap.put("profileImagepath",profileImagepath);
+		return returnMap;
+	}
+	private void insertChargeSheetDetails(java.sql.Date date, AdminVo adminVo, PatientRegistretionVo patientVo,
+			DiagnosisReportAddVo diagnosisReportAddVo, String titleforcharge, float charge) {
+		PatientChargesHistoryVo chargesHistoryVo = new PatientChargesHistoryVo();
+		chargesHistoryVo.setAdminid(adminVo);
+		chargesHistoryVo.setDiagnosisid(diagnosisReportAddVo);
+		chargesHistoryVo.setAmount(charge);
+		chargesHistoryVo.setChargetype("Dignosis Report Charges");
+		chargesHistoryVo.setDate(date);
+		chargesHistoryVo.setPatientid(patientVo);
+		chargesHistoryVo.setTitle(titleforcharge);
+
+		PatientChargesHistoryDao chargesHistoryDao = new PatientChargesHistoryDao();
+		chargesHistoryDao.insertCharges(chargesHistoryVo);
 	}
 
 	private void diagnosisReportList(HttpServletRequest request, HttpServletResponse response) {

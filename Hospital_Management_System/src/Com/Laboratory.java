@@ -50,7 +50,7 @@ public class Laboratory extends HttpServlet {
    	private String laboratorystaffuser = null;
    	private String laboratorystaffemailinvalid = null;
 
-   	private static final String SAVE_DIR_Images = "Laboratory_Staff_Image";
+   	private static final String SAVE_DIR_Images = "User_Image";
 
    	private static String getSubmittedFileName(Part part) {
    		String filename = "null";
@@ -108,8 +108,6 @@ public class Laboratory extends HttpServlet {
    		String flag = request.getParameter("flag");
    		String firstName = request.getParameter("firstname");
    		
-   		System.out.println(firstName);
-   		System.out.println(flag);
    		if (flag.equalsIgnoreCase("insert")) {
    			laboratoryStaffInsert(request, response);
    		}
@@ -265,11 +263,12 @@ public class Laboratory extends HttpServlet {
 
    				LoginVO loginvo = new LoginVO();
    				loginvo.setLaboratoryloginid(laboratoryVo);
+   				loginvo.setAdminid(adminVo);
    				loginvo.setEmail(email);
    				loginvo.setPassword(password);
    				loginvo.setUsername(userName);
    				loginvo.setLastlogin(joiningdate);
-   				loginvo.setRoll("Pharmacist");
+   				loginvo.setRoll("Laboratory Staff");
 
    				LoginDAO logdao = new LoginDAO();
    				ArrayList<LoginVO> emailchack = logdao.emailverify(loginvo);

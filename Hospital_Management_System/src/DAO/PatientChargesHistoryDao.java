@@ -9,7 +9,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.AnnotationConfiguration;
 
-import VO.LaboratoryVo;
 import VO.PatientChargesHistoryVo;
 
 public class PatientChargesHistoryDao {
@@ -34,11 +33,10 @@ public class PatientChargesHistoryDao {
 		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
 		Session session = sessionfactory.openSession();
 		Transaction transaction = session.beginTransaction();
-		List<PatientChargesHistoryVo> pharmanicistList = new ArrayList<PatientChargesHistoryVo>();
+		List<PatientChargesHistoryVo> pharmanicistList = new ArrayList<>();
 	    try {
-	        Query q = session.createQuery("from PatientChargesHistoryVo AS n where n.patientid =:id and pramenttype =:Pramenttype");
+	        Query q = session.createQuery("from PatientChargesHistoryVo AS n where n.patientid =:id and n.pramenttype =true");
 	        q.setParameter("id", chargesHistoryVo.getPatientid());
-	        q.setParameter("Pramenttype", chargesHistoryVo.getPramenttype());
 	        pharmanicistList = q.list();
 	    } catch (Exception e) {
 	        e.printStackTrace();
@@ -48,6 +46,26 @@ public class PatientChargesHistoryDao {
 	        session.close();
 	    }
 	    return (ArrayList<PatientChargesHistoryVo>) pharmanicistList;
+	}
+
+	public String updateCharges(PatientChargesHistoryVo chargesHistoryVo) {
+		SessionFactory sessionfactory = new AnnotationConfiguration().configure().buildSessionFactory();
+		Session session = sessionfactory.openSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+			Query q = session.createSQLQuery("update PatientChargesHistory as a set a.PramentType = false where a.Id =:id");
+			q.setParameter("id", chargesHistoryVo.getId());
+			q.executeUpdate();
+			}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+	        transaction.commit();
+	        session.close();
+	    }
+		
+		return "true";
 	}
 
 }

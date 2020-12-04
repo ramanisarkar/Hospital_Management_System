@@ -1,19 +1,61 @@
 package VO;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-
 public class CommonFiledVo {
-	int prescriptionId ,PatientID, quantity,id ,adminId ;
+	int prescriptionId ,PatientID, quantity,id ,adminId,id2 ;
 	String date,joiningdate,discription ,patientId,patientName,type,treatmentName,Name,title,field1,field2,field3;
-	float price ,discount ,subtotal;
-	List<DispatchMedicineInfoVo> dispatchMedicineInfoVo;
+	float price ,discount ,subtotal,floatfield1;
+	boolean bool1,bool2 ,bool3 ,bool4 ,bool5;
+	java.sql.Date chargedate;
 	
+	public java.sql.Date getChargedate() {
+		return chargedate;
+	}
+	public void setChargedate(java.sql.Date chargedate) {
+		this.chargedate = chargedate;
+	}
+	public boolean isBool1() {
+		
+		return bool1;
+	}
+	public void setBool1(boolean bool1) {
+		this.bool1 = bool1;
+	}
+	public boolean isBool2() {
+		return bool2;
+	}
+	public void setBool2(boolean bool2) {
+		this.bool2 = bool2;
+	}
+	public boolean isBool3() {
+		return bool3;
+	}
+	public void setBool3(boolean bool3) {
+		this.bool3 = bool3;
+	}
+	public boolean isBool4() {
+		return bool4;
+	}
+	public void setBool4(boolean bool4) {
+		this.bool4 = bool4;
+	}
+	public boolean isBool5() {
+		return bool5;
+	}
+	public void setBool5(boolean bool5) {
+		this.bool5 = bool5;
+	}
+	public float getFloatfield1() {
+		return floatfield1;
+	}
+	public void setFloatfield1(float floatfield1) {
+		this.floatfield1 = floatfield1;
+	}
+	public int getId2() {
+		return id2;
+	}
+	public void setId2(int id2) {
+		this.id2 = id2;
+	}
 	public String getField3() {
 		return field3;
 	}
@@ -61,12 +103,6 @@ public class CommonFiledVo {
 	}
 	public void setJoiningdate(String joiningdate) {
 		this.joiningdate = joiningdate;
-	}
-	public List<DispatchMedicineInfoVo> getDispatchMedicineInfoVo() {
-		return dispatchMedicineInfoVo;
-	}
-	public void setDispatchMedicineInfoVo(List<DispatchMedicineInfoVo> dispatchMedicineInfoVo) {
-		this.dispatchMedicineInfoVo = dispatchMedicineInfoVo;
 	}
 	public float getDiscount() {
 		return discount;
@@ -139,6 +175,17 @@ public class CommonFiledVo {
 	}
 	public void setTreatmentName(String treatmentName) {
 		this.treatmentName = treatmentName;
+	}
+	@Override
+	public String toString() {
+		return "CommonFiledVo [prescriptionId=" + prescriptionId + ", PatientID=" + PatientID + ", quantity=" + quantity
+				+ ", id=" + id + ", adminId=" + adminId + ", id2=" + id2 + ", date=" + date + ", joiningdate="
+				+ joiningdate + ", discription=" + discription + ", patientId=" + patientId + ", patientName="
+				+ patientName + ", type=" + type + ", treatmentName=" + treatmentName + ", Name=" + Name + ", title="
+				+ title + ", field1=" + field1 + ", field2=" + field2 + ", field3=" + field3 + ", price=" + price
+				+ ", discount=" + discount + ", subtotal=" + subtotal + ", floatfield1=" + floatfield1 + ", bool1="
+				+ bool1 + ", bool2=" + bool2 + ", bool3=" + bool3 + ", bool4=" + bool4 + ", bool5=" + bool5
+				+ ", chargedate=" + chargedate + "]";
 	}
 	
 }

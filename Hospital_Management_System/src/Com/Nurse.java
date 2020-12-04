@@ -58,7 +58,7 @@ public class Nurse extends HttpServlet {
 	private String nurseuser = null;
 	private String nurseemailinvalid = null;
 
-	private static final String SAVE_DIR_Images = "Nurse_Image";
+	private static final String SAVE_DIR_Images = "User_Image";
 
 	private static String getSubmittedFileName(Part part) {
 		String filename = "null";
@@ -299,6 +299,7 @@ public class Nurse extends HttpServlet {
 				LoginVO loginvo = new LoginVO();
 				loginvo.setNurseloginid(nurseVo);
 				loginvo.setEmail(email);
+				loginvo.setAdminid(adminVo);
 				loginvo.setPassword(password);
 				loginvo.setUsername(userName);
 				loginvo.setLastlogin(joiningdate);

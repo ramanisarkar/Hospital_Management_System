@@ -5,30 +5,56 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
-<script type="text/javascript">
-$(document).ready(function(){
-$.get('BloodManage', { flag: username }, function(response) {
-		var obj = JSON.parse(response);
-		$.each(obj, function(index) {
-			blooddoner++;
-			var html = '';
-			html += '<!--  ----Add new Out Patient----  --><div class="modal fade outpatiebnt" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">';
-			html += '<div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">×</button><h3 class="modal-title">Add Outpatient</h3>';
-			html += '';
-			html += '';
-			html += '';
-			html += '';
-			html += '';
-			html += '';
-			html += '';
-			$('.bloodDonorList').append(html);
-		});
-	});
-</script>
 </head>
 <body>
+<div class="row">
+	<div class="col-md-1 col-sm-4 col-xs-12 div_padding_right_0 align_center div_padding_bottom_5"
+	    style="margin-bottom:0px">
+	    <input class="form-control" type="checkbox" name="newentry[]" value="1" checked="">
+	</div>
+	<div class="col-md-2 col-sm-4 col-xs-12 div_padding_right_0 align_center div_padding_bottom_5"
+	    style="margin-bottom:0px">
+	    <select name="type[]" id="type_1"class="load_category more_invoice_charges dropdown_width_100_per" required="">
+	        
+	    </select>
+	</div>
+	<div class="col-md-2 col-sm-4 col-xs-12  align_center div_padding_right_0 div_padding_bottom_5"
+	    style="margin-bottom:0px">
+	    <select id="title_1" class="charge_amount_autofill dropdown_width_100_per" style="width: 125px;"
+	        name="title[]" required>
+	        <option value="">Select Title</option>
+	    </select>
+	</div>
+	<div class="col-md-1 col-sm-4 col-xs-12 div_padding_right_0 align_center div_padding_bottom_5"
+	    style="margin-bottom:0px">
+	    <input id="date_1" class="form-control text-input invoice_date" placeholder="Date" type="text"
+	        name="date[]" required="">
+	</div>
+	<div class="col-md-1 col-sm-4 col-xs-12 div_padding_right_0 align_center div_padding_bottom_5"
+	    style="margin-bottom:0px">
+	    <input id="unit_1" class="form-control text-input" type="text" placeholder="Unit" name="unit[newentry_1]">
+	</div>
+	<div class="col-md-1"style="margin-bottom:0px">
+	    <input id="amount_1" class="form-control text-input" type="number" min="0"onkeypress="if(this.value.length==10) return false;" step="0.01" placeholder="Amount"name="amount[]" required>
+	</div>
+	<div class="col-md-1 col-sm-4 col-xs-12 div_padding_right_0 align_center div_padding_bottom_5"
+	    style="margin-bottom:0px">
+	    <input id="discount_amount_1" class="form-control text-input transaction_discount_new_entry" dataid1="1"
+	        type="number" min="0" onkeypress="if(this.value.length==10) return false;" step="0.01"
+	        placeholder="Discount Amount" name="discount_amount[newentry_1]">
+	</div>
+	<div class="col-md-1 col-sm-4 col-xs-12 div_padding_right_0 align_center div_padding_bottom_5"
+	    style="margin-bottom:0px">
+	    <input id="total_amount_1" class="form-control text-input" type="number" min="0"
+	        onkeypress="if(this.value.length==10) return false;" step="0.01" placeholder="Total Amount"
+	        name="total_amount[newentry_1]" required="">
+	</div>
+	<div class="col-md-1 col-sm-4 col-xs-12 align_center div_padding_bottom_5" style="margin-bottom:0px">
+	        <button type="button" class="btn btn-default remove_transaction"><i class="entypo-trash">Delete</i></button>
+	    </div>
+	</div>
 <!--  ----Add new Out Patient----  -->
-	<div class="modal fade outpatiebnt" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade outpatiebnt"	 id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	    <div class="modal-dialog modal-lg">
 	        <div class="modal-content">
 	            <div class="modal-header">

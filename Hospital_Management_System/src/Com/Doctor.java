@@ -48,7 +48,7 @@ public class Doctor extends HttpServlet {
 		// TODO Auto-generated constructor stub
 	}
 
-	private static final String SAVE_DIR_Images = "Doctor_Image";
+	private static final String SAVE_DIR_Images = "User_Image";
 	private static final String SAVE_DIR_Document = "Doctor_Document";
 	
 	private	String doctorupdate = null;
@@ -410,6 +410,7 @@ public class Doctor extends HttpServlet {
 				loginvo.setDoctorid(doctorVo);
 				loginvo.setEmail(email);
 				loginvo.setPassword(password);
+				loginvo.setAdminid(adminVo);
 				loginvo.setUsername(userName);
 				loginvo.setLastlogin(joiningdate);
 				loginvo.setRoll("Doctor");

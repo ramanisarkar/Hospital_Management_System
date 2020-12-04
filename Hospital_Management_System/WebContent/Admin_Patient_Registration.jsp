@@ -79,7 +79,7 @@ $(document).ready(function(){
 			count++;
 		   	var html = '';
 		   	html += '<tr id='+count+'>';
-		   	html += '<td><img src="Patient_Registration_Image/'+obj[index].profileimage+'" height="50px" width="50px" class="img-circle"></td>';
+		   	html += '<td><img src="	User_Image/'+obj[index].profileimage+'" height="50px" width="50px" class="img-circle"></td>';
 		   	html += '<td style="padding-left: 15px; padding-top: 23px;" ><a href="#">'+obj[index].patientid+'</a></td>';
 		   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].firstname+'</td>';
 		   	html += '<td style="padding-left: 15px; padding-top: 23px;">'+obj[index].bloodgroup+'</td>';

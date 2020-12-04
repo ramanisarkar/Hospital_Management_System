@@ -27,8 +27,7 @@ public class BloodManageDao {
 			bloodManageList = q.list();
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		finally {
+		} finally {
 			transaction.commit();
 			session.close();
 		}

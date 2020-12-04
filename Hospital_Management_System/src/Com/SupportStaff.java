@@ -54,7 +54,7 @@ public class SupportStaff extends HttpServlet {
 	private String supportstaffuser = null;
 	private String supportstaffemailinvalid = null;
 
-	private static final String SAVE_DIR_Images = "Support_Staff_Image";
+	private static final String SAVE_DIR_Images = "User_Image";
 
 	private static String getSubmittedFileName(Part part) {
 		String filename = "null";
@@ -293,11 +293,12 @@ public class SupportStaff extends HttpServlet {
 
 				LoginVO loginvo = new LoginVO();
 				loginvo.setSupportstaffloginid(support_StaffVo);
+				loginvo.setAdminid(adminVo);
 				loginvo.setEmail(email);
 				loginvo.setPassword(password);
 				loginvo.setUsername(userName);
 				loginvo.setLastlogin(joiningdate);
-				loginvo.setRoll("SupportStaff");
+				loginvo.setRoll("Support Staff");
 
 				LoginDAO logdao = new LoginDAO();
 				ArrayList<LoginVO> emailchack = logdao.emailverify(loginvo);

@@ -11,7 +11,6 @@ import org.hibernate.cfg.AnnotationConfiguration;
 
 import VO.AllDataCountVo;
 import VO.BedCategoryVo;
-import VO.DoctorVo;
 
 public class AllDataCountDao {
 	
@@ -42,16 +41,14 @@ public class AllDataCountDao {
 			Query q = session.createQuery("update AllDataCountVo set "+columnName+" = "+columnName+"+1 where adminid =:id");
 			q.setParameter("id", allDataCountVo.getAdminid());
 			q.executeUpdate();
-			}
+		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 		finally {
 	        transaction.commit();
 	        session.close();
 	    }
-		
 	}
 
 	public ArrayList<AllDataCountVo> allDataList(AllDataCountVo allDataCountVo) {

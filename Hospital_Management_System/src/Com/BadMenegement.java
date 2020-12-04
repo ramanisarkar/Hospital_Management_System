@@ -61,8 +61,6 @@ public class BadMenegement extends HttpServlet {
 			throws ServletException, IOException {
 		System.out.println("---------------------------------");
 		String flag = request.getParameter("flag");
-		System.out.println(flag);
-		System.out.println("---------------------------------");
 		HttpSession session = request.getSession();
 		if (flag.equalsIgnoreCase("insert")) {
 			int adminid = Integer.parseInt(request.getParameter("id"));
@@ -138,10 +136,6 @@ public class BadMenegement extends HttpServlet {
 		}
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		System.out.println("---------------------------------");
