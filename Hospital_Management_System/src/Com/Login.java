@@ -335,45 +335,6 @@ public class Login extends HttpServlet {
 
 					response.sendRedirect("Roll_Base_Login.jsp");
 				}
-//					} else if (professorroll.equalsIgnoreCase("professor")) {
-//						byte[] image= professorlist.get(0).getImage();
-//						System.out.println(image);
-//						FileOutputStream fout=new FileOutputStream("D:\\ing\\professor.jpg");  
-//						fout.write(image);  
-//						fout.close();
-//
-//						loginvo.setLastlogin(lastlogin);
-//						loginvo.setId(loginid);
-//						
-//						logindao.logintime(loginvo);
-//						
-//						session.setAttribute("professordata", professorlist);
-//						
-//						response.sendRedirect("Professor_Login.jsp");
-//					} 
-//				}
-//				else if (roll.equalsIgnoreCase("Student")) {
-//					
-//					StudentVo studentvo = new StudentVo();
-//					studentvo.setEmail(email);
-//					studentvo.setPassword(pass);
-//					ArrayList<StudentVo> studentlist = logindao.studentVerify(studentvo);
-//					session.setAttribute("studentname", studentlist.get(0).getFirstName());
-//					session.setAttribute("studentid", studentlist.get(0).getId());
-//					byte[] image= studentlist.get(0).getImage();
-//					System.out.println(image);
-//					FileOutputStream fout=new FileOutputStream("D:\\ing\\student.jpg");  
-//					fout.write(image);  
-//					fout.close();
-//					
-//					loginvo.setLastlogin(lastlogin);
-//					loginvo.setId(loginid);
-//					
-//					logindao.logintime(loginvo);
-//					
-//					session.setAttribute("studentdata", studentlist);
-//					response.sendRedirect("Student_Login.jsp");
-//				}
 			} else {
 
 				session.setAttribute("wrong", "true");
@@ -390,68 +351,6 @@ public class Login extends HttpServlet {
 
 		}
 	}
-
-//	private void updatepassword(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//		try {
-//			HttpSession session = request.getSession(false);
-//			String email = (String) session.getAttribute("email");
-//			String userroll = (String) session.getAttribute("roll");
-//			String password = request.getParameter("password");
-//			String conformpassword = request.getParameter("cpassword");
-//			if (EmailValidation.isValid(email)) {
-//				if (password.equals(conformpassword)) {
-//					if (userroll.equals("Admin")) {
-//						CollegeVo collegevo = new CollegeVo();
-//						collegevo.setEmail(email);
-//						collegevo.setPassword(conformpassword);
-//
-//						LoginVO login = new LoginVO();
-//						login.setEmail(email);
-//						login.setPassword(conformpassword);
-//
-//						LoginDAO logindao = new LoginDAO();
-////						logindao.forgetPasswordCollege(collegevo, login);
-//					} else if (userroll.equals("professor")) {
-//						ProfessorVo professorvo = new ProfessorVo();
-//						professorvo.setEmail(email);
-//						professorvo.setPassword(conformpassword);
-//
-//						LoginVO login = new LoginVO();
-//						login.setEmail(email);
-//						login.setPassword(conformpassword);
-//
-//						LoginDAO logindao = new LoginDAO();
-////						logindao.forgetPasswordProfessor(professorvo, login);
-//					}
-//					else if (userroll.equals("student")) {
-//						StudentVo studentvo = new StudentVo();
-//						studentvo.setEmail(email);
-//						studentvo.setPassword(conformpassword);
-//
-//						LoginVO login = new LoginVO();
-//						login.setEmail(email);
-//						login.setPassword(conformpassword);
-//
-//						LoginDAO logindao = new LoginDAO();
-////						logindao.forgetPasswordStudent(studentvo, login);
-//					}
-//					response.sendRedirect("Com_Login.jsp");
-//				} else {
-//					session.setAttribute("error", "true");
-//					response.sendRedirect("forgetPasswordupdate.jsp");
-//				}
-//
-//			} else {
-//				session.setAttribute("wrong", "true");
-//				response.sendRedirect("forgetPasswordupdate.jsp");
-//			}
-//		} catch (Exception e) {
-//			HttpSession session = request.getSession();
-//			session.setAttribute("error", "true");
-//			response.sendRedirect("forgetPasswordupdate.jsp");
-//		}
-//
-//	}
 
 	private void forgotepassword(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		try {
